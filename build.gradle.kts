@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
 	compile("org.jetbrains.kotlin:kotlin-scripting-jvm")
-	testCompile("junit", "junit", "4.12")
+	compile("org.slf4j:slf4j-nop:1.7.26")
 	testCompile("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
 }
 
