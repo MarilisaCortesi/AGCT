@@ -12,6 +12,7 @@ val DETERIORATING = BasicDeterioratingMolecule("det")
 val GENE = BasicGene("gen")
 val PROTEIN = BasicProtein("pro", GENE)
 val REGULATIVE = BasicRegulativeMolecule("reg")
+val DETERIORATING_REGULATIVE = BasicDeterioratingMolecule("det reg")
 val REGULATOR = BasicRegulator(REGULATIVE, PROTEIN)
 
 private const val DELTA = 10e-15
@@ -37,11 +38,12 @@ infix fun<T> T.shouldNotEqual(expected: Any?) {
 
 val Int.elements : Matcher<Map<*, *>>
     get() = object : Matcher<Map<*, *>> {
-        override fun test(value: Map<*, *>) = with(value.size) {
-            Result(
-                this == this@elements,
-                "map should have ${ this@elements} model.utils.elements but it has $this",
-                "map should not have ${ this@elements} model.utils.elements but it has"
-            )
-        }
+        override fun test(value: Map<*, *>) =
+            value.size.run {
+                Result(
+                    this == this@elements,
+                    "map should have ${ this@elements} model.utils.elements but it has $this",
+                    "map should not have ${ this@elements} model.utils.elements but it has"
+                )
+            }
     }

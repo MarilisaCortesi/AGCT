@@ -4,10 +4,10 @@ import model.variables.Concentration
 import model.variables.Rate
 
 /**
- * A molecule inside the genetic circuit.
+ * A molecule inside the genetic circuitContext.
  *
  * @property id the identificator of the molecule, which will be used when creating the reactions
- * @property fullName the full name of the molecule, which will be used in the verbose circuit description
+ * @property fullName the full name of the molecule, which will be used in the verbose circuitContext description
  * @property initialConcentration the initial initialConcentration of the molecule
  */
 interface Molecule {
@@ -42,11 +42,11 @@ interface DeterioratingMolecule : Molecule {
  * A protein, which can be coded by one gene only.
  *
  * @property coder the gene which codes for the protein
- * @property codingRate the rate at which the transcription occurs
+ * @property basalRate the rate at which the transcription occurs
  */
 interface Protein : DeterioratingMolecule, RegulativeMolecule {
     val coder: Gene
-    var codingRate: Rate
+    var basalRate: Rate
 }
 
 /**

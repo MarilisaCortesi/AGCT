@@ -82,7 +82,7 @@ private val Molecule.name
     } + "(\"$id\")"
 
 private val Protein.rate
-    get() = "a rate ${codingRate.stringValue}"
+    get() = "a rate ${basalRate.stringValue}"
 
 private val Regulator<*>.name
     get() = self.name

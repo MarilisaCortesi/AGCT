@@ -53,11 +53,17 @@ class BasicRegulativeMolecule internal constructor(override val id: String) : Ab
 class BasicDeterioratingMolecule internal constructor(override val id: String) : AbstractDeterioratingMolecule(id)
 
 /**
+ * A generic regulative molecule with a deterioration rate.
+ */
+class BasicDeterioratingRegulativeMolecule internal constructor(override val id: String) :
+    AbstractDeterioratingMolecule(id), RegulativeMolecule
+
+/**
  * A generic protein with default values.
  */
 class BasicProtein internal constructor(override val id: String, override val coder: Gene) :
     AbstractDeterioratingMolecule(id), Protein {
-    override var codingRate = Rate()
+    override var basalRate = Rate()
 }
 
 /**

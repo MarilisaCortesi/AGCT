@@ -1,17 +1,10 @@
 package model.entities
 
-import model.utils.DETERIORATING
-import model.utils.GENE
-import model.utils.MOLECULE
-import model.utils.PROTEIN
-import model.utils.REGULATIVE
-import model.utils.REGULATOR
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
+import model.utils.*
 import model.variables.Concentration
 import model.variables.Rate
-import model.utils.shouldEqual
-import model.utils.shouldNotEqual
 
 private val DEFAULT_RATE = Rate(1, 2, 3, 4, 5)
 private val DEFAULT_CONCENTRATION = Concentration(1, 2, 3, 4, 5)
@@ -23,7 +16,7 @@ private const val SECOND_ID = "second"
 
 class TestEntities : StringSpec({
     "test molecule" {
-        with(MOLECULE) {
+        MOLECULE.run {
             id shouldBe "mol"
             fullName shouldBe id
             initialConcentration shouldBe Concentration()
@@ -35,7 +28,7 @@ class TestEntities : StringSpec({
     }
 
     "test deteriorating molecule" {
-        with(DETERIORATING) {
+        DETERIORATING.run {
             id shouldBe "det"
             deteriorationRate shouldBe Rate()
             deteriorationRate = DEFAULT_RATE
@@ -43,18 +36,27 @@ class TestEntities : StringSpec({
         }
     }
 
+    "test deteriorating and regulative molecule" {
+        DETERIORATING_REGULATIVE.run {
+            id shouldBe "det reg"
+            deteriorationRate shouldBe Rate()
+            deteriorationRate = DEFAULT_RATE
+            deteriorationRate shouldBe DEFAULT_RATE
+        }
+    }
+
     "test protein" {
-        with(PROTEIN) {
+        PROTEIN.run {
             id shouldBe "pro"
             coder shouldBe GENE
-            codingRate shouldBe Rate()
-            codingRate = DEFAULT_RATE
-            codingRate shouldBe DEFAULT_RATE
+            basalRate shouldBe Rate()
+            basalRate = DEFAULT_RATE
+            basalRate shouldBe DEFAULT_RATE
         }
     }
 
     "test regulator" {
-        with(REGULATOR) {
+        REGULATOR.run {
             id shouldBe "regulator\\reg"
             self shouldBe REGULATIVE
             target shouldBe PROTEIN

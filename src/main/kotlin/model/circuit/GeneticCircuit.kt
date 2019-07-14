@@ -7,12 +7,12 @@ import model.entities.Regulator
 
 interface GeneticCircuit {
     /**
-     * The circuit's name.
+     * The circuitContext's name.
      */
     val name: String
 
     /**
-     * A map containing all the molecules of the circuit, indexed by their ids.
+     * A map containing all the molecules of the circuitContext, indexed by their ids.
      */
     val molecules: Map<String, Molecule>
 
@@ -22,7 +22,7 @@ interface GeneticCircuit {
     val reactions: Map<Gene, MutableMap<Protein, MutableList<Regulator<*>>>>
 
     /**
-     * Adds a gene to the circuit.
+     * Adds a gene to the circuitContext.
      *
      * @param gene the gene to be added.
      */
@@ -30,7 +30,7 @@ interface GeneticCircuit {
 
 
     /**
-     * Adds a protein to the circuit.
+     * Adds a protein to the circuitContext.
      *
      * @param protein the protein to be added.
      */
@@ -38,7 +38,7 @@ interface GeneticCircuit {
 
 
     /**
-     * Adds a regulator to the circuit.
+     * Adds a regulator to the circuitContext.
      *
      * @param regulator the regulator to be added.
      */
