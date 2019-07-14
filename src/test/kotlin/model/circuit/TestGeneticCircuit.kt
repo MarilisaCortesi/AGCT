@@ -1,4 +1,4 @@
-package model
+package model.circuit
 
 import model.utils.GENE
 import model.utils.PROTEIN
@@ -8,12 +8,11 @@ import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.shouldHave
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
-import main.model.GeneticCircuit
 import model.entities.BasicGene
 import java.lang.IllegalStateException
 
 class TestGeneticCircuit : StringSpec({
-    with(GeneticCircuit()) {
+    with(BasicGeneticCircuit()) {
         addGene(GENE)
         addProtein(PROTEIN)
         addRegulator(REGULATOR)
