@@ -3,7 +3,7 @@ package model.circuit
 import main.model.GeneticCircuit
 import model.entities.*
 
-class BasicGeneticCircuit : GeneticCircuit {
+class BasicGeneticCircuit(override val name: String) : GeneticCircuit {
     private val moleculesMap = mutableMapOf<String, Molecule>()
     private val reactionsMap = mutableMapOf<Gene, MutableMap<Protein, MutableList<Regulator<*>>>>()
 

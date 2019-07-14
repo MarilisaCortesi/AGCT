@@ -7,6 +7,11 @@ import model.entities.Regulator
 
 interface GeneticCircuit {
     /**
+     * The circuit's name.
+     */
+    val name: String
+
+    /**
      * A map containing all the molecules of the circuit, indexed by their ids.
      */
     val molecules: Map<String, Molecule>
