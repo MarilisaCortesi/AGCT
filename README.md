@@ -1,4 +1,4 @@
-# Another Genetic Circuit Transcriptor
+# Another Genetic Circuit Transcriber
 
 *AGCT* is a Kotlin DSL for writing simple Genetic Circuits with a human-readable syntax.
 
