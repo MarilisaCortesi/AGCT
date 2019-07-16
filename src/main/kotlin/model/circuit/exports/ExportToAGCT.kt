@@ -1,10 +1,12 @@
 package model.circuit.exports
 
-import main.model.GeneticCircuit
+import model.circuit.GeneticCircuit
 import model.entities.*
 import model.variables.Variable
 
 fun GeneticCircuit.exportToAGCT() = buildString {
+    append("CIRCUIT \"${name.toUpperCase()}\"\n\n\n")
+
     for ((gene, reaction) in reactions.filter { it.value.isNotEmpty() }) {
         append("Given the ${gene.name}")
         append(reaction.joinToString())
@@ -22,7 +24,7 @@ fun GeneticCircuit.exportToAGCT() = buildString {
         }
         append("\n")
     }
-}
+}.let { println(it) }
 
 private fun Map<Protein, List<Regulator<*>>>.joinToString() = if (isNotEmpty()) {
     buildString {

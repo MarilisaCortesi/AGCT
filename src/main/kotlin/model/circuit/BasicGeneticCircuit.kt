@@ -1,6 +1,5 @@
 package model.circuit
 
-import main.model.GeneticCircuit
 import model.entities.*
 
 class BasicGeneticCircuit internal constructor(override val name: String) : GeneticCircuit {

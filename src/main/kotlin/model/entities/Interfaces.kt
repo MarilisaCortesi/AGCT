@@ -4,10 +4,10 @@ import model.variables.Concentration
 import model.variables.Rate
 
 /**
- * A molecule inside the genetic circuitContext.
+ * A molecule inside the genetic circuit.
  *
  * @property id the identificator of the molecule, which will be used when creating the reactions
- * @property fullName the full name of the molecule, which will be used in the verbose circuitContext description
+ * @property fullName the full name of the molecule, which will be used in the verbose circuit description
  * @property initialConcentration the initial initialConcentration of the molecule
  */
 interface Molecule {

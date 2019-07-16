@@ -8,12 +8,11 @@ import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.shouldHave
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
-import model.circuit.exports.exportToAGCT
 import model.entities.BasicGene
 import java.lang.IllegalStateException
 
 class TestGeneticCircuit : StringSpec({
-    BasicGeneticCircuit("test circuitContext").run {
+    BasicGeneticCircuit("test circuit").run {
         addGene(GENE)
         addProtein(PROTEIN)
         addRegulator(REGULATOR)
