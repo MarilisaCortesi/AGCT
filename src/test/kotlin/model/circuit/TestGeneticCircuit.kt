@@ -25,5 +25,9 @@ class TestGeneticCircuit : StringSpec({
         shouldThrow<IllegalStateException> {
             addGene(BasicGene("pro"))
         }
+
+        shouldThrow<IllegalStateException> {
+            addGene(BasicGene("gen"))
+        }
     }
 })

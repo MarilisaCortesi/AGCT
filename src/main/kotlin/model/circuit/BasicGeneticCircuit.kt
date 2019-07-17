@@ -26,7 +26,7 @@ class BasicGeneticCircuit internal constructor(override val name: String) : Gene
 
     private fun insertMolecule(molecule: Molecule) =
         moleculesMap.put(molecule.id, molecule).run {
-            if(this != null && this.javaClass != molecule.javaClass) {
+            if(this != null && this !== molecule) {
                 throw IllegalStateException("Already a molecule with that name.")
             }
         }
