@@ -5,42 +5,30 @@ import model.entities.Molecule
 import model.entities.Protein
 import model.entities.Regulator
 
+/**
+ * Represents a [genetic circuit][GeneticCircuit] with a [name], its [molecules] and the [reactions] between them.
+ */
 interface GeneticCircuit {
-    /**
-     * The circuit's name.
-     */
     val name: String
 
-    /**
-     * A map containing all the molecules of the circuit, indexed by their ids.
-     */
     val molecules: Map<String, Molecule>
 
-    /**
-     * A map containing the relationships between the molecules.
-     */
     val reactions: Map<Gene, MutableMap<Protein, MutableList<Regulator<*>>>>
 
     /**
-     * Adds a gene to the circuit.
-     *
-     * @param gene the gene to be added.
+     * Adds a [gene] to the circuit.
      */
     fun addGene(gene: Gene)
 
 
     /**
-     * Adds a protein to the circuit.
-     *
-     * @param protein the protein to be added.
+     * Adds a [protein] to the circuit.
      */
     fun addProtein(protein: Protein)
 
 
     /**
-     * Adds a regulator to the circuit.
-     *
-     * @param regulator the regulator to be added.
+     * Adds a [regulator] to the circuit.
      */
     fun addRegulator(regulator: Regulator<*>)
 }

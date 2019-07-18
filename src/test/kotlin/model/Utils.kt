@@ -1,4 +1,4 @@
-package model.utils
+package model
 
 import io.kotlintest.Matcher
 import io.kotlintest.Result
@@ -12,7 +12,7 @@ val DETERIORATING = BasicDeterioratingMolecule("det")
 val GENE = BasicGene("gen")
 val PROTEIN = BasicProtein("pro", GENE)
 val REGULATIVE = BasicRegulativeMolecule("reg")
-val DETERIORATING_REGULATIVE = BasicDeterioratingMolecule("det reg")
+val DETERIORATING_REGULATIVE = BasicDeterioratingRegulativeMolecule("det reg")
 val REGULATOR = BasicRegulator(REGULATIVE, PROTEIN)
 
 private const val DELTA = 10e-15
@@ -42,8 +42,8 @@ val Int.elements : Matcher<Map<*, *>>
             value.size.run {
                 Result(
                     this == this@elements,
-                    "map should have ${ this@elements} model.utils.elements but it has $this",
-                    "map should not have ${ this@elements} model.utils.elements but it has"
+                    "map should have ${ this@elements} model.elements but it has $this",
+                    "map should not have ${ this@elements} model.elements but it has"
                 )
             }
     }

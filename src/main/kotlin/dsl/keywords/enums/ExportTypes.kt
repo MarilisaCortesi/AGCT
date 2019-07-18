@@ -1,4 +1,4 @@
-package dsl.keywords
+package dsl.keywords.enums
 
 interface ExportType
 

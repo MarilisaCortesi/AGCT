@@ -1,10 +1,10 @@
 package dsl.keywords
 
-import dsl.circuit.CircuitContext
+import dsl.contexts.CircuitContext
+import dsl.keywords.utils.KeywordWrapper
 
-val Create = create
+val Create = CreateWrapper()
 
-@Suppress("ClassName")
-object create {
+class CreateWrapper : KeywordWrapper {
     infix fun circuit(context: CircuitContext) = context
 }

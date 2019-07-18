@@ -4,6 +4,9 @@ import model.circuit.GeneticCircuit
 import model.entities.*
 import model.variables.Variable
 
+/**
+ * Exports a [circuit][GeneticCircuit] using the AGCT syntax.
+ */
 fun GeneticCircuit.exportToAGCT() = buildString {
     append("CIRCUIT \"${name.toUpperCase()}\"\n\n\n")
 

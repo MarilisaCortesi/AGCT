@@ -1,13 +1,10 @@
-package model.circuit
+package model
 
-import model.utils.GENE
-import model.utils.PROTEIN
-import model.utils.REGULATOR
-import model.utils.elements
 import io.kotlintest.matchers.maps.shouldContainKey
 import io.kotlintest.shouldHave
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
+import model.circuit.BasicGeneticCircuit
 import model.entities.BasicGene
 import java.lang.IllegalStateException
 

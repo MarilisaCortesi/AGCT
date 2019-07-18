@@ -1,6 +1,7 @@
-package dsl.keywords
+package dsl.keywords.utils
 
-import dsl.circuit.CircuitContext
+import dsl.contexts.CircuitContext
+import dsl.keywords.enums.ExportType
 
 /**
  * Creates a circuit context from a string.

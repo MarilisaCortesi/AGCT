@@ -1,8 +1,8 @@
-package model.entities
+package model
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
-import model.utils.*
+import model.entities.*
 import model.variables.Concentration
 import model.variables.Rate
 

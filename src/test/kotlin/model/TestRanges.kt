@@ -1,7 +1,7 @@
-package model.variables
+package model
 
 import io.kotlintest.specs.StringSpec
-import model.utils.shouldMatchWithTolerance
+import model.variables.*
 import kotlin.math.sqrt
 
 private val FIRST_SEQUENCE_LIN = sequenceOf(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0)

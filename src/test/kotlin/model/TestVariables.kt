@@ -1,10 +1,11 @@
-package model.variables
+package model
 
 import io.kotlintest.matchers.collections.shouldHaveSingleElement
 import io.kotlintest.specs.StringSpec
-import model.utils.shouldEqual
-import model.utils.shouldMatchWithTolerance
-import model.utils.shouldNotEqual
+import model.variables.Concentration
+import model.variables.DEFAULT_CONCENTRATION_VALUE
+import model.variables.DEFAULT_RATE_VALUE
+import model.variables.Rate
 
 private const val SINGLE_ELEMENT = 20.0
 private val MULTIPLE_ELEMENTS = setOf(1.0, 2.0, 3.0, 4.0, 5.0)
