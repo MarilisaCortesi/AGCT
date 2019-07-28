@@ -1,4 +1,4 @@
-package model.variables
+package dsl
 
 import kotlin.math.log10
 import kotlin.math.pow
@@ -24,7 +24,7 @@ fun range(from: Number, to: Number, step: Number = 1.0) =
  * Starting [from] and ending [to] the given values, for a total of [num] elements.
  */
 fun linspace(from: Number, to: Number, num: Int) =
-    sequence (from, (to.toDouble() - from.toDouble()) / (num - 1), num)
+    sequence(from, (to.toDouble() - from.toDouble()) / (num - 1), num)
 
 /**
  * An inclusive range of [values] spaced on a logarithmic scale.

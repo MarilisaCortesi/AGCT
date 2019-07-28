@@ -1,11 +1,11 @@
 package dsl.keywords
+/*
 
 import dsl.contexts.CircuitContext
 import dsl.keywords.enums.AGCT
 import dsl.keywords.enums.Alchemist
 import dsl.keywords.enums.ExportType
 import dsl.keywords.utils.*
-import model.circuit.exports.exportToAGCT
 
 // KEYWORD
 @Suppress("ClassName")
@@ -20,7 +20,7 @@ class FirstTimeExportWrapper internal constructor(private val context: CircuitCo
     FirstTimeWrapper<ExportType>(), ExportWrapper {
     override fun performOn(obj: ExportType) {
         when (obj) {
-            AGCT -> context.exportToAGCT()
+            AGCT -> throw NotImplementedError("AGCT export not yet supported.")
             Alchemist -> throw NotImplementedError("Alchemist export not yet supported.")
             else -> throw IllegalArgumentException("Unknown export type.")
         }
@@ -35,3 +35,4 @@ class FirstTimeExportWrapper internal constructor(private val context: CircuitCo
 
 class SecondTimeExportWrapper internal constructor(wrapped: FirstTimeExportWrapper) :
     SecondTimeWrapper<ExportType, SecondTimeExportWrapper>(wrapped), ExportWrapper by wrapped
+*/

@@ -1,51 +1,42 @@
 package model.circuit
 
 import model.entities.*
+import model.reactions.BiochemicalReaction
+import model.reactions.Degradation
+import model.reactions.Transcription
+import java.lang.IllegalStateException
 
-class BasicGeneticCircuit internal constructor(override val name: String) : GeneticCircuit {
-    private val moleculesMap = mutableMapOf<String, Molecule>()
-    private val reactionsMap = mutableMapOf<Gene, MutableMap<Protein, MutableList<Regulator<*>>>>()
-
-    override val molecules
-        get() = moleculesMap.toMap()
-
-    override val reactions
-        get() = reactionsMap.toMap()
-
-    override fun addGene(gene: Gene) {
-        insertGene(gene)
-    }
-
-    override fun addProtein(protein: Protein) {
-        insertProtein(protein)
-    }
-
-    override fun addRegulator(regulator: Regulator<*>) {
-        insertRegulator(regulator)
-    }
-
-    private fun insertMolecule(molecule: Molecule) =
-        moleculesMap.put(molecule.id, molecule).run {
-            if(this != null && this !== molecule) {
-                throw IllegalStateException("Already a molecule with that name.")
+/**
+ * A genetic circuit with basic limitations:
+ * - a molecule that can deteriorate, must have one and one deterioration reaction only;
+ * - a gene can code for an arbitrary number of proteins, but a protein can be coded by one gene only;
+ * - a regulator can regulate an arbitrary number of transcription reactions;
+ * - a transcription reaction can have an arbitrary number of regulators;
+ *
+ * For any of them that is broken, an exception will be thrown.
+ */
+internal class BasicGeneticCircuit(name: String) : AbstractGeneticCircuit(name) {
+    override fun checkOnAdd(entity: BiochemicalEntity, reaction: BiochemicalReaction) {
+        circuit.getOrPut(entity) { mutableSetOf() }.run {
+            when {
+                contains(reaction) ->
+                    throw IllegalArgumentException("$reaction already set for $entity.")
+                entity is Protein && reaction is Transcription && filterIsInstance<Transcription>().isNotEmpty() ->
+                    throw IllegalArgumentException("Transcription reaction already set for $entity.")
+                else ->
+                    add(reaction)
             }
         }
+    }
 
-    private fun insertGene(gene: Gene) =
-        gene.run {
-            insertMolecule(this)
-            reactionsMap.getOrPut(this) { mutableMapOf() }
-        }
-
-    private fun insertProtein(protein: Protein) =
-        protein.run {
-            insertMolecule(this)
-            insertGene(coder).getOrPut(this) { mutableListOf() }
-        }
-
-    private fun insertRegulator(regulator: Regulator<*>) =
-        regulator.run {
-            moleculesMap.putIfAbsent(self.id, self)
-            insertProtein(target).add(this)
-        }
+    override fun checkOnExport() {
+        circuit.filterKeys { it is DegradingMolecule }
+            .filterValues { it is Degradation }
+            .filterValues { it.isNotEmpty() }
+            .keys
+            .random()
+            .apply {
+                throw IllegalStateException("Degradation reaction not set for $this")
+            }
+    }
 }

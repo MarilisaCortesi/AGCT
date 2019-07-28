@@ -1,5 +1,6 @@
 package dsl.contexts
 
+/*
 import dsl.keywords.export
 import model.circuit.GeneticCircuit
 import model.circuit.BasicGeneticCircuit
@@ -13,13 +14,11 @@ class CircuitContext internal constructor(name: String) : GeneticCircuit by Basi
     internal val circuit = BasicGeneticCircuit(name)
 
     /**
-     * Checks if a molecule exists, if not returns null, otherwise returns it only if it has type T.
-     *
-     * @param id the molecule id
-     * @param T the type of the molecule
+     * Checks if a [molecule][id] exists.
+     * If not returns null, otherwise returns it only if it has type [T].
      */
-    internal inline fun<reified T : Molecule> getAndCheck(id: String) =
-        circuit.molecules[id].run {
+    internal inline fun<reified T : BiochemicalEntity> getAndCheck(id: String) =
+        circuit.entities[id].run {
             when(this) {
                 null -> null
                 is T -> this
@@ -28,18 +27,16 @@ class CircuitContext internal constructor(name: String) : GeneticCircuit by Basi
         }
 
     /**
-     * Puts a molecule into the circuit.
-     *
-     * @param molecule the molecule to be put.
+     * Puts a [molecule] into the circuit.
      */
-    internal fun put(molecule: Molecule) =
+    internal fun put(molecule: BiochemicalEntity) =
         when (molecule) {
             is Gene -> circuit.addGene(molecule)
             is Protein -> circuit.addProtein(molecule)
-            is Regulator<*> -> circuit.addRegulator(molecule)
-            is RegulativeMolecule -> Unit
+            is RegulativeMolecule -> circuit.addRegulator(molecule)
             else -> throw IllegalStateException("Unknown molecule class.")
         }
 
     infix fun then(export: export) = export.wrapper(this)
 }
+*/

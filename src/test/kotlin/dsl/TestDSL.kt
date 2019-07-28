@@ -1,5 +1,6 @@
 package dsl
 
+/*
 import dsl.contexts.CircuitContext
 import dsl.keywords.*
 import dsl.keywords.enums.AGCT
@@ -27,8 +28,8 @@ fun main() {
                             has an initialConcentration of/in Concentration()
                             has a deteriorationRate of/in Rate()
                         } with {
-                            a unificationRate of/in Rate()
-                            a separationRate of/in Rate()
+                            a bindingRate of/in Rate()
+                            a unbindingRate of/in Rate()
                             a codingRate of/in Rate()
                         }
                 }
@@ -41,13 +42,13 @@ fun main() {
                     a basalRate of/in Rate()
                     as gene regulators {
                         the molecule "m111" with {
-                            a unificationRate of/in Rate()
-                            a separationRate of/in Rate()
+                            a bindingRate of/in Rate()
+                            a unbindingRate of/in Rate()
                             a codingRate of/in Rate()
                         }
                         the molecule "m112" with {
-                            a unificationRate of/in Rate()
-                            a separationRate of/in Rate()
+                            a bindingRate of/in Rate()
+                            a unbindingRate of/in Rate()
                             a codingRate of/in Rate()
                         }
                     }
@@ -170,3 +171,4 @@ fun main() {
     Taken the molecule("reg") it has an initial concentration of 100.0
      */
 }
+*/

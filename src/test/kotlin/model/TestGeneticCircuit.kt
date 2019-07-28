@@ -1,30 +1,27 @@
 package model
 
-import io.kotlintest.matchers.maps.shouldContainKey
-import io.kotlintest.shouldHave
+import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
 import model.circuit.BasicGeneticCircuit
 import model.entities.BasicGene
-import java.lang.IllegalStateException
+import model.entities.entity
+import model.reactions.DirectTranscription
 
-class TestGeneticCircuit : StringSpec({
+internal class TestGeneticCircuit : StringSpec({
     BasicGeneticCircuit("test circuit").run {
-        addGene(GENE)
-        addProtein(PROTEIN)
-        addRegulator(REGULATOR)
+        add(DEGRADATION, DIRECT_TRANSCRIPTION, REGULATION)
 
-        molecules shouldHave 3.elements
-        molecules shouldContainKey "gen"
-        molecules shouldContainKey "pro"
-        molecules shouldContainKey "reg"
+        entities shouldContainExactlyInAnyOrder setOf(GENE, PROTEIN, REGULATIVE, REGULATED_GENE)
+        reactions shouldContainExactlyInAnyOrder setOf(DEGRADATION, DIRECT_TRANSCRIPTION, REGULATION)
 
-        shouldThrow<IllegalStateException> {
-            addGene(BasicGene("pro"))
-        }
+        shouldThrow<IllegalArgumentException> {
+            add(DEGRADATION)
+        }.message shouldBe "$DEGRADATION already set for $PROTEIN."
 
-        shouldThrow<IllegalStateException> {
-            addGene(BasicGene("gen"))
-        }
+        shouldThrow<IllegalArgumentException> {
+            add(DirectTranscription(entity<BasicGene>("g"), PROTEIN))
+        }.message shouldBe "Transcription reaction already set for $PROTEIN."
     }
 })

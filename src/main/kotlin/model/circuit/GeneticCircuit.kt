@@ -1,34 +1,18 @@
 package model.circuit
 
-import model.entities.Gene
-import model.entities.Molecule
-import model.entities.Protein
-import model.entities.Regulator
+import model.entities.*
+import model.reactions.BiochemicalReaction
 
 /**
- * Represents a [genetic circuit][GeneticCircuit] with a [name], its [molecules] and the [reactions] between them.
+ * Represents a [genetic circuit][GeneticCircuit] with a [name], its [entities] and the [reactions] between them.
  */
-interface GeneticCircuit {
+internal interface GeneticCircuit {
     val name: String
-
-    val molecules: Map<String, Molecule>
-
-    val reactions: Map<Gene, MutableMap<Protein, MutableList<Regulator<*>>>>
+    val entities: Set<BiochemicalEntity>
+    val reactions: Set<BiochemicalReaction>
 
     /**
-     * Adds a [gene] to the circuit.
+     * Adds a series of [reactions] to the circuit.
      */
-    fun addGene(gene: Gene)
-
-
-    /**
-     * Adds a [protein] to the circuit.
-     */
-    fun addProtein(protein: Protein)
-
-
-    /**
-     * Adds a [regulator] to the circuit.
-     */
-    fun addRegulator(regulator: Regulator<*>)
+    fun add(vararg reactions: BiochemicalReaction): GeneticCircuit
 }
