@@ -10,7 +10,7 @@ import model.entities.entity
 import model.reactions.DirectTranscription
 
 internal class TestGeneticCircuit : StringSpec({
-    BasicGeneticCircuit("test circuit").run {
+    BasicGeneticCircuit("test geneticCircuit").run {
         add(DEGRADATION, DIRECT_TRANSCRIPTION, REGULATION)
 
         entities shouldContainExactlyInAnyOrder setOf(GENE, PROTEIN, REGULATIVE, REGULATED_GENE)
@@ -22,6 +22,6 @@ internal class TestGeneticCircuit : StringSpec({
 
         shouldThrow<IllegalArgumentException> {
             add(DirectTranscription(entity<BasicGene>("g"), PROTEIN))
-        }.message shouldBe "Transcription reaction already set for $PROTEIN."
+        }.message shouldBe "Transcription biochemicalReaction already set for $PROTEIN."
     }
 })

@@ -4,8 +4,8 @@ import model.entities.*
 import model.variables.Rate
 
 /**
- * A reaction that occurs with a given [rate].
- * The [reagents] and the [products] of the reaction contain their coefficients.
+ * A biochemicalReaction that occurs with a given [rate].
+ * The [reagents] and the [products] of the biochemicalReaction contain their coefficients.
  */
 internal interface Reaction {
     val reagents: Map<BiochemicalEntity, Int>
@@ -15,7 +15,7 @@ internal interface Reaction {
 }
 
 /**
- * A biochemical reaction that can be made of multiple [single reactions][reactions].
+ * A biochemical biochemicalReaction that can be made of multiple [single reactions][reactions].
  */
 internal interface BiochemicalReaction {
     val reactions: Set<Reaction>

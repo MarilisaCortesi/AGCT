@@ -3,7 +3,7 @@ package model.entities
 import model.variables.Concentration
 
 /**
- * An entity inside the genetic circuit, identified by its [id].
+ * An biochemicalEntity inside the genetic geneticCircuit, identified by its [id].
  * 
  * The [initial concentration][initialConcentration] is the quantity of molecule present at the beginning.
  */
@@ -32,6 +32,11 @@ internal interface DegradingMolecule : BiochemicalEntity
 internal interface RegulatingMolecule : BiochemicalEntity
 
 /**
+ * A molecule that can bot degrade and behave as a gene regulator.
+ */
+internal interface DegradingRegulatingMolecule : DegradingMolecule, RegulatingMolecule
+
+/**
  * A gene that codes for an arbitrary number of proteins, passing through the phases of transcription and translation.
  */
 internal interface Gene : BiochemicalEntity
@@ -44,10 +49,10 @@ internal interface MRna : DegradingMolecule
 /**
  * A protein which can be coded by a gene.
  */
-internal interface Protein : DegradingMolecule, RegulatingMolecule
+internal interface Protein : DegradingRegulatingMolecule
 
 /**
- * A [biochemical entity][BiochemicalEntity] composed of two bound single entities.
+ * A [biochemical biochemicalEntity][BiochemicalEntity] composed of two bound single entities.
  */
 internal interface BoundBiochemicalEntity<out F : BiochemicalEntity, out S : BiochemicalEntity> : BiochemicalEntity {
     val first: F

@@ -31,8 +31,8 @@ internal class BasicDegradingMolecule(parameters: EntityParameters) :
 internal class BasicRegulatingMolecule(parameters: EntityParameters) :
     AbstractEntity(parameters), RegulatingMolecule
 
-internal class DegradingRegulatingMolecule(parameters: EntityParameters) :
-    AbstractEntity(parameters), DegradingMolecule, RegulatingMolecule
+internal class BasicDegradingRegulatingMolecule(parameters: EntityParameters) :
+    AbstractEntity(parameters), DegradingRegulatingMolecule
 
 internal class BasicGene(parameters: EntityParameters) :
     AbstractEntity(parameters), Gene

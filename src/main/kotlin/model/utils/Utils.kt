@@ -1,7 +1,10 @@
 package model.utils
 
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
+
 /**
- * Exception thrown when an unknown implementation of an entity or a reaction is passed.
+ * Exception thrown when an unknown implementation of an biochemicalEntity or a biochemicalReaction is passed.
  * Likely to be used in a "when" construct.
  */
 internal class UnknownClassException(
@@ -19,6 +22,21 @@ internal val Any.className
         ?.split(('A'..'Z').toString())
         ?.joinToString(" ")
         ?: ""
+
+/**
+ * Given a [KClass] named 'Something', it returns the class named 'BasicSomething' if it exists.
+ */
+internal val KClass<*>.basicClass
+    get() = Class.forName(buildString {
+        append(qualifiedName)
+        insert(lastIndexOf('.') + 1, "Basic")
+    }).kotlin
+
+/**
+ * Given a [KClass] it returns its constructor or the constructor of its basic implementation if present.
+ */
+internal val KClass<*>.constructor
+    get() = primaryConstructor ?: basicClass.primaryConstructor ?: throw IllegalStateException("$simpleName has no constructors")
 
 /**
  * Returns true if the [other] object is the same as [this], false if not.

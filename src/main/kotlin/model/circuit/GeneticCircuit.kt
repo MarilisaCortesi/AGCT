@@ -4,7 +4,7 @@ import model.entities.*
 import model.reactions.BiochemicalReaction
 
 /**
- * Represents a [genetic circuit][GeneticCircuit] with a [name], its [entities] and the [reactions] between them.
+ * Represents a [genetic geneticCircuit][GeneticCircuit] with a [name], its [entities] and the [reactions] between them.
  */
 internal interface GeneticCircuit {
     val name: String
@@ -12,7 +12,12 @@ internal interface GeneticCircuit {
     val reactions: Set<BiochemicalReaction>
 
     /**
-     * Adds a series of [reactions] to the circuit.
+     * Adds a series of [reactions] to the geneticCircuit.
      */
-    fun add(vararg reactions: BiochemicalReaction): GeneticCircuit
+    fun add(vararg reactions: BiochemicalReaction)
+
+    /**
+     * Exports the geneticCircuit.
+     */
+    fun exportTo(vararg types: ExportTypes)
 }

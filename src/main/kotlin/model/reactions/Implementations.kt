@@ -45,7 +45,7 @@ internal class BasicReaction(
     reagents: Map<BiochemicalEntity, Int> = emptyMap(),
     products: Map<BiochemicalEntity, Int> = emptyMap(),
     rate: Rate = Rate(),
-    name: String = "reaction"
+    name: String = "biochemicalReaction"
 ) : AbstractReaction(reagents, products, rate, name)
 
 internal class BasicDegradation(

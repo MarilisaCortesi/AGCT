@@ -5,7 +5,6 @@ import model.reactions.BiochemicalReaction
 import model.reactions.Reaction
 
 internal abstract class AbstractGeneticCircuit(override val name: String) : GeneticCircuit {
-
     protected val circuit = mutableMapOf<BiochemicalEntity, MutableSet<BiochemicalReaction>>()
 
     override val entities: Set<BiochemicalEntity>
@@ -27,27 +26,32 @@ internal abstract class AbstractGeneticCircuit(override val name: String) : Gene
         reactions.filterIsInstance<R>().toSet()
 
     /**
-     * Adds a series of [reactions] into the genetic circuit.
+     * Adds a series of [reactions] into the genetic geneticCircuit.
      *
-     * @throws IllegalArgumentException if the reaction does not follow the circuit rules.
+     * @throws IllegalArgumentException if the biochemicalReaction does not follow the geneticCircuit rules.
      */
-    override fun add(vararg reactions: BiochemicalReaction): GeneticCircuit {
+    override fun add(vararg reactions: BiochemicalReaction) {
         for (reaction in reactions) {
             for (entity in reaction.entities) {
                 checkOnAdd(entity, reaction)
             }
         }
-        return this
+    }
+
+    override fun exportTo(vararg types: ExportTypes) {
+        for (type in types) {
+            type.from(this)
+        }
     }
 
     /**
-     * Implements the rules to be followed when adding a new reaction to the circuit.
-     * Adds the [entity] and the [reaction] to the circuit or throws an [IllegalArgumentException].
+     * Implements the rules to be followed when adding a new biochemicalReaction to the geneticCircuit.
+     * Adds the [entity] and the [reaction] to the geneticCircuit or throws an [IllegalArgumentException].
      */
     protected abstract fun checkOnAdd(entity: BiochemicalEntity, reaction: BiochemicalReaction)
 
     /**
-     * Implements the rules to be followed when adding a new reaction to the circuit.
+     * Implements the rules to be followed when adding a new biochemicalReaction to the geneticCircuit.
      * Throws an [IllegalStateException] if the rules are not covered.
      */
     protected abstract fun checkOnExport()

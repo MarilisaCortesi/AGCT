@@ -7,11 +7,11 @@ import model.reactions.Transcription
 import java.lang.IllegalStateException
 
 /**
- * A genetic circuit with basic limitations:
- * - a molecule that can deteriorate, must have one and one deterioration reaction only;
+ * A genetic geneticCircuit with basic limitations:
+ * - a molecule that can deteriorate, must have one and one deterioration biochemicalReaction only;
  * - a gene can code for an arbitrary number of proteins, but a protein can be coded by one gene only;
  * - a regulator can regulate an arbitrary number of transcription reactions;
- * - a transcription reaction can have an arbitrary number of regulators;
+ * - a transcription biochemicalReaction can have an arbitrary number of regulators;
  *
  * For any of them that is broken, an exception will be thrown.
  */
@@ -22,7 +22,7 @@ internal class BasicGeneticCircuit(name: String) : AbstractGeneticCircuit(name) 
                 contains(reaction) ->
                     throw IllegalArgumentException("$reaction already set for $entity.")
                 entity is Protein && reaction is Transcription && filterIsInstance<Transcription>().isNotEmpty() ->
-                    throw IllegalArgumentException("Transcription reaction already set for $entity.")
+                    throw IllegalArgumentException("Transcription biochemicalReaction already set for $entity.")
                 else ->
                     add(reaction)
             }
@@ -34,9 +34,9 @@ internal class BasicGeneticCircuit(name: String) : AbstractGeneticCircuit(name) 
             .filterValues { it is Degradation }
             .filterValues { it.isNotEmpty() }
             .keys
-            .random()
-            .apply {
-                throw IllegalStateException("Degradation reaction not set for $this")
+            .takeIf { it.isNotEmpty() }
+            .run {
+                throw IllegalStateException("Degradation biochemicalReaction not set for $this")
             }
     }
 }
