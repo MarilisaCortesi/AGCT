@@ -1,23 +1,30 @@
 package dsl
 
-/*
-import dsl.keywords.Create
-import dsl.keywords.The
-import dsl.utils.AGCT
-import dsl.utils.Alchemist
-import dsl.keywords.export
-import dsl.model.initialConcentration
+import dsl.levels.Create
+import dsl.levels.degradationRate
+import dsl.levels.export
+import dsl.levels.initialConcentration
+import dsl.utils.entityList
+import dsl.utils.reactionList
 
 fun main() {
     Create circuit "My Circuit" containing {
-        The gene "gA" that {
-            has an initialConcentration of 2
+        the gene "gA" that {
+            has an initialConcentration into values(1, 2, 3, 4, 5)
         }
-        // The gene "gA" having {
 
-        // }  whichCodesFor
-    } then export to AGCT and Alchemist
+        the protein "pA" that {
+            has an initialConcentration of 2
+            has a degradationRate of 10
+        }
+
+        the regulator "rA" that {
+            has a degradationRate of 2
+        }
+    } then export to entityList and reactionList // and AGCT and Alchemist
 }
+
+/*
     Create circuit "My Circuit" containing {
         The gene "gA" that {
             [has] (an) [initialConcentration] (of/in) ...

@@ -13,10 +13,12 @@ internal abstract class AbstractReaction(
     override val name: String
 ) : Reaction {
     override fun toString() =
-        "$name: " + buildString {
-            append(reagents.entries.joinToString(" + ") { "${it.value} ${it.key.id}" })
+        buildString {
+            append(name)
+            append(": ")
+            append(reagents.reaction)
             append(" --> ")
-            append(products.entries.joinToString(" + ") { "${it.value} ${it.key.id}" })
+            append(products.reaction)
         }
 
     override fun hashCode() =
@@ -24,14 +26,21 @@ internal abstract class AbstractReaction(
 
     override fun equals(other: Any?) =
         checkEquals(other) { reagents == it.reagents && products == it.products }
+
+    private val Map<BiochemicalEntity, Int>.reaction
+        get() = if (size == 0) {
+            "[]"
+        } else {
+            entries.joinToString(" + ") { if (it.value != 1) "${it.value} " else "" + it.key.id }
+        }
 }
 
 internal abstract class AbstractBiochemicalReaction : BiochemicalReaction {
     override fun toString() =
-        "${className.toUpperCase()}:" + buildString {
-            for (reaction in reactions) {
-                append("\n- $reaction")
-            }
+        buildString {
+            append(className.toUpperCase())
+            append(":\n- ")
+            append(reactions.joinToString("\n- "))
         }
 
     override fun hashCode() =

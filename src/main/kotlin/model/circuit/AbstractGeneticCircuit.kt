@@ -25,12 +25,19 @@ internal abstract class AbstractGeneticCircuit(override val name: String) : Gene
     inline fun<reified R : Reaction> reactionsOf() =
         reactions.filterIsInstance<R>().toSet()
 
-    /**
-     * Adds a series of [reactions] into the genetic geneticCircuit.
-     *
-     * @throws IllegalArgumentException if the biochemicalReaction does not follow the geneticCircuit rules.
-     */
-    override fun add(vararg reactions: BiochemicalReaction) {
+    override fun addEntity(entity: BiochemicalEntity) =
+        addEntities(entity)
+
+    override fun addEntities(vararg entities: BiochemicalEntity) {
+        for (entity in entities) {
+            circuit.getOrPut(entity) { mutableSetOf() }
+        }
+    }
+
+    override fun addReaction(reaction: BiochemicalReaction) =
+        addReactions(reaction)
+
+    override fun addReactions(vararg reactions: BiochemicalReaction) {
         for (reaction in reactions) {
             for (entity in reaction.entities) {
                 checkOnAdd(entity, reaction)
@@ -39,6 +46,7 @@ internal abstract class AbstractGeneticCircuit(override val name: String) : Gene
     }
 
     override fun exportTo(vararg types: ExportTypes) {
+        checkOnExport()
         for (type in types) {
             type.from(this)
         }

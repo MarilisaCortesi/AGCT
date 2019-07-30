@@ -12,9 +12,24 @@ internal interface GeneticCircuit {
     val reactions: Set<BiochemicalReaction>
 
     /**
+     * Adds an [entity] to the geneticCircuit.
+     */
+    fun addEntity(entity: BiochemicalEntity)
+
+    /**
+     * Adds a series of [entities] to the geneticCircuit.
+     */
+    fun addEntities(vararg entities: BiochemicalEntity)
+
+    /**
+     * Adds a [reaction] to the geneticCircuit.
+     */
+    fun addReaction(reaction: BiochemicalReaction)
+
+    /**
      * Adds a series of [reactions] to the geneticCircuit.
      */
-    fun add(vararg reactions: BiochemicalReaction)
+    fun addReactions(vararg reactions: BiochemicalReaction)
 
     /**
      * Exports the geneticCircuit.

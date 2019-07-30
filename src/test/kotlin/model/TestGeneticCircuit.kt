@@ -11,17 +11,17 @@ import model.reactions.DirectTranscription
 
 internal class TestGeneticCircuit : StringSpec({
     BasicGeneticCircuit("test geneticCircuit").run {
-        add(DEGRADATION, DIRECT_TRANSCRIPTION, REGULATION)
+        addReactions(DEGRADATION, DIRECT_TRANSCRIPTION, REGULATION)
 
         entities shouldContainExactlyInAnyOrder setOf(GENE, PROTEIN, REGULATIVE, REGULATED_GENE)
         reactions shouldContainExactlyInAnyOrder setOf(DEGRADATION, DIRECT_TRANSCRIPTION, REGULATION)
 
         shouldThrow<IllegalArgumentException> {
-            add(DEGRADATION)
+            addReaction(DEGRADATION)
         }.message shouldBe "$DEGRADATION already set for $PROTEIN."
 
         shouldThrow<IllegalArgumentException> {
-            add(DirectTranscription(entity<BasicGene>("g"), PROTEIN))
+            addReaction(DirectTranscription(entity<BasicGene>("g"), PROTEIN))
         }.message shouldBe "Transcription biochemicalReaction already set for $PROTEIN."
     }
 })

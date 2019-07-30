@@ -35,7 +35,7 @@ internal class BasicGeneticCircuit(name: String) : AbstractGeneticCircuit(name) 
             .filterValues { it.isNotEmpty() }
             .keys
             .takeIf { it.isNotEmpty() }
-            .run {
+            ?.run {
                 throw IllegalStateException("Degradation biochemicalReaction not set for $this")
             }
     }

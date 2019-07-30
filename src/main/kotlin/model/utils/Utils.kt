@@ -49,3 +49,8 @@ internal fun<C : Any> C.checkEquals(other: Any?, check: (C) -> Boolean) =
         javaClass != other?.javaClass -> false
         else -> (other as C).let(check)
     }
+
+/**
+ * Given a [string][this], it is printed to output console.
+ */
+internal fun String.toConsole() = println(this)
