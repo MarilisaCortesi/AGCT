@@ -6,6 +6,7 @@ import dsl.levels.export
 import dsl.levels.initialConcentration
 import dsl.utils.entityList
 import dsl.utils.reactionList
+import dsl.utils.values
 
 fun main() {
     Create circuit "My Circuit" containing {
