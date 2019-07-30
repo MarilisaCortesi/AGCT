@@ -5,7 +5,7 @@ import model.reactions.BiochemicalReaction
 import model.reactions.Reaction
 
 internal abstract class AbstractGeneticCircuit(override val name: String) : GeneticCircuit {
-    protected val circuit = mutableMapOf<BiochemicalEntity, MutableSet<BiochemicalReaction>>()
+    private val circuit = mutableMapOf<BiochemicalEntity, MutableSet<BiochemicalReaction>>()
 
     override val entities: Set<BiochemicalEntity>
         get() = circuit.keys.toSet()
@@ -40,29 +40,36 @@ internal abstract class AbstractGeneticCircuit(override val name: String) : Gene
     override fun addReactions(vararg reactions: BiochemicalReaction) {
         for (reaction in reactions) {
             for (entity in reaction.entities) {
-                checkOnAdd(entity, reaction)
+                circuit.getOrPut(entity) { mutableSetOf() }.also { set ->
+                    for (check in addingRules.values) {
+                        check(set, entity, reaction)
+                    }
+                }.add(reaction)
             }
         }
     }
 
     override fun exportTo(vararg types: ExportTypes) {
-        checkOnExport()
+        for (check in exportRules.values) {
+            check(circuit)
+        }
+
         for (type in types) {
             type.from(this)
         }
     }
 
     /**
-     * Implements the rules to be followed when adding a new biochemicalReaction to the geneticCircuit.
-     * Adds the [entity] and the [reaction] to the geneticCircuit or throws an [IllegalArgumentException].
+     * The list of rules to be checked when adding a new reaction to the circuit.
+     * Must throw an [IllegalArgumentException] if the rule is not followed.
      */
-    protected abstract fun checkOnAdd(entity: BiochemicalEntity, reaction: BiochemicalReaction)
+    protected val addingRules = mutableMapOf<String, (MutableSet<BiochemicalReaction>, BiochemicalEntity, BiochemicalReaction) -> Unit>()
 
     /**
-     * Implements the rules to be followed when adding a new biochemicalReaction to the geneticCircuit.
-     * Throws an [IllegalStateException] if the rules are not covered.
+     * Implements the rules to be followed when exporting the circuit.
+     * Must throw an [IllegalStateException] if the rules are not followed.
      */
-    protected abstract fun checkOnExport()
+    protected val exportRules = mutableMapOf<String, (Map<BiochemicalEntity, Set<BiochemicalReaction>>) -> Unit>()
 }
 
 private val BiochemicalReaction.entities

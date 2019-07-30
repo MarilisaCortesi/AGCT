@@ -8,19 +8,23 @@ import model.entities.*
 import model.reactions.*
 import kotlin.math.abs
 
-internal val MOLECULE = entity<Molecule>("mol")
-internal val DEGRADING = entity<DegradingMolecule>("det")
-internal val REGULATIVE = entity<RegulatingMolecule>("reg")
+internal val ENTITY = entity<BasicEntity>("ent")
+internal val DEGRADING = entity<BasicDegradingEntity>("det")
+internal val REGULATIVE = entity<BasicRegulatingEntity>("reg")
 internal val DEGRADING_REGULATIVE = entity<DegradingRegulatingMolecule>("det reg")
-internal val GENE = entity<Gene>("gen")
-internal val MRNA = entity<MRna>("rna")
-internal val PROTEIN = entity<Protein>("pro")
+internal val GENE = entity<BasicGene>("gen")
+internal val MRNA = entity<BasicMRna>("rna")
+internal val PROTEIN = entity<BasicProtein>("pro")
 internal val REGULATED_GENE = RegulatedGene(GENE, REGULATIVE)
+internal val REGULATED_MRNA = RegulatedMRna(MRNA, REGULATIVE)
 
 internal val DEGRADATION = BasicDegradation(PROTEIN)
-internal val DIRECT_TRANSCRIPTION = DirectTranscription(GENE, PROTEIN)
-internal val TWO_STEP_TRANSCRIPTION = TwoStepTranscription(GENE, MRNA, PROTEIN)
-internal val REGULATION = BasicRegulation(DIRECT_TRANSCRIPTION, REGULATIVE)
+internal val DIRECT = DirectTranscription(GENE, PROTEIN)
+internal val TRANSCRIPTION = BasicTranscription(GENE, MRNA)
+internal val TRANSLATION = BasicTranslation(MRNA, PROTEIN)
+internal val DIRECT_REGULATION = BasicRegulation(DIRECT, REGULATIVE)
+internal val TRANSCRIPTION_REGULATION = BasicRegulation(TRANSCRIPTION, REGULATIVE)
+internal val TRANSLATION_REGULATION = BasicRegulation(TRANSLATION, REGULATIVE)
 
 private const val DELTA = 10e-15
 
@@ -54,17 +58,3 @@ internal val Int.elements : Matcher<Collection<*>>
                 )
             }
     }
-
-/*
-val Int.elements : Matcher<Map<*, *>>
-    get() = object : Matcher<Map<*, *>> {
-        override fun test(value: Map<*, *>) =
-            value.size.run {
-                Result(
-                    this == this@elements,
-                    "map should have ${ this@elements} model.elements but it has $this",
-                    "map should not have ${ this@elements} model.elements but it has"
-                )
-            }
-    }
-*/

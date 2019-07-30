@@ -25,31 +25,38 @@ internal interface BiochemicalReaction {
  * The degradation of a [molecule].
  */
 internal interface Degradation : BiochemicalReaction {
-    val molecule: DegradingMolecule
+    val molecule: DegradingEntity
     val degradationRate: Rate
 }
 
 /**
- * The transcription (and translation) of a [gene][coder] into a [protein][target] passing through a molecule of [mRNA][step].
+ * The coding of a [target] from a [coder].
  */
-internal interface Transcription : BiochemicalReaction {
-    val coder: Gene
-    val step: MRna?
-    val target: Protein
-    val transcriptionRate: Rate
-    val translationRate: Rate?
+internal interface CodingReaction<out C : TranscribingEntity, out T : TranscribableEntity> : BiochemicalReaction {
+    val coder: C
+    val target: T
+    val basalRate: Rate
 }
 
 /**
-* The regulation of a [transcription][reaction] from a [regulator].
-* The translation, if present, is not affected by the regulation.
+ * The transcription of a [gene][coder] into an [molecule][target] that can either be a [Protein] or [mRNA][MRna].
+ */
+internal interface Transcription<out T : TranscribableEntity> : CodingReaction<Gene, T>
+
+/**
+ * The translation of a [protein][target] from a molecule of [mRNA][coder].
+ */
+internal interface Translation : CodingReaction<MRna, Protein>
+
+/**
+* The regulation of a [coding reaction][reaction] from a [regulator].
 *
-* The [binding rate][bindingRate] is the rate at which the regulator links itself to the gene.
-* The [unbinding rate][unbindingRate] is the rate at which the regulated gene separates in the two entities.
+* The [binding rate][bindingRate] is the rate at which the regulator links itself to the entity.
+* The [unbinding rate][unbindingRate] is the rate at which the bound entity separates in the two original entities.
 */
 internal interface Regulation : BiochemicalReaction {
-    val regulator: RegulatingMolecule
-    val reaction: Transcription
+    val reaction: CodingReaction<*, *>
+    val regulator: RegulatingEntity
     val regulatedRate: Rate
     val bindingRate: Rate
     val unbindingRate: Rate

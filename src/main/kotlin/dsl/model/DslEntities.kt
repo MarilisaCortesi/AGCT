@@ -21,7 +21,7 @@ abstract class DslEntity internal constructor(internal val id: String) {
 }
 
 abstract class DslDegradingRegulating internal constructor(id: String) : DslEntity(id) {
-    abstract override val biochemicalEntity: RegulatingMolecule
+    abstract override val biochemicalEntity: RegulatingEntity
 
     val degradationRate = DslRate()
 }
@@ -37,10 +37,10 @@ class DslProtein(id: String) : DslDegradingRegulating(id) {
 }
 
 class DslRegulator(id: String) : DslDegradingRegulating(id) {
-    override val biochemicalEntity: RegulatingMolecule
+    override val biochemicalEntity: RegulatingEntity
         get() = if(degradationRate.rate == null) {
-            BasicRegulatingMolecule(parameters)
+            BasicRegulatingEntity(parameters)
         } else {
-            BasicDegradingRegulatingMolecule(parameters)
+            DegradingRegulatingMolecule(parameters)
         }
 }

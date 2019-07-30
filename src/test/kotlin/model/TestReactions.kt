@@ -3,11 +3,103 @@ package model
 import io.kotlintest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotlintest.matchers.collections.shouldHaveSingleElement
 import io.kotlintest.shouldBe
-import io.kotlintest.shouldHave
 import io.kotlintest.specs.StringSpec
 import model.entities.*
 import model.reactions.*
 import model.variables.Rate
+
+internal class TestReactions : StringSpec({
+    "test basics" {
+        DEGRADATION.run {
+            molecule shouldBe PROTEIN
+            degradationRate shouldBe Rate()
+            reactions shouldContainExactlyInAnyOrder DEGRADATION_REACTIONS
+            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
+        }
+
+        DIRECT.run {
+            coder shouldBe GENE
+            target shouldBe PROTEIN
+            basalRate shouldBe Rate()
+            reactions shouldContainExactlyInAnyOrder DIRECT_REACTIONS
+            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
+        }
+
+        TRANSCRIPTION.run {
+            coder shouldBe GENE
+            target shouldBe MRNA
+            basalRate shouldBe Rate()
+            reactions shouldContainExactlyInAnyOrder TRANSCRIPTION_REACTIONS
+            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
+        }
+
+        TRANSLATION.run {
+            coder shouldBe MRNA
+            target shouldBe PROTEIN
+            basalRate shouldBe Rate()
+            reactions shouldContainExactlyInAnyOrder TRANSLATION_REACTIONS
+            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
+        }
+
+        DIRECT_REGULATION.run {
+            reaction shouldBe DIRECT
+            regulator shouldBe REGULATIVE
+            regulatedRate shouldBe Rate()
+            unbindingRate shouldBe Rate()
+            bindingRate shouldBe Rate()
+            reactions shouldContainExactlyInAnyOrder DIRECT_REGULATION_REACTIONS
+            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
+        }
+
+        TRANSCRIPTION_REGULATION.run {
+            reaction shouldBe TRANSCRIPTION
+            regulator shouldBe REGULATIVE
+            regulatedRate shouldBe Rate()
+            unbindingRate shouldBe Rate()
+            bindingRate shouldBe Rate()
+            reactions shouldContainExactlyInAnyOrder TRANSCRIPTION_REGULATION_REACTIONS
+            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
+        }
+
+        TRANSLATION_REGULATION.run {
+            reaction shouldBe TRANSLATION
+            regulator shouldBe REGULATIVE
+            regulatedRate shouldBe Rate()
+            unbindingRate shouldBe Rate()
+            bindingRate shouldBe Rate()
+            reactions shouldContainExactlyInAnyOrder TRANSLATION_REGULATION_REACTIONS
+            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
+        }
+    }
+
+    "test equality" {
+        DEGRADATION shouldEqual BasicDegradation(PROTEIN, Rate(2))
+        DIRECT shouldEqual DirectTranscription(GENE, PROTEIN, Rate(2))
+        TRANSCRIPTION shouldEqual BasicTranscription(GENE, MRNA, Rate(2))
+        TRANSLATION shouldEqual BasicTranslation(MRNA, PROTEIN, Rate(2))
+        DIRECT_REGULATION shouldEqual BasicRegulation(DIRECT, REGULATIVE, Rate(2), Rate(2), Rate(2))
+        TRANSCRIPTION_REGULATION shouldEqual BasicRegulation(TRANSCRIPTION, REGULATIVE, Rate(2), Rate(2), Rate(2))
+        TRANSLATION_REGULATION shouldEqual BasicRegulation(TRANSLATION, REGULATIVE, Rate(2), Rate(2), Rate(2))
+
+        val gene = entity<Gene>("g2")
+        val mrna = entity<MRna>("m2")
+        val protein = entity<Protein>("p2")
+        val regulative = entity<RegulatingEntity>("r2")
+        DEGRADATION shouldNotEqual BasicDegradation(protein)
+        DIRECT shouldNotEqual DirectTranscription(GENE, protein)
+        DIRECT shouldNotEqual DirectTranscription(gene, PROTEIN)
+        TRANSCRIPTION shouldNotEqual BasicTranscription(GENE, mrna)
+        TRANSCRIPTION shouldNotEqual BasicTranscription(gene, MRNA)
+        TRANSLATION shouldNotEqual BasicTranslation(MRNA, protein)
+        TRANSLATION shouldNotEqual BasicTranslation(mrna, PROTEIN)
+        DIRECT_REGULATION shouldNotEqual BasicRegulation(DIRECT, regulative)
+        DIRECT_REGULATION shouldNotEqual BasicRegulation(DirectTranscription(gene, protein), REGULATIVE)
+        TRANSCRIPTION_REGULATION shouldNotEqual BasicRegulation(TRANSCRIPTION, regulative)
+        TRANSCRIPTION_REGULATION shouldNotEqual BasicRegulation(BasicTranscription(gene, mrna), REGULATIVE)
+        TRANSLATION_REGULATION shouldNotEqual BasicRegulation(TRANSLATION, regulative)
+        TRANSLATION_REGULATION shouldNotEqual BasicRegulation(BasicTranslation(mrna, protein), REGULATIVE)
+    }
+})
 
 private val DEGRADATION_REACTIONS = setOf(
     BasicReaction(
@@ -17,7 +109,7 @@ private val DEGRADATION_REACTIONS = setOf(
     )
 )
 
-private val DIRECT_TRANSCRIPTION_REACTIONS = setOf(
+private val DIRECT_REACTIONS = setOf(
     BasicReaction(
         reagents = mapOf(GENE to 1),
         products = mapOf(GENE to 1, PROTEIN to 1),
@@ -25,12 +117,15 @@ private val DIRECT_TRANSCRIPTION_REACTIONS = setOf(
     )
 )
 
-private val TWO_STEP_TRANSCRIPTION_REACTIONS = setOf(
+private val TRANSCRIPTION_REACTIONS = setOf(
     BasicReaction(
         reagents = mapOf(GENE to 1),
         products = mapOf(GENE to 1, MRNA to 1),
         name = "rna transcription"
-    ),
+    )
+)
+
+private val TRANSLATION_REACTIONS = setOf(
     BasicReaction(
         reagents = mapOf(MRNA to 1),
         products = mapOf(MRNA to 1, PROTEIN to 1),
@@ -38,7 +133,7 @@ private val TWO_STEP_TRANSCRIPTION_REACTIONS = setOf(
     )
 )
 
-private val REGULATION_REACTIONS = setOf(
+private val DIRECT_REGULATION_REACTIONS = setOf(
     BasicReaction(
         reagents = mapOf(GENE to 1, REGULATIVE to 1),
         products = mapOf(REGULATED_GENE to 1),
@@ -56,63 +151,38 @@ private val REGULATION_REACTIONS = setOf(
     )
 )
 
-internal class TestReactions : StringSpec({
-    "test basics" {
-        DEGRADATION.run {
-            molecule shouldBe PROTEIN
-            degradationRate shouldBe Rate()
-            reactions shouldContainExactlyInAnyOrder DEGRADATION_REACTIONS
-            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
-        }
+private val TRANSCRIPTION_REGULATION_REACTIONS = setOf(
+    BasicReaction(
+        reagents = mapOf(GENE to 1, REGULATIVE to 1),
+        products = mapOf(REGULATED_GENE to 1),
+        name = "gen binding"
+    ),
+    BasicReaction(
+        reagents = mapOf(REGULATED_GENE to 1),
+        products = mapOf(GENE to 1, REGULATIVE to 1),
+        name = "gen unbinding"
+    ),
+    BasicReaction(
+        reagents = mapOf(REGULATED_GENE to 1),
+        products = mapOf(REGULATED_GENE to 1, MRNA to 1),
+        name = "rna transcription"
+    )
+)
 
-        DIRECT_TRANSCRIPTION.run {
-            coder shouldBe GENE
-            step shouldBe null
-            target shouldBe PROTEIN
-            transcriptionRate shouldBe Rate()
-            translationRate shouldBe null
-            reactions shouldContainExactlyInAnyOrder DIRECT_TRANSCRIPTION_REACTIONS
-            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
-        }
-
-        TWO_STEP_TRANSCRIPTION.run {
-            coder shouldBe GENE
-            step shouldBe MRNA
-            target shouldBe PROTEIN
-            transcriptionRate shouldBe Rate()
-            translationRate shouldBe Rate()
-            reactions shouldContainExactlyInAnyOrder TWO_STEP_TRANSCRIPTION_REACTIONS
-            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
-        }
-
-        REGULATION.run {
-            reaction shouldBe DIRECT_TRANSCRIPTION
-            regulator shouldBe REGULATIVE
-            regulatedRate shouldBe Rate()
-            unbindingRate shouldBe Rate()
-            bindingRate shouldBe Rate()
-            reactions shouldContainExactlyInAnyOrder REGULATION_REACTIONS
-            reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
-        }
-    }
-
-    "test equality" {
-        DEGRADATION shouldEqual BasicDegradation(PROTEIN, Rate(2))
-        DIRECT_TRANSCRIPTION shouldEqual DirectTranscription(GENE, PROTEIN, Rate(2))
-        TWO_STEP_TRANSCRIPTION shouldEqual TwoStepTranscription(GENE, MRNA, PROTEIN, Rate(2), Rate(2))
-        REGULATION shouldEqual BasicRegulation(DIRECT_TRANSCRIPTION, REGULATIVE, Rate(2), Rate(2))
-
-        val gene = entity<Gene>("g2")
-        val mrna = entity<MRna>("m2")
-        val protein = entity<Protein>("p2")
-        val regulative = entity<RegulatingMolecule>("r2")
-        DEGRADATION shouldNotEqual BasicDegradation(protein)
-        DIRECT_TRANSCRIPTION shouldNotEqual DirectTranscription(GENE, protein)
-        DIRECT_TRANSCRIPTION shouldNotEqual DirectTranscription(gene, PROTEIN)
-        TWO_STEP_TRANSCRIPTION shouldNotEqual TwoStepTranscription(GENE, MRNA, protein)
-        TWO_STEP_TRANSCRIPTION shouldNotEqual TwoStepTranscription(GENE, mrna, PROTEIN)
-        TWO_STEP_TRANSCRIPTION shouldNotEqual TwoStepTranscription(gene, MRNA, PROTEIN)
-        REGULATION shouldNotEqual BasicRegulation(DIRECT_TRANSCRIPTION, regulative)
-        REGULATION shouldNotEqual BasicRegulation(DirectTranscription(gene, protein), REGULATIVE)
-    }
-})
+private val TRANSLATION_REGULATION_REACTIONS = setOf(
+    BasicReaction(
+        reagents = mapOf(MRNA to 1, REGULATIVE to 1),
+        products = mapOf(REGULATED_MRNA to 1),
+        name = "rna binding"
+    ),
+    BasicReaction(
+        reagents = mapOf(REGULATED_MRNA to 1),
+        products = mapOf(MRNA to 1, REGULATIVE to 1),
+        name = "rna unbinding"
+    ),
+    BasicReaction(
+        reagents = mapOf(REGULATED_MRNA to 1),
+        products = mapOf(REGULATED_MRNA to 1, PROTEIN to 1),
+        name = "pro transcription"
+    )
+)

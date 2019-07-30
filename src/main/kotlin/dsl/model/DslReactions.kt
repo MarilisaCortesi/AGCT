@@ -16,7 +16,7 @@ class DslTranscription internal constructor() : DslReaction() {
     private var target: DslProtein by Delegates.notNull()
     private var transcriptionRate: Rate = Rate()
 
-    override val biochemicalReaction: Transcription
+    override val biochemicalReaction: DirectTranscription
         get() = DirectTranscription(
             coder.biochemicalEntity,
             target.biochemicalEntity,

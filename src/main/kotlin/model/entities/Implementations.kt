@@ -22,17 +22,17 @@ internal abstract class AbstractBoundEntity<out F : BiochemicalEntity, out S : B
     override val second: S
 ) : AbstractEntity(EntityParameters().apply { id = "[${first.id}-${second.id}]" }), BoundBiochemicalEntity<F, S>
 
-internal class BasicMolecule(parameters: EntityParameters) :
-    AbstractEntity(parameters), Molecule
+internal class BasicDegradingEntity(parameters: EntityParameters) :
+    AbstractEntity(parameters), DegradingEntity
 
-internal class BasicDegradingMolecule(parameters: EntityParameters) :
-    AbstractEntity(parameters), DegradingMolecule
+internal class BasicRegulatingEntity(parameters: EntityParameters) :
+    AbstractEntity(parameters), RegulatingEntity
 
-internal class BasicRegulatingMolecule(parameters: EntityParameters) :
-    AbstractEntity(parameters), RegulatingMolecule
+internal class DegradingRegulatingMolecule(parameters: EntityParameters) :
+    AbstractEntity(parameters), DegradingEntity, RegulatingEntity
 
-internal class BasicDegradingRegulatingMolecule(parameters: EntityParameters) :
-    AbstractEntity(parameters), DegradingRegulatingMolecule
+internal class BasicEntity(parameters: EntityParameters) :
+    AbstractEntity(parameters)
 
 internal class BasicGene(parameters: EntityParameters) :
     AbstractEntity(parameters), Gene
@@ -43,5 +43,8 @@ internal class BasicMRna(parameters: EntityParameters) :
 internal class BasicProtein(parameters: EntityParameters) :
     AbstractEntity(parameters), Protein
 
-internal class RegulatedGene(gene: Gene, regulator: RegulatingMolecule) :
-    AbstractBoundEntity<Gene, RegulatingMolecule>(gene, regulator), Gene
+internal class RegulatedMRna(mRna: MRna, regulator: RegulatingEntity) :
+    AbstractBoundEntity<MRna, RegulatingEntity>(mRna, regulator), MRna
+
+internal class RegulatedGene(gene: Gene, regulator: RegulatingEntity) :
+    AbstractBoundEntity<Gene, RegulatingEntity>(gene, regulator), Gene

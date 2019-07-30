@@ -1,8 +1,9 @@
 package model.entities
 
-import model.utils.constructor
 import model.variables.Concentration
 import kotlin.properties.Delegates
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
 
 /**
  * Creates an biochemicalEntity using its parameters and its [type][T].
@@ -27,3 +28,19 @@ internal class EntityParameters {
     var initialConcentration: Concentration = Concentration()
     var aliases: MutableList<String> = mutableListOf()
 }
+
+
+/**
+ * Given a [KClass] named 'Something', it returns the class named 'BasicSomething' if it exists.
+ */
+private val KClass<*>.basicClass
+    get() = Class.forName(buildString {
+        append(qualifiedName?.replace("Biochemical", ""))
+        insert(lastIndexOf('.') + 1, "Basic")
+    }).kotlin
+
+/**
+ * Given a [KClass] it returns its constructor or the constructor of its basic implementation if present.
+ */
+private val KClass<*>.constructor
+    get() = primaryConstructor ?: basicClass.primaryConstructor ?: throw IllegalStateException("$simpleName has no constructors")

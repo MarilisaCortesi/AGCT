@@ -1,42 +1,67 @@
 package model.circuit
 
 import model.entities.*
+import model.reactions.*
 import model.reactions.BiochemicalReaction
+import model.reactions.CodingReaction
 import model.reactions.Degradation
 import model.reactions.Transcription
+import model.reactions.Translation
+import model.utils.toConsole
 import java.lang.IllegalStateException
 
 /**
  * A genetic geneticCircuit with basic limitations:
- * - a molecule that can deteriorate, must have one and one deterioration biochemicalReaction only;
- * - a gene can code for an arbitrary number of proteins, but a protein can be coded by one gene only;
- * - a regulator can regulate an arbitrary number of transcription reactions;
- * - a transcription biochemicalReaction can have an arbitrary number of regulators;
+ * 0. the same reaction cannot be set twice for the same entity;
+ * 1. a degrading molecule must have one and one degrading reaction only;
+ * 2. a gene can code directly for an arbitrary number of proteins, but a protein can be coded by one gene only;
+ * 3. a gene can code for an arbitrary number of mRNA molecules, but a mRNA molecule can be coded by one gene only;
+ * 4. a molecule of mRNA can code for one protein only, as well as one protein can be coded by one molecule of mRNA only;
+ * 5. a regulator can regulate an arbitrary number of coding reactions;
+ * 6. a coding reaction can have an arbitrary number of regulators;
  *
  * For any of them that is broken, an exception will be thrown.
  */
 internal class BasicGeneticCircuit(name: String) : AbstractGeneticCircuit(name) {
-    override fun checkOnAdd(entity: BiochemicalEntity, reaction: BiochemicalReaction) {
-        circuit.getOrPut(entity) { mutableSetOf() }.run {
-            when {
-                contains(reaction) ->
-                    throw IllegalArgumentException("$reaction already set for $entity.")
-                entity is Protein && reaction is Transcription && filterIsInstance<Transcription>().isNotEmpty() ->
-                    throw IllegalArgumentException("Transcription biochemicalReaction already set for $entity.")
-                else ->
-                    add(reaction)
+    init {
+        exportRules["one degradation reaction at least"] = { circuit ->
+            circuit.filterKeys { it is DegradingEntity }
+                .filterValues { it.filterIsInstance<Degradation>().isEmpty() }
+                .keys
+                .firstOrNull()
+                ?.let { entity ->
+                    throw IllegalStateException("Degradation reaction not set for $entity")
+                }
+        }
+
+        // includes "one degradation reaction at most" as a degradation reaction is made of the entity only
+        addingRules["no duplicate reactions"] = { set, entity, reaction ->
+            if (set.contains(reaction))
+                throw IllegalArgumentException("$reaction already set for $entity.")
+        }
+
+        addingRules["one protein transcription/translation at most"] = { set, entity, reaction ->
+            if (entity is Protein && reaction is CodingReaction<*, *>) {
+                set.filterIsInstance<CodingReaction<*, *>>().firstOrNull()?.run {
+                    throw IllegalArgumentException("$entity is already transcribed/translated by $coder")
+                }
             }
         }
-    }
 
-    override fun checkOnExport() {
-        circuit.filterKeys { it is DegradingMolecule }
-            .filterValues { it is Degradation }
-            .filterValues { it.isNotEmpty() }
-            .keys
-            .takeIf { it.isNotEmpty() }
-            ?.run {
-                throw IllegalStateException("Degradation biochemicalReaction not set for $this")
+        addingRules["one mRNA transcription at most"] = { set, entity, reaction ->
+            if (entity is MRna && reaction is Transcription<*>) {
+                set.filterIsInstance<Transcription<*>>().firstOrNull()?.run {
+                    throw IllegalArgumentException("$entity is already transcribed by $coder")
+                }
             }
+        }
+
+        addingRules["one mRNA translation at most"] = { set, entity, reaction ->
+            if (entity is MRna && reaction is Translation) {
+                set.filterIsInstance<Translation>().firstOrNull()?.run {
+                    throw IllegalArgumentException("$entity already translates $target")
+                }
+            }
+        }
     }
 }

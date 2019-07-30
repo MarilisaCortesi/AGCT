@@ -2,7 +2,7 @@ package dsl.model
 
 import model.circuit.BasicGeneticCircuit
 import model.circuit.GeneticCircuit
-import model.entities.DegradingMolecule
+import model.entities.DegradingEntity
 import model.reactions.BasicDegradation
 
 abstract class DslCircuit internal constructor() {
@@ -37,7 +37,7 @@ class BasicDslCircuit internal constructor(private val name: String) : DslCircui
         get() = entities.values
             .filterIsInstance<DslDegradingRegulating>()
             .filter { it.degradationRate.rate != null }
-            .map { BasicDegradation(it.biochemicalEntity as DegradingMolecule, it.degradationRate.rate!!) }
+            .map { BasicDegradation(it.biochemicalEntity as DegradingEntity, it.degradationRate.rate!!) }
             .toSet()
             .toTypedArray()
 

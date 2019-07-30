@@ -14,42 +14,42 @@ internal interface BiochemicalEntity {
 }
 
 /**
- * A generic molecule.
+ * An entity that can degrade.
  */
-internal interface Molecule : BiochemicalEntity
+internal interface DegradingEntity : BiochemicalEntity
 
 /**
- * A molecule that can degrade.
- */
-internal interface DegradingMolecule : BiochemicalEntity
-
-/**
- * A molecule that can be a gene regulator.
+ * An entity that can behave as gene regulator.
  *
  * I.e. a protein can regulate (activating or inhibiting the transcription of another protein by a gene) so it should
  * extend this interface, while a gene should not as it can not behave as a regulator.
  */
-internal interface RegulatingMolecule : BiochemicalEntity
+internal interface RegulatingEntity : BiochemicalEntity
 
 /**
- * A molecule that can bot degrade and behave as a gene regulator.
+ * An entity that can be a coder in either a transcription or a translation reaction.
  */
-internal interface DegradingRegulatingMolecule : DegradingMolecule, RegulatingMolecule
+internal interface TranscribingEntity : BiochemicalEntity
+
+/**
+ * An entity that can be a target in either a transcription or a translation reaction.
+ */
+internal interface TranscribableEntity : BiochemicalEntity
 
 /**
  * A gene that codes for an arbitrary number of proteins, passing through the phases of transcription and translation.
  */
-internal interface Gene : BiochemicalEntity
+internal interface Gene : BiochemicalEntity, TranscribingEntity
 
 /**
  * A molecule of mRNA which is the step between the gene and the protein that it codes for.
  */
-internal interface MRna : DegradingMolecule
+internal interface MRna : DegradingEntity, TranscribingEntity, TranscribableEntity
 
 /**
  * A protein which can be coded by a gene.
  */
-internal interface Protein : DegradingRegulatingMolecule
+internal interface Protein : DegradingEntity, RegulatingEntity, TranscribableEntity
 
 /**
  * A [biochemical biochemicalEntity][BiochemicalEntity] composed of two bound single entities.

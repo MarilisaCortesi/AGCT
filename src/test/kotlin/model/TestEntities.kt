@@ -8,7 +8,7 @@ import model.variables.Concentration
 
 internal class TestEntities : StringSpec({
     "test basics" {
-        MOLECULE testBasics "mol"
+        ENTITY testBasics "ent"
         DEGRADING testBasics "det"
         REGULATIVE testBasics "reg"
         DEGRADING_REGULATIVE testBasics "det reg"
@@ -16,13 +16,14 @@ internal class TestEntities : StringSpec({
         MRNA testBasics "rna"
         PROTEIN testBasics "pro"
         REGULATED_GENE testBasics "[gen-reg]"
+        REGULATED_MRNA testBasics "[rna-reg]"
     }
 
     "test equality" {
-        entity<Molecule>("mol") shouldEqual MOLECULE
-        entity<Molecule>("mol") { initialConcentration = Concentration(2) } shouldEqual MOLECULE
-        entity<Molecule>("oth") shouldNotEqual MOLECULE
-        entity<Molecule>("pro") shouldNotEqual MOLECULE
+        entity<BiochemicalEntity>("ent") shouldEqual ENTITY
+        entity<BiochemicalEntity>("ent") { initialConcentration = Concentration(2) } shouldEqual ENTITY
+        entity<BiochemicalEntity>("oth") shouldNotEqual ENTITY
+        entity<BiochemicalEntity>("pro") shouldNotEqual ENTITY
     }
 })
 

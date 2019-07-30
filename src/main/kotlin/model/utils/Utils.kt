@@ -15,8 +15,10 @@ internal class UnknownClassException(
 /**
  * Returns the class name of an object.
  */
-internal val Any.className
-    get() = javaClass.simpleName
+internal val Any?.className
+    get() = this
+        ?.javaClass
+        ?.simpleName
         ?.removePrefix("Basic")
         ?.capitalize()
         ?.split(('A'..'Z').toString())
@@ -24,19 +26,9 @@ internal val Any.className
         ?: ""
 
 /**
- * Given a [KClass] named 'Something', it returns the class named 'BasicSomething' if it exists.
+ * Given an [object][this], it is printed to output console.
  */
-internal val KClass<*>.basicClass
-    get() = Class.forName(buildString {
-        append(qualifiedName)
-        insert(lastIndexOf('.') + 1, "Basic")
-    }).kotlin
-
-/**
- * Given a [KClass] it returns its constructor or the constructor of its basic implementation if present.
- */
-internal val KClass<*>.constructor
-    get() = primaryConstructor ?: basicClass.primaryConstructor ?: throw IllegalStateException("$simpleName has no constructors")
+internal fun Any?.toConsole() = println(this)
 
 /**
  * Returns true if the [other] object is the same as [this], false if not.
@@ -49,8 +41,3 @@ internal fun<C : Any> C.checkEquals(other: Any?, check: (C) -> Boolean) =
         javaClass != other?.javaClass -> false
         else -> (other as C).let(check)
     }
-
-/**
- * Given a [string][this], it is printed to output console.
- */
-internal fun String.toConsole() = println(this)
