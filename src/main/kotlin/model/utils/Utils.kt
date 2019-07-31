@@ -1,13 +1,10 @@
 package model.utils
 
-import kotlin.reflect.KClass
-import kotlin.reflect.full.primaryConstructor
-
 /**
- * Exception thrown when an unknown implementation of an biochemicalEntity or a biochemicalReaction is passed.
+ * Exception thrown when an unsupported class is passed.
  * Likely to be used in a "when" construct.
  */
-internal class UnknownClassException(
+internal class UnsupportedClassException(
     message: String? = null,
     cause: Throwable? = null
 ) : IllegalArgumentException(message, cause)
@@ -24,6 +21,12 @@ internal val Any?.className
         ?.split(('A'..'Z').toString())
         ?.joinToString(" ")
         ?: ""
+
+/**
+ * A for each method with a "this" context for each element.
+ */
+internal fun<T : Any?> Collection<T>.forEachSelf(action: T.() -> Unit) =
+    forEach { it.action() }
 
 /**
  * Given an [object][this], it is printed to output console.

@@ -13,7 +13,7 @@ abstract class DslPositiveVariable<T : Number> internal constructor(
         into(sequenceOf(value))
 
     infix fun into(values: Sequence<Number>) {
-        variable = values.map { it }.construct()
+        variable = values.construct()
     }
 }
 

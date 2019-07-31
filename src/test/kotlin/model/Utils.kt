@@ -4,6 +4,7 @@ import io.kotlintest.Matcher
 import io.kotlintest.Result
 import io.kotlintest.fail
 import io.kotlintest.matchers.collections.shouldHaveSize
+import model.circuit.BasicGeneticCircuit
 import model.entities.*
 import model.reactions.*
 import kotlin.math.abs

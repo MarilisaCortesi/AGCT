@@ -2,7 +2,7 @@
 
 package dsl.utils
 
-import model.circuit.ExportTypes
+import model.circuit.export.ExportTypes
 import model.circuit.GeneticCircuit
 
 abstract class ExportObject internal constructor() {

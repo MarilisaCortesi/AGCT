@@ -6,7 +6,9 @@ import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
 import model.circuit.BasicGeneticCircuit
+import model.circuit.export.ExportTypes
 import model.entities.*
+import model.reactions.BasicDegradation
 import model.reactions.BasicTranscription
 import model.reactions.BasicTranslation
 import model.reactions.DirectTranscription
@@ -82,6 +84,16 @@ internal class TestGeneticCircuit : StringSpec({
             shouldThrow<IllegalStateException> {
                 exportTo()
             }.message shouldBe "Degradation reaction not set for $PROTEIN"
+        }
+    }
+
+    "random test" {
+        BasicGeneticCircuit("test").run {
+            val pro2 = entity<Protein>("pro2")
+            val deg2 = BasicDegradation(pro2)
+            val tra2 = DirectTranscription(GENE, pro2)
+            addReactions(DEGRADATION, DIRECT, DIRECT_REGULATION, deg2, tra2)
+            exportTo(ExportTypes.AGCT)
         }
     }
 })

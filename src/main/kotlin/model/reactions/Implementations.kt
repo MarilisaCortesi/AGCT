@@ -3,7 +3,7 @@ package model.reactions
 import model.utils.checkEquals
 import model.utils.className
 import model.entities.*
-import model.utils.UnknownClassException
+import model.utils.UnsupportedClassException
 import model.variables.Rate
 
 internal abstract class AbstractReaction(
@@ -140,6 +140,6 @@ internal class BasicRegulation(
             is BasicTranslation -> RegulatedMRna(reaction.coder, regulator).let {
                 Pair(it, BasicTranslation(it, reaction.target, regulatedRate))
             }
-            else -> throw UnknownClassException("${reaction.coder} is of unknown type.")
+            else -> throw UnsupportedClassException("${reaction.coder} has an unsupported type.")
         }
 }

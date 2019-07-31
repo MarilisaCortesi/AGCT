@@ -1,29 +1,20 @@
 package model.circuit
 
+import model.circuit.export.ExportTypes
 import model.entities.BiochemicalEntity
 import model.reactions.BiochemicalReaction
-import model.reactions.Reaction
 
 internal abstract class AbstractGeneticCircuit(override val name: String) : GeneticCircuit {
     private val circuit = mutableMapOf<BiochemicalEntity, MutableSet<BiochemicalReaction>>()
 
-    override val entities: Set<BiochemicalEntity>
-        get() = circuit.keys.toSet()
-
     override val reactions: Set<BiochemicalReaction>
         get() = circuit.values.flatten().toSet()
 
-    /**
-     * Returns a set of entities of type [E].
-     */
-    inline fun<reified E : BiochemicalEntity> entitiesOf() =
-        entities.filterIsInstance<E>().toSet()
+    override val entities: Set<BiochemicalEntity>
+        get() = circuit.keys.toSet()
 
-    /**
-     * Returns a set of reactions of type [R].
-     */
-    inline fun<reified R : Reaction> reactionsOf() =
-        reactions.filterIsInstance<R>().toSet()
+    override fun reactionsOf(entity: BiochemicalEntity) =
+        circuit[entity]?.toSet() ?: emptySet()
 
     override fun addEntity(entity: BiochemicalEntity) =
         addEntities(entity)

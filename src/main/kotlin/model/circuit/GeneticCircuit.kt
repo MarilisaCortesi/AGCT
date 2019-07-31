@@ -1,5 +1,6 @@
 package model.circuit
 
+import model.circuit.export.ExportTypes
 import model.entities.*
 import model.reactions.BiochemicalReaction
 
@@ -8,8 +9,14 @@ import model.reactions.BiochemicalReaction
  */
 internal interface GeneticCircuit {
     val name: String
-    val entities: Set<BiochemicalEntity>
+
     val reactions: Set<BiochemicalReaction>
+    val entities: Set<BiochemicalEntity>
+
+    /**
+     * Returns the reactions involving the given [entity].
+     */
+    fun reactionsOf(entity: BiochemicalEntity) : Set<BiochemicalReaction>
 
     /**
      * Adds an [entity] to the geneticCircuit.
