@@ -4,10 +4,8 @@ package model.utils
  * Exception thrown when an unsupported class is passed.
  * Likely to be used in a "when" construct.
  */
-internal class UnsupportedClassException(
-    message: String? = null,
-    cause: Throwable? = null
-) : IllegalArgumentException(message, cause)
+internal class UnsupportedClassException(unsupported: Any?) :
+    IllegalArgumentException("$unsupported has class ${unsupported?.javaClass}, which is not supported in this context.")
 
 /**
  * Returns the class name of an object.
@@ -17,6 +15,7 @@ internal val Any?.className
         ?.javaClass
         ?.simpleName
         ?.removePrefix("Basic")
+        ?.removePrefix("Dsl")
         ?.capitalize()
         ?.split(('A'..'Z').toString())
         ?.joinToString(" ")
@@ -44,3 +43,9 @@ internal fun<C : Any> C.checkEquals(other: Any?, check: (C) -> Boolean) =
         javaClass != other?.javaClass -> false
         else -> (other as C).let(check)
     }
+
+/**
+ * Surrounds the string with two inverted commas to resemble a string.
+ */
+internal val String.string
+    get() = "\"$this\""

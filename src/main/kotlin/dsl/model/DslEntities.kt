@@ -6,24 +6,19 @@ import model.entities.BiochemicalEntity
 import model.entities.EntityParameters
 import model.entities.Gene
 import model.entities.Protein
-import model.variables.Concentration
 
 abstract class DslEntity internal constructor(internal val id: String) {
     internal abstract val biochemicalEntity: BiochemicalEntity
 
-    internal open val parameters
-        get() = EntityParameters().also {
-            it.id = id
-            it.initialConcentration = initialConcentration.concentration ?: Concentration()
-        }
-
-    val initialConcentration = DslConcentration()
+    internal val initialConcentration = DslConcentration()
 }
 
-abstract class DslDegradingRegulating internal constructor(id: String) : DslEntity(id) {
-    abstract override val biochemicalEntity: RegulatingEntity
+abstract class DslDegradable internal constructor(id: String) : DslEntity(id) {
+    internal abstract var degradation: DslDegradation?
+}
 
-    val degradationRate = DslRate()
+abstract class DslRegulating internal constructor(id: String) : DslDegradable(id) {
+    abstract override val biochemicalEntity: RegulatingEntity
 }
 
 class DslGene(id: String) : DslEntity(id) {
@@ -31,16 +26,26 @@ class DslGene(id: String) : DslEntity(id) {
         get() = BasicGene(parameters)
 }
 
-class DslProtein(id: String) : DslDegradingRegulating(id) {
+class DslProtein(id: String) : DslRegulating(id) {
     override val biochemicalEntity: Protein
         get() = BasicProtein(parameters)
+
+    override var degradation: DslDegradation? = DslDegradation().also { it.entity = this }
 }
 
-class DslRegulator(id: String) : DslDegradingRegulating(id) {
+class DslMolecule(id: String) : DslRegulating(id) {
     override val biochemicalEntity: RegulatingEntity
-        get() = if(degradationRate.rate == null) {
+        get() = if(degradation == null) {
             BasicRegulatingEntity(parameters)
         } else {
             DegradingRegulatingMolecule(parameters)
         }
+
+    override var degradation: DslDegradation? = null
 }
+
+private val DslEntity.parameters
+    get() = EntityParameters().also {
+        it.id = id
+        it.initialConcentration = initialConcentration.concentration
+    }

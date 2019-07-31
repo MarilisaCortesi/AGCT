@@ -14,25 +14,26 @@ import model.reactions.Regulation
 import model.reactions.Transcription
 import model.utils.UnsupportedClassException
 import model.utils.className
+import model.utils.string
 import model.utils.toConsole
 import model.variables.Variable
 
 internal fun GeneticCircuit.agctExport() = start(" {", "}") {
-    block("Create circuit \"$name\" containing") {
-        genes.blocks({ "the gene \"$id\" that" }) {
+    block("Create circuit ${name.string} containing") {
+        genes.blocks({ "the ${this.string} that" }) {
             transcriptions.blocks({ "codes for" }) {
-                line("the protein \"${target.id}\"")
+                line("the protein ${target.id.string}")
                 line("with a basalRate ${basalRate.string}")
                 regulations.blocks({ "regulated by" }) {
-                    line("the regulator \"${regulator.id}\"")
+                    line("the regulator ${regulator.id.string}")
                     line("with a regulatedRate ${regulatedRate.string}")
                     line("with a bindingRate ${bindingRate.string}")
                     line("with an unbindingRate ${unbindingRate.string}")
                 }
             }
         }
-        line()
-        dslEntities.blocks({ string }) {
+
+        dslEntities.blocks({ "the $string" }) {
             line("has an initialConcentration ${initialConcentration.string}")
             if (this is DegradingEntity) {
                 line("has a degradationRate ${degradation.degradationRate.string}")
@@ -51,9 +52,9 @@ private val BiochemicalEntity.string
     get() = when (this) {
         is Gene -> "gene"
         is Protein -> "protein"
-        is RegulatingEntity -> "regulator"
-        else -> throw UnsupportedClassException("$this has an unsupported class type")
-    } + "(\"$id\")"
+        is RegulatingEntity -> "molecule"
+        else -> throw UnsupportedClassException(this)
+    } + " ${id.string}"
 
 private val DegradingEntity.degradation
     get() = Context.context.circuit.reactionsOf(this).filterIsInstance<Degradation>().single()

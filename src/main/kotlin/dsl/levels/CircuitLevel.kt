@@ -6,37 +6,33 @@ class CircuitLevel internal constructor(private val circuit: DslCircuit) {
     val the = this
 
     infix fun gene(id: String) =
-        circuit.getOrPutEntity(id) { DslGene(this) }.run { GeneWrapper(this) }
+        LevelWrapper(EntityLevel(circuit.getOrPutEntity(id) { DslGene(this) }))
 
     infix fun protein(id: String) =
-        circuit.getOrPutEntity(id) { DslProtein(this) }.run { ProteinWrapper(this) }
+        LevelWrapper(DegradableEntityLevel(circuit.getOrPutEntity(id) { DslProtein(this) }))
 
-    infix fun regulator(id: String) =
-        circuit.getOrPutEntity(id) { DslRegulator(this) }.run { RegulatorWrapper(this) }
+    infix fun molecule(id: String) =
+        LevelWrapper(DegradableEntityLevel(circuit.getOrPutEntity<DslRegulating>(id) { DslMolecule(this) }))
 
+    /*
     fun gene(id: String, block: GeneLevel.() -> Unit) =
         gene(id).that(block)
 
     fun protein(id: String, block: ProteinLevel.() -> Unit) =
         protein(id).that(block)
 
-    fun regulator(id: String, block: RegulatorLevel.() -> Unit) =
-        regulator(id).that(block)
+    fun molecule(id: String, block: RegulatorLevel.() -> Unit) =
+        molecule(id).that(block)
+    */
 }
 
-abstract class EntityWrapper<out L: EntityLevel<DslEntity>> internal constructor(private val innerLevel: L) {
+operator fun String.invoke(block: GenericEntityLevel.() -> Unit) =
+    TopLevel.circuit.getOrThrow(this).let {
+        LevelWrapper(EntityLevel(it)).that { GenericEntityLevel(it).block() }
+    }
+
+
+class LevelWrapper<out L: EntityLevel<*>> internal constructor(private val innerLevel: L) {
     infix fun that(block: L.() -> Unit) =
         innerLevel.run(block)
-
-    fun invoke(block: L.() -> Unit) =
-        that(block)
 }
-
-class GeneWrapper internal constructor(gene: DslGene) :
-    EntityWrapper<GeneLevel>(GeneLevel(gene))
-
-class ProteinWrapper internal constructor(protein: DslProtein) :
-    EntityWrapper<ProteinLevel>(ProteinLevel(protein))
-
-class RegulatorWrapper internal constructor(regulator: DslRegulator) :
-    EntityWrapper<RegulatorLevel>(RegulatorLevel(regulator))

@@ -1,42 +1,52 @@
 package dsl.model
 
+import model.entities.DegradingEntity
 import model.reactions.*
 import model.reactions.BiochemicalReaction
 import model.reactions.DirectTranscription
-import model.reactions.Transcription
-import model.variables.Rate
 import kotlin.properties.Delegates
 
 abstract class DslReaction internal constructor() {
     internal abstract val biochemicalReaction: BiochemicalReaction
 }
 
+class DslDegradation internal constructor() : DslReaction() {
+    internal var entity: DslDegradable by Delegates.notNull()
+    internal var degradationRate: DslRate = DslRate()
+
+    override val biochemicalReaction: BiochemicalReaction
+        get() = BasicDegradation(
+            entity.biochemicalEntity as DegradingEntity,
+            degradationRate.rate
+        )
+}
+
 class DslTranscription internal constructor() : DslReaction() {
-    private var coder: DslGene by Delegates.notNull()
-    private var target: DslProtein by Delegates.notNull()
-    private var transcriptionRate: Rate = Rate()
+    internal var coder: DslGene by Delegates.notNull()
+    internal var target: DslProtein by Delegates.notNull()
+    internal var transcriptionRate: DslRate = DslRate()
 
     override val biochemicalReaction: DirectTranscription
         get() = DirectTranscription(
             coder.biochemicalEntity,
             target.biochemicalEntity,
-            transcriptionRate
+            transcriptionRate.rate
         )
 }
 
 class DslRegulation internal constructor(): DslReaction() {
-    private var transcription: DslTranscription by Delegates.notNull()
-    private var regulator: DslDegradingRegulating by Delegates.notNull()
-    private var regulatedRate: Rate = Rate()
-    private var bindingRate: Rate = Rate()
-    private var unbindingRate: Rate = Rate()
+    internal var transcription: DslTranscription by Delegates.notNull()
+    internal var regulator: DslRegulating by Delegates.notNull()
+    internal var regulatedRate: DslRate = DslRate()
+    internal var bindingRate: DslRate = DslRate()
+    internal var unbindingRate: DslRate = DslRate()
 
     override val biochemicalReaction: Regulation
         get() = BasicRegulation(
             transcription.biochemicalReaction,
             regulator.biochemicalEntity,
-            regulatedRate,
-            bindingRate,
-            unbindingRate
+            regulatedRate.rate,
+            bindingRate.rate,
+            unbindingRate.rate
         )
 }

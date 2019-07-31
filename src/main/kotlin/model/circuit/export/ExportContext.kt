@@ -15,6 +15,7 @@ import model.utils.UnsupportedClassException
 import model.utils.toConsole
 import model.variables.Variable
 import java.lang.StringBuilder
+import kotlin.reflect.jvm.reflect
 
 internal class Context private constructor(val circuit: GeneticCircuit, val beforeBlock: String, val afterBlock: String) {
     private val builder: StringBuilder = StringBuilder()
@@ -37,8 +38,9 @@ internal class Context private constructor(val circuit: GeneticCircuit, val befo
                 }
             }.builder.toString()
 
-        fun line(line: String = "") {
+        fun line(line: String) {
             context.run {
+                builder.replaceEnding("${context.beforeBlock}\n\n", "${context.beforeBlock}\n")
                 if (line == "") {
                     builder.append("\n")
                 } else {
@@ -53,7 +55,16 @@ internal class Context private constructor(val circuit: GeneticCircuit, val befo
                 indentation++
                 inner()
                 indentation--
+                builder.replaceEnding("\n\n", "\n")
                 line(afterBlock)
+                builder.replaceEnding("${indentation.tabs}$prefix$beforeBlock\n${indentation.tabs}$afterBlock\n")
+            }
+        }
+
+        private fun StringBuilder.replaceEnding(ending: String, replacement: String = "") {
+            if (endsWith(ending)) {
+                setLength(length - ending.length)
+                append(replacement)
             }
         }
 
@@ -76,8 +87,8 @@ internal fun <T> T.block(prefix: T.() -> String, inner: T.() -> Unit) {
 }
 
 internal fun <T> Collection<T>.blocks(prefix: T.() -> String, inner: T.() -> Unit) {
-    forEachIndexed { index, element ->
-        if (index != 0) line()
+    for (element in this) {
         element.block(prefix, inner)
+        line()
     }
 }

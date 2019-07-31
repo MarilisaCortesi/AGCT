@@ -140,6 +140,6 @@ internal class BasicRegulation(
             is BasicTranslation -> RegulatedMRna(reaction.coder, regulator).let {
                 Pair(it, BasicTranslation(it, reaction.target, regulatedRate))
             }
-            else -> throw UnsupportedClassException("${reaction.coder} has an unsupported type.")
+            else -> throw UnsupportedClassException(reaction.coder)
         }
 }

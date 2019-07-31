@@ -1,12 +1,12 @@
+@file:Suppress("RemoveExplicitTypeArguments")
+
 package dsl.model
 
+import dsl.utils.ExportObject
 import model.circuit.BasicGeneticCircuit
-import model.circuit.GeneticCircuit
-import model.entities.DegradingEntity
-import model.reactions.BasicDegradation
+import model.utils.string
 
 abstract class DslCircuit internal constructor() {
-    internal abstract val geneticCircuit : GeneticCircuit
     protected var entities = mutableMapOf<String, DslEntity>()
     protected var reactions = mutableSetOf<DslReaction>()
 
@@ -15,17 +15,23 @@ abstract class DslCircuit internal constructor() {
             if (this !is E) throw IllegalArgumentException("$this already exist but it is not of type ${E::class}")
         } as E
 
+    internal fun getOrThrow(id: String) =
+        getOrPutEntity<DslEntity>(id) {
+            throw java.lang.IllegalArgumentException("Entity ${id.string} has not been set before.")
+        }
+
     internal inline fun<reified R : DslReaction> putReaction(reaction: R) =
         reactions.add(reaction)
+
+    internal abstract fun exportTo(types: Collection<ExportObject>)
 }
 
 class BasicDslCircuit internal constructor(private val name: String) : DslCircuit() {
-    override val geneticCircuit : BasicGeneticCircuit
-        get() = BasicGeneticCircuit(name).also { circuit ->
+    override fun exportTo(types: Collection<ExportObject>) =
+        BasicGeneticCircuit(name).also { circuit ->
             circuit.addEntities(*entitiesArray)
-            circuit.addReactions(*degradationsArray)
-            circuit.addReactions(*reactionsArray)
-        }
+            circuit.addReactions(*degradationsArray, *reactionsArray)
+        }.exportTo(*types.map { it.type }.toTypedArray())
 
     private val entitiesArray
         get() = entities.values
@@ -35,9 +41,9 @@ class BasicDslCircuit internal constructor(private val name: String) : DslCircui
 
     private val degradationsArray
         get() = entities.values
-            .filterIsInstance<DslDegradingRegulating>()
-            .filter { it.degradationRate.rate != null }
-            .map { BasicDegradation(it.biochemicalEntity as DegradingEntity, it.degradationRate.rate!!) }
+            .filterIsInstance<DslDegradable>()
+            .mapNotNull { it.degradation }
+            .map { it.biochemicalReaction }
             .toSet()
             .toTypedArray()
 

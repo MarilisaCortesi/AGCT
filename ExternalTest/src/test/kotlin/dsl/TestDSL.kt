@@ -1,9 +1,6 @@
 package dsl
 
-import dsl.levels.Create
-import dsl.levels.degradationRate
-import dsl.levels.export
-import dsl.levels.initialConcentration
+import dsl.levels.*
 import dsl.utils.AGCT
 import dsl.utils.values
 
@@ -13,14 +10,19 @@ fun main() {
             has an initialConcentration into values(1, 2, 3, 4, 5)
         }
 
-        the gene "gB"
-
         the protein "pA" that {
             has an initialConcentration of 2
             has a degradationRate of 3
         }
 
-        the regulator "rA"
+        the molecule "rA" that {
+            has an initialConcentration of 2
+        }
+
+        "pA" {
+            has an initialConcentration of 2
+            has a degradationRate of 5
+        }
     } then export to AGCT // and Alchemist
 }
 
@@ -29,30 +31,25 @@ fun main() {
         The gene "gA" that {
             [has] (an) [initialConcentration] (of/in) ...
 
-            [codes] (for) {
-                [the] (protein) that {
+            [codes] (for) [the] (protein) "pA" (that) {
+                [has] (an) [initialConcentration] (of/in) ...
+                [has] (a) [degradationRate] (of/in) ...
+            } where the transcription {
+                [has] (a) [basalRate] (in/of) ...
+
+                [is] (regulatedBy) [the] (molecule) "rA" that {
                     [has] (an) [initialConcentration] (of/in) ...
                     [has] (a) [degradationRate] (of/in) ...
+                } where the regulation {
+                    [has] (a) [regulatedRate] (in/of) ...
+                    [has] (a) [bindingRate] (in/of) ...
+                    [has] (an) [unbindingRate] (in/of) ...
                 }
 
-                [with] (a) [transcriptionRate] (in/of) ...
 
-                [regulated] by {
-                    [the] (regulator) ...
-                    [with] (a) [regulatedRate] (in/of) ...
-                    [with] (a) [bindingRate] (in/of) ...
-                    [with] (an) [unbindingRate] (in/of) ...
-                }
-
-                regulated by {
-                    the regulator ...
-                }
-            }
-
-            codes for {
-                the protein ...
             }
         }
+    }
  */
 
 /*

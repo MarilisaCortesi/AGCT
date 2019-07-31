@@ -10,15 +10,29 @@ val Create = TopLevel()
 object export
 
 class TopLevel internal constructor() {
-    infix fun circuit(name: String) = BasicDslCircuit(name).run { CircuitWrapper(this) }
-}
+    infix fun circuit(name: String) =
+        BasicDslCircuit(name).apply {
+            if (privateCircuit == null) {
+                privateCircuit = this
+            } else {
+                throw IllegalStateException("Another circuit is already running.")
+            }
+        }.run { CircuitWrapper() }
 
-class CircuitWrapper internal constructor(private val circuit: DslCircuit) {
-    infix fun containing(block: CircuitLevel.() -> Unit) =
-        CircuitLevel(circuit).apply(block).run { CircuitWrapper(circuit) }
+    class CircuitWrapper internal constructor() {
+        infix fun containing(block: CircuitLevel.() -> Unit) =
+            CircuitLevel(circuit).apply(block).run { CircuitWrapper() }
 
-    infix fun then(dummy: export) =
-        CircuitExportFirst(circuit)
+        infix fun then(dummy: export) =
+            CircuitExportFirst(circuit).also { privateCircuit = null }
+    }
+
+    companion object Circuit {
+        private var privateCircuit: DslCircuit? = null
+
+        internal val circuit
+            get() = privateCircuit ?: throw IllegalStateException("No circuits running.")
+    }
 }
 
 class CircuitExportFirst internal constructor(private val circuit: DslCircuit) {
@@ -34,5 +48,5 @@ class CircuitExportSecond internal constructor(private val circuit: DslCircuit) 
         and(setOf(type))
 
     internal fun and(types: Collection<ExportObject>) =
-        apply { types.forEach { it.export(circuit.geneticCircuit) } }
+        apply { circuit.exportTo(types) }
 }
