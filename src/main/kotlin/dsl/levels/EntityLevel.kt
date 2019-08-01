@@ -2,12 +2,11 @@
 
 package dsl.levels
 
+import dsl.degradationRate
+import dsl.initialConcentration
 import dsl.model.*
 import model.utils.className
 import java.lang.IllegalStateException
-
-object initialConcentration
-object degradationRate
 
 open class EntityLevel<out E : DslEntity> internal constructor(protected val entity: E) {
     open val has: EntityLevel<E>

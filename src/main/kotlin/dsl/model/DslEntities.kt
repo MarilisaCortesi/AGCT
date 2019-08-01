@@ -1,5 +1,6 @@
 package dsl.model
 
+import dsl.levels.TopLevel.Circuit.default
 import model.entities.*
 import model.entities.BasicGene
 import model.entities.BiochemicalEntity
@@ -10,7 +11,7 @@ import model.entities.Protein
 abstract class DslEntity internal constructor(internal val id: String) {
     internal abstract val biochemicalEntity: BiochemicalEntity
 
-    internal val initialConcentration = DslConcentration()
+    internal val initialConcentration = default.initialConcentration.copy
 }
 
 abstract class DslDegradable internal constructor(id: String) : DslEntity(id) {

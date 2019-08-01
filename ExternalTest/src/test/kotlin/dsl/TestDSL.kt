@@ -1,28 +1,27 @@
 package dsl
 
 import dsl.levels.*
-import dsl.utils.AGCT
-import dsl.utils.values
+import dsl.utils.*
 
 fun main() {
     Create circuit "My Circuit" containing {
-        the gene "gA" that {
-            has an initialConcentration into values(1, 2, 3, 4, 5)
-        }
+        the gene "gA"
 
         the protein "pA" that {
-            has an initialConcentration of 2
-            has a degradationRate of 3
+            has an initialConcentration of 100
+            has a degradationRate of 5
         }
 
         the molecule "rA" that {
             has an initialConcentration of 2
         }
 
-        "pA" {
-            has an initialConcentration of 2
+        the molecule "rB" that {
             has a degradationRate of 5
         }
+    } with {
+        a default initialConcentration into logspace(0, 4, 5)
+        a default degradationRate into range(1, 9, 2)
     } then export to AGCT // and Alchemist
 }
 

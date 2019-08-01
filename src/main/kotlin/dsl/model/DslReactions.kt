@@ -1,5 +1,6 @@
 package dsl.model
 
+import dsl.levels.TopLevel.Circuit.default
 import model.entities.DegradingEntity
 import model.reactions.*
 import model.reactions.BiochemicalReaction
@@ -12,7 +13,7 @@ abstract class DslReaction internal constructor() {
 
 class DslDegradation internal constructor() : DslReaction() {
     internal var entity: DslDegradable by Delegates.notNull()
-    internal var degradationRate: DslRate = DslRate()
+    internal var degradationRate: DslRate = default.degradationRate.copy
 
     override val biochemicalReaction: BiochemicalReaction
         get() = BasicDegradation(
@@ -24,22 +25,22 @@ class DslDegradation internal constructor() : DslReaction() {
 class DslTranscription internal constructor() : DslReaction() {
     internal var coder: DslGene by Delegates.notNull()
     internal var target: DslProtein by Delegates.notNull()
-    internal var transcriptionRate: DslRate = DslRate()
+    internal var basalRate: DslRate = default.basalRate.copy
 
     override val biochemicalReaction: DirectTranscription
         get() = DirectTranscription(
             coder.biochemicalEntity,
             target.biochemicalEntity,
-            transcriptionRate.rate
+            basalRate.rate
         )
 }
 
 class DslRegulation internal constructor(): DslReaction() {
     internal var transcription: DslTranscription by Delegates.notNull()
     internal var regulator: DslRegulating by Delegates.notNull()
-    internal var regulatedRate: DslRate = DslRate()
-    internal var bindingRate: DslRate = DslRate()
-    internal var unbindingRate: DslRate = DslRate()
+    internal var regulatedRate: DslRate = default.regulatedRate.copy
+    internal var bindingRate: DslRate = default.bindingRate.copy
+    internal var unbindingRate: DslRate = default.unbindingRate.copy
 
     override val biochemicalReaction: Regulation
         get() = BasicRegulation(

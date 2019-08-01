@@ -1,12 +1,14 @@
-@file:Suppress("RemoveExplicitTypeArguments")
+@file:Suppress("RemoveExplicitTypeArguments", "UNUSED_PARAMETER")
 
 package dsl.model
 
+import dsl.*
 import dsl.utils.ExportObject
 import model.circuit.BasicGeneticCircuit
 import model.utils.string
 
 abstract class DslCircuit internal constructor() {
+    internal val defaultValues = DefaultValues()
     protected var entities = mutableMapOf<String, DslEntity>()
     protected var reactions = mutableSetOf<DslReaction>()
 
@@ -24,6 +26,24 @@ abstract class DslCircuit internal constructor() {
         reactions.add(reaction)
 
     internal abstract fun exportTo(types: Collection<ExportObject>)
+
+    class DefaultValues internal constructor() {
+        val a = this
+
+        internal val initialConcentration = DslConcentration()
+        internal val degradationRate = DslRate()
+        internal val basalRate = DslRate()
+        internal val regulatedRate = DslRate()
+        internal val bindingRate = DslRate()
+        internal val unbindingRate = DslRate()
+
+        infix fun default(dummy: initialConcentration) = initialConcentration
+        infix fun default(dummy: degradationRate) = degradationRate
+        infix fun default(dummy: basalRate) = basalRate
+        infix fun default(dummy: regulatedRate) = regulatedRate
+        infix fun default(dummy: bindingRate) = bindingRate
+        infix fun default(dummy: unbindingRate) = unbindingRate
+    }
 }
 
 class BasicDslCircuit internal constructor(private val name: String) : DslCircuit() {

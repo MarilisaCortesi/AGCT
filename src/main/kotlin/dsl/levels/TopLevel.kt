@@ -1,13 +1,12 @@
-@file:Suppress("UNUSED_PARAMETER", "ClassName")
+@file:Suppress("UNUSED_PARAMETER")
 
 package dsl.levels
 
+import dsl.*
 import dsl.model.*
 import dsl.utils.ExportObject
 
 val Create = TopLevel()
-
-object export
 
 class TopLevel internal constructor() {
     infix fun circuit(name: String) =
@@ -20,8 +19,11 @@ class TopLevel internal constructor() {
         }.run { CircuitWrapper() }
 
     class CircuitWrapper internal constructor() {
+        infix fun with(block: DslCircuit.DefaultValues.() -> Unit) =
+            default.block().let { this }
+
         infix fun containing(block: CircuitLevel.() -> Unit) =
-            CircuitLevel(circuit).apply(block).run { CircuitWrapper() }
+            CircuitLevel(circuit).apply(block).let { this }
 
         infix fun then(dummy: export) =
             CircuitExportFirst(circuit).also { privateCircuit = null }
@@ -32,6 +34,9 @@ class TopLevel internal constructor() {
 
         internal val circuit
             get() = privateCircuit ?: throw IllegalStateException("No circuits running.")
+
+        internal val default
+            get() = circuit.defaultValues
     }
 }
 
