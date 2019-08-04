@@ -1,23 +1,25 @@
-package dsl
-
-import dsl.levels.*
-import dsl.utils.*
+import dsl.*
 
 fun main() {
     Create circuit "My Circuit" containing {
         the gene "gA"
 
-        the protein "pA" that {
-            has an initialConcentration of 100
-            has a degradationRate of 5
+        the protein "pA"
+
+        the molecule "rA"
+
+        the molecule "rB"
+
+        "gA" {
+            has an initialConcentration of 20
         }
 
-        the molecule "rA" that {
-            has an initialConcentration of 2
+        "pA" {
+            has an initialConcentration of 50
         }
 
-        the molecule "rB" that {
-            has a degradationRate of 5
+        "rA" {
+            has a degradationRate of 2
         }
     } with {
         a default initialConcentration into logspace(0, 4, 5)

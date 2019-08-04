@@ -1,5 +1,7 @@
 package model.utils
 
+import kotlin.reflect.KClass
+
 /**
  * Exception thrown when an unsupported class is passed.
  * Likely to be used in a "when" construct.
@@ -8,9 +10,14 @@ internal class UnsupportedClassException(unsupported: Any?) :
     IllegalArgumentException("$unsupported has class ${unsupported?.javaClass}, which is not supported in this context.")
 
 /**
- * Returns the class name of an object.
+ * Given an [object][this], it is printed to output console.
  */
-internal val Any?.className
+internal fun Any?.toConsole() = println(this)
+
+/**
+ * Returns the type of an object in form of a string.
+ */
+internal val Any?.type
     get() = this
         ?.javaClass
         ?.simpleName
@@ -22,26 +29,27 @@ internal val Any?.className
         ?: ""
 
 /**
- * A for each method with a "this" context for each element.
+ * Creates an instance from a [class][this] using the given [parameters].
  */
-internal fun<T : Any?> Collection<T>.forEachSelf(action: T.() -> Unit) =
-    forEach { it.action() }
-
-/**
- * Given an [object][this], it is printed to output console.
- */
-internal fun Any?.toConsole() = println(this)
+internal fun<T : Any> KClass<T>.create(vararg parameters: Any) : T {
+    for (constructor in constructors) {
+        try {
+            return constructor.call(*parameters)
+        } catch (e: Exception) { }
+    }
+    throw IllegalArgumentException("$this cannot be created with the given parameters.")
+}
 
 /**
  * Returns true if the [other] object is the same as [this], false if not.
- * The type [C] is the type used to cast the [other] object.
+ * The type [T] is the type used to cast the [other] object.
  */
 @Suppress("UNCHECKED_CAST")
-internal fun<C : Any> C.checkEquals(other: Any?, check: (C) -> Boolean) =
+internal fun<T : Any> T.checkEquals(other: Any?, check: (T) -> Boolean) =
     when {
         this === other -> true
         javaClass != other?.javaClass -> false
-        else -> (other as C).let(check)
+        else -> (other as T).let(check)
     }
 
 /**

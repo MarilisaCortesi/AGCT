@@ -1,16 +1,16 @@
-@file:Suppress("RemoveExplicitTypeArguments", "UNUSED_PARAMETER")
+@file:Suppress("PackageDirectoryMismatch", "RemoveExplicitTypeArguments", "UNUSED_PARAMETER")
 
-package dsl.model
+package dsl
 
-import dsl.*
-import dsl.utils.ExportObject
 import model.circuit.BasicGeneticCircuit
 import model.utils.string
 
 abstract class DslCircuit internal constructor() {
-    internal val defaultValues = DefaultValues()
-    protected var entities = mutableMapOf<String, DslEntity>()
-    protected var reactions = mutableSetOf<DslReaction>()
+    protected val entities = mutableMapOf<String, DslEntity>()
+
+    protected val reactions = mutableSetOf<DslReaction>()
+
+    internal abstract val default: DefaultValues
 
     internal inline fun<reified E : DslEntity> getOrPutEntity(id: String, ifAbsent: String.() -> E) =
         entities.getOrPut(id) { id.ifAbsent() }.apply {
@@ -26,27 +26,12 @@ abstract class DslCircuit internal constructor() {
         reactions.add(reaction)
 
     internal abstract fun exportTo(types: Collection<ExportObject>)
-
-    class DefaultValues internal constructor() {
-        val a = this
-
-        internal val initialConcentration = DslConcentration()
-        internal val degradationRate = DslRate()
-        internal val basalRate = DslRate()
-        internal val regulatedRate = DslRate()
-        internal val bindingRate = DslRate()
-        internal val unbindingRate = DslRate()
-
-        infix fun default(dummy: initialConcentration) = initialConcentration
-        infix fun default(dummy: degradationRate) = degradationRate
-        infix fun default(dummy: basalRate) = basalRate
-        infix fun default(dummy: regulatedRate) = regulatedRate
-        infix fun default(dummy: bindingRate) = bindingRate
-        infix fun default(dummy: unbindingRate) = unbindingRate
-    }
 }
 
-class BasicDslCircuit internal constructor(private val name: String) : DslCircuit() {
+class BasicDslCircuit internal constructor(
+    private val name: String,
+    override val default: DefaultValues
+) : DslCircuit() {
     override fun exportTo(types: Collection<ExportObject>) =
         BasicGeneticCircuit(name).also { circuit ->
             circuit.addEntities(*entitiesArray)
@@ -62,8 +47,13 @@ class BasicDslCircuit internal constructor(private val name: String) : DslCircui
     private val degradationsArray
         get() = entities.values
             .filterIsInstance<DslDegradable>()
-            .mapNotNull { it.degradation }
-            .map { it.biochemicalReaction }
+            .mapNotNull { it.degradationRate?.to(it) }
+            .map { (rate, entity) ->
+                DslDegradation(default).also {
+                    it.entity = entity
+                    it.degradationRate = rate
+                }.biochemicalReaction
+            }
             .toSet()
             .toTypedArray()
 

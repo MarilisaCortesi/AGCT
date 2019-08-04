@@ -1,7 +1,7 @@
 package model.reactions
 
 import model.utils.checkEquals
-import model.utils.className
+import model.utils.type
 import model.entities.*
 import model.utils.UnsupportedClassException
 import model.variables.Rate
@@ -38,7 +38,7 @@ internal abstract class AbstractReaction(
 internal abstract class AbstractBiochemicalReaction : BiochemicalReaction {
     override fun toString() =
         buildString {
-            append(this@AbstractBiochemicalReaction.className.toUpperCase())
+            append(this@AbstractBiochemicalReaction.type.toUpperCase())
             append(":\n- ")
             append(reactions.joinToString("\n- "))
         }

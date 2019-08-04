@@ -1,7 +1,7 @@
 package model.variables
 
 import model.utils.checkEquals
-import model.utils.className
+import model.utils.type
 
 /**
  * A variable whose value can be found inside a set of [values].
@@ -11,7 +11,7 @@ internal interface Variable<out T> {
 }
 
 @Suppress("UNCHECKED_CAST")
-internal abstract class PositiveVariable<out T : Number>(values: Collection<T>) : Variable<T> {
+internal abstract class PositiveVariable<out T : Number>(values: Sequence<T>) : Variable<T> {
     init {
         for (value in values) {
             if (value.toDouble() <= 0)
@@ -22,7 +22,7 @@ internal abstract class PositiveVariable<out T : Number>(values: Collection<T>) 
     override val values = values.map { it }.toSet()
 
     override fun toString() =
-        "$className(${values.joinToString { ", " }})"
+        "$type(${values.joinToString { ", " }})"
 
     override fun hashCode() =
         values.hashCode()
@@ -36,9 +36,9 @@ internal abstract class PositiveVariable<out T : Number>(values: Collection<T>) 
  */
 internal const val DEFAULT_RATE_VALUE = 1.0
 
-internal class Rate(values: Collection<Number>): PositiveVariable<Double>(values.map { it.toDouble() }) {
-    constructor(values: Sequence<Number>) : this(values.toSet())
-    constructor(vararg values: Number = arrayOf(DEFAULT_RATE_VALUE)) : this(values.toSet())
+internal class Rate(values: Sequence<Number>) : PositiveVariable<Double>(values.map { it.toDouble() }) {
+    constructor(values: Collection<Number>) : this(values.asSequence())
+    constructor(vararg values: Number = arrayOf(DEFAULT_RATE_VALUE)) : this(values.asSequence())
 }
 
 /**
@@ -46,7 +46,7 @@ internal class Rate(values: Collection<Number>): PositiveVariable<Double>(values
  */
 internal const val DEFAULT_CONCENTRATION_VALUE = 100.0
 
-internal class Concentration(values: Collection<Number>): PositiveVariable<Double>(values.map { it.toDouble() }) {
-    constructor(values: Sequence<Number>) : this(values.toSet())
-    constructor(vararg values: Number = arrayOf(DEFAULT_CONCENTRATION_VALUE)) : this(values.toSet())
+internal class Concentration(values: Sequence<Number>) : PositiveVariable<Double>(values.map { it.toDouble() }) {
+    constructor(values: Collection<Number>) : this(values.asSequence())
+    constructor(vararg values: Number = arrayOf(DEFAULT_CONCENTRATION_VALUE)) : this(values.asSequence())
 }

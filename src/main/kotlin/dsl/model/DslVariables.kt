@@ -1,42 +1,33 @@
-package dsl.model
+@file:Suppress("PackageDirectoryMismatch")
 
+package dsl
+
+import model.utils.create
 import model.variables.Concentration
-import model.variables.PositiveVariable
 import model.variables.Rate
+import model.variables.Variable
 
-abstract class DslVariable internal constructor(value: PositiveVariable<*>?) {
-    internal abstract val Sequence<Number>.construct: PositiveVariable<Number>
+@Suppress("UNCHECKED_CAST")
+abstract class DslVariable internal constructor(private var privateValue: Variable<Number>) {
+    protected fun<T : Variable<Number>> getCastedValue() =
+        privateValue as T
 
-    internal abstract val copy: DslVariable
-
-    internal var value: PositiveVariable<Number>? = value
+    internal abstract val value: Variable<Number>
 
     infix fun of(value: Number) =
         into(sequenceOf(value))
 
     infix fun into(values: Sequence<Number>) {
-        value = values.construct
+        privateValue = privateValue::class.create(values)
     }
 }
 
-class DslConcentration internal constructor(value: Concentration? = null) : DslVariable(value) {
-    override val Sequence<Number>.construct: Concentration
-        get() = Concentration(this)
-
-    override val copy: DslConcentration
-        get() = DslConcentration(value as Concentration?)
-
-    internal val concentration
-        get() = (value ?: Concentration()) as Concentration
+class DslConcentration internal constructor(default: Concentration = Concentration()) : DslVariable(default) {
+    override val value: Concentration
+        get() = getCastedValue()
 }
 
-class DslRate internal constructor(value: Rate? = null) : DslVariable(value) {
-    override val Sequence<Number>.construct: Rate
-        get() = Rate(this)
-
-    override val copy: DslRate
-        get() = DslRate(value as Rate?)
-
-    internal val rate
-        get() = (value ?: Rate()) as Rate
+class DslRate internal constructor(default: Rate = Rate()) : DslVariable(default) {
+    override val value: Rate
+        get() = getCastedValue()
 }

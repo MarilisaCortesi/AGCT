@@ -1,4 +1,6 @@
-package dsl.utils
+@file:Suppress("PackageDirectoryMismatch")
+
+package dsl
 
 import kotlin.math.log10
 import kotlin.math.pow

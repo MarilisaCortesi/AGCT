@@ -1,7 +1,6 @@
 package model.circuit.export
 
 import model.circuit.GeneticCircuit
-import model.entities.*
 import model.entities.BiochemicalEntity
 import model.entities.BoundBiochemicalEntity
 import model.entities.DegradingEntity
@@ -13,7 +12,6 @@ import model.reactions.Degradation
 import model.reactions.Regulation
 import model.reactions.Transcription
 import model.utils.UnsupportedClassException
-import model.utils.className
 import model.utils.string
 import model.utils.toConsole
 import model.variables.Variable

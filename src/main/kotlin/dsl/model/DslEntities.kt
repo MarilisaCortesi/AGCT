@@ -1,6 +1,7 @@
-package dsl.model
+@file:Suppress("PackageDirectoryMismatch")
 
-import dsl.levels.TopLevel.Circuit.default
+package dsl
+
 import model.entities.*
 import model.entities.BasicGene
 import model.entities.BiochemicalEntity
@@ -8,45 +9,47 @@ import model.entities.EntityParameters
 import model.entities.Gene
 import model.entities.Protein
 
-abstract class DslEntity internal constructor(internal val id: String) {
+abstract class DslEntity internal constructor(default: DefaultValues) {
     internal abstract val biochemicalEntity: BiochemicalEntity
 
-    internal val initialConcentration = default.initialConcentration.copy
+    internal abstract val id: String
+
+    internal val initialConcentration = default.initialConcentration
 }
 
-abstract class DslDegradable internal constructor(id: String) : DslEntity(id) {
-    internal abstract var degradation: DslDegradation?
+abstract class DslDegradable internal constructor(default: DefaultValues) : DslEntity(default) {
+    internal abstract var degradationRate: DslRate?
 }
 
-abstract class DslRegulating internal constructor(id: String) : DslDegradable(id) {
+abstract class DslRegulating internal constructor(default: DefaultValues) : DslDegradable(default) {
     abstract override val biochemicalEntity: RegulatingEntity
 }
 
-class DslGene(id: String) : DslEntity(id) {
+class DslGene(default: DefaultValues, override val id: String) : DslEntity(default) {
     override val biochemicalEntity: Gene
         get() = BasicGene(parameters)
 }
 
-class DslProtein(id: String) : DslRegulating(id) {
+class DslProtein(default: DefaultValues, override val id: String) : DslRegulating(default) {
     override val biochemicalEntity: Protein
         get() = BasicProtein(parameters)
 
-    override var degradation: DslDegradation? = DslDegradation().also { it.entity = this }
+    override var degradationRate: DslRate? = default.degradationRate
 }
 
-class DslMolecule(id: String) : DslRegulating(id) {
+class DslMolecule(default: DefaultValues, override val id: String) : DslRegulating(default) {
     override val biochemicalEntity: RegulatingEntity
-        get() = if(degradation == null) {
+        get() = if(degradationRate == null) {
             BasicRegulatingEntity(parameters)
         } else {
             DegradingRegulatingMolecule(parameters)
         }
 
-    override var degradation: DslDegradation? = null
+    override var degradationRate: DslRate? = null
 }
 
 private val DslEntity.parameters
     get() = EntityParameters().also {
         it.id = id
-        it.initialConcentration = initialConcentration.concentration
+        it.initialConcentration = initialConcentration.value
     }

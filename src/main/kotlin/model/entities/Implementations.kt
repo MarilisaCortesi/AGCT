@@ -1,7 +1,7 @@
 package model.entities
 
 import model.utils.checkEquals
-import model.utils.className
+import model.utils.type
 import model.utils.string
 
 internal abstract class AbstractEntity(parameters: EntityParameters) : BiochemicalEntity {
@@ -9,7 +9,7 @@ internal abstract class AbstractEntity(parameters: EntityParameters) : Biochemic
     override val initialConcentration = parameters.initialConcentration
     override val aliases = parameters.aliases.toList()
 
-    override fun toString() = "$className(${id.string})"
+    override fun toString() = "$type(${id.string})"
 
     override fun hashCode() =
         id.hashCode()

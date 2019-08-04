@@ -1,9 +1,11 @@
-@file:Suppress("ClassName")
+@file:Suppress("PackageDirectoryMismatch", "ClassName")
 
-package dsl.utils
+package dsl
 
 import model.circuit.export.ExportTypes
 import model.circuit.GeneticCircuit
+
+fun all(vararg types: ExportObject) = types.toSet()
 
 abstract class ExportObject internal constructor() {
     internal abstract val type: ExportTypes

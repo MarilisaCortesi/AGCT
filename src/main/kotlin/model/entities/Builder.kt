@@ -1,15 +1,15 @@
 package model.entities
 
+import model.utils.create
 import model.variables.Concentration
 import kotlin.properties.Delegates
 import kotlin.reflect.KClass
-import kotlin.reflect.full.primaryConstructor
 
 /**
  * Creates an biochemicalEntity using its parameters and its [type][T].
  */
 internal inline fun<reified T : BiochemicalEntity> entity(block: EntityParameters.() -> Unit = {}) =
-    EntityParameters().apply(block).run { T::class.constructor.call(this) } as T
+    EntityParameters().apply(block).run { T::class.createEntity(this) }
 
 /**
  * Creates an biochemicalEntity using its parameters and its [type][T].
@@ -33,14 +33,13 @@ internal class EntityParameters {
 /**
  * Given a [KClass] named 'Something', it returns the class named 'BasicSomething' if it exists.
  */
-private val KClass<*>.basicClass
-    get() = Class.forName(buildString {
-        append(qualifiedName?.replace("Biochemical", ""))
-        insert(lastIndexOf('.') + 1, "Basic")
-    }).kotlin
-
-/**
- * Given a [KClass] it returns its constructor or the constructor of its basic implementation if present.
- */
-private val KClass<*>.constructor
-    get() = primaryConstructor ?: basicClass.primaryConstructor ?: throw IllegalStateException("$simpleName has no constructors")
+@Suppress("UNCHECKED_CAST")
+private fun<T : BiochemicalEntity> KClass<T>.createEntity(parameters: EntityParameters) =
+    try {
+        create(parameters)
+    } catch (e: Exception) {
+        Class.forName(buildString {
+            append(qualifiedName?.replace("Biochemical", ""))
+            insert(lastIndexOf('.') + 1, "Basic")
+        }).kotlin.create(parameters)
+    } as T

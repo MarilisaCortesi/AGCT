@@ -1,42 +1,46 @@
-@file:Suppress("UNUSED_PARAMETER")
+@file:Suppress("PackageDirectoryMismatch", "UNUSED_PARAMETER")
 
-package dsl.levels
-
-import dsl.*
-import dsl.model.*
-import dsl.utils.ExportObject
+package dsl
 
 val Create = TopLevel()
 
 class TopLevel internal constructor() {
-    infix fun circuit(name: String) =
-        BasicDslCircuit(name).apply {
-            if (privateCircuit == null) {
-                privateCircuit = this
-            } else {
-                throw IllegalStateException("Another circuit is already running.")
-            }
-        }.run { CircuitWrapper() }
+    companion object {
+        private var companionCircuit: DslCircuit? = null
 
-    class CircuitWrapper internal constructor() {
-        infix fun with(block: DslCircuit.DefaultValues.() -> Unit) =
-            default.block().let { this }
-
-        infix fun containing(block: CircuitLevel.() -> Unit) =
-            CircuitLevel(circuit).apply(block).let { this }
-
-        infix fun then(dummy: export) =
-            CircuitExportFirst(circuit).also { privateCircuit = null }
+        internal fun getEntity(id: String) =
+            companionCircuit?.getOrThrow(id) ?: throw IllegalStateException("No circuit is running.")
     }
 
-    companion object Circuit {
-        private var privateCircuit: DslCircuit? = null
+    infix fun circuit(name: String) =
+        CircuitWrapper(name)
 
-        internal val circuit
-            get() = privateCircuit ?: throw IllegalStateException("No circuits running.")
+    class CircuitWrapper internal constructor(private val name: String) {
+        private val withRoutines = mutableListOf<MutableDefaultValues.() -> Unit>()
+        private val containingRoutines = mutableListOf<CircuitLevel.() -> Unit>()
 
-        internal val default
-            get() = circuit.defaultValues
+        infix fun with(block: MutableDefaultValues.() -> Unit) =
+            withRoutines.add(block).let { this }
+
+        infix fun containing(block: CircuitLevel.() -> Unit) =
+            containingRoutines.add(block).let { this }
+
+        infix fun then(dummy: export) =
+            MutableDefaultValues().run {
+                for (routine in withRoutines) {
+                    routine()
+                }
+                BasicDslCircuit(name, immutable)
+            }.let { circuit ->
+                companionCircuit = circuit
+                CircuitLevel(circuit).run {
+                    for (routine in containingRoutines) {
+                        routine()
+                    }
+                }
+                companionCircuit = null
+                CircuitExportFirst(circuit)
+            }
     }
 }
 
