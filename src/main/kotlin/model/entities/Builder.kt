@@ -24,7 +24,7 @@ internal inline fun<reified T : BiochemicalEntity> entity(id: String, block: Ent
  * A class containing default parameters for a biochemical biochemicalEntity.
  */
 internal class EntityParameters {
-    var id: String by Delegates.notNull()
+    lateinit var id: String
     var initialConcentration: Concentration = Concentration()
     var aliases: MutableList<String> = mutableListOf()
 }

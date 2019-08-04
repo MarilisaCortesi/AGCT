@@ -13,7 +13,7 @@ abstract class DslReaction internal constructor() {
 }
 
 class DslDegradation internal constructor(default: DefaultValues) : DslReaction() {
-    internal var entity: DslDegradable by Delegates.notNull()
+    internal lateinit var entity: DslDegradable
     internal var degradationRate: DslRate = default.degradationRate
 
     override val biochemicalReaction: BiochemicalReaction
@@ -24,8 +24,8 @@ class DslDegradation internal constructor(default: DefaultValues) : DslReaction(
 }
 
 class DslTranscription internal constructor(default: DefaultValues) : DslReaction() {
-    internal var coder: DslGene by Delegates.notNull()
-    internal var target: DslProtein by Delegates.notNull()
+    internal lateinit var coder: DslGene
+    internal lateinit var target: DslProtein
     internal var basalRate: DslRate = default.basalRate
 
     override val biochemicalReaction: DirectTranscription
@@ -37,8 +37,8 @@ class DslTranscription internal constructor(default: DefaultValues) : DslReactio
 }
 
 class DslRegulation internal constructor(default: DefaultValues): DslReaction() {
-    internal var transcription: DslTranscription by Delegates.notNull()
-    internal var regulator: DslRegulating by Delegates.notNull()
+    internal lateinit var transcription: DslTranscription
+    internal lateinit var regulator: DslRegulating
     internal var regulatedRate: DslRate = default.regulatedRate
     internal var bindingRate: DslRate = default.bindingRate
     internal var unbindingRate: DslRate = default.unbindingRate
