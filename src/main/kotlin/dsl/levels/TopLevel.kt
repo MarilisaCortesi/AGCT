@@ -16,25 +16,25 @@ class TopLevel internal constructor() {
         CircuitWrapper(name)
 
     class CircuitWrapper internal constructor(private val name: String) {
-        private val withRoutines = mutableListOf<MutableDefaultValues.() -> Unit>()
-        private val containingRoutines = mutableListOf<CircuitLevel.() -> Unit>()
+        private val defaultRoutines = mutableListOf<MutableDefaultValues.() -> Unit>()
+        private val circuitRoutines = mutableListOf<CircuitLevel.() -> Unit>()
 
         infix fun with(block: MutableDefaultValues.() -> Unit) =
-            withRoutines.add(block).let { this }
+            defaultRoutines.add(block).let { this }
 
         infix fun containing(block: CircuitLevel.() -> Unit) =
-            containingRoutines.add(block).let { this }
+            circuitRoutines.add(block).let { this }
 
         infix fun then(dummy: export) =
             MutableDefaultValues().run {
-                for (routine in withRoutines) {
+                for (routine in defaultRoutines) {
                     routine()
                 }
                 BasicDslCircuit(name, immutable)
             }.let { circuit ->
                 companionCircuit = circuit
                 CircuitLevel(circuit).run {
-                    for (routine in containingRoutines) {
+                    for (routine in circuitRoutines) {
                         routine()
                     }
                 }
