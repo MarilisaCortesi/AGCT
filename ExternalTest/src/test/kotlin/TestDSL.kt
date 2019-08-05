@@ -2,13 +2,9 @@ import dsl.*
 
 fun main() {
     Create circuit "My Circuit" containing {
-        the gene "gA"
+        the gene "gA" that {
 
-        the protein "pA"
-
-        the molecule "rA"
-
-        the molecule "rB"
+        }
 
         "gA" {
             has an initialConcentration of 20

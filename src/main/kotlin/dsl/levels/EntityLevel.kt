@@ -12,14 +12,12 @@ open class EntityLevel<out E : DslEntity> internal constructor(protected val ent
     infix fun an(dummy: initialConcentration) = entity.initialConcentration
 }
 
-class DegradableEntityLevel<out E : DslDegradable> internal constructor(entity: E): EntityLevel<E>(entity) {
-    override val has: DegradableEntityLevel<E>
+open class DegradingEntityLevel<out E : DslDegradable> internal constructor(entity: E): EntityLevel<E>(entity) {
+    override val has: DegradingEntityLevel<E>
         get() = this
 
-    infix fun a(dummy: degradationRate) = entity.run {
-        degradationRate = DslRate()
-        degradationRate!!
-    }
+    infix fun a(dummy: degradationRate) =
+        DslRate().apply { entity.degradationRate = this }
 }
 
 class GenericEntityLevel internal constructor(entity: DslEntity) : EntityLevel<DslEntity>(entity) {
@@ -27,11 +25,15 @@ class GenericEntityLevel internal constructor(entity: DslEntity) : EntityLevel<D
         get() = this
 
     infix fun a(dummy: degradationRate) =
-        degradableLevel.a(dummy)
+        if (entity is DslDegradable) DegradingEntityLevel(entity).a(dummy) else throw cannot("degrade")
 
-    private val degradableLevel
-        get() = if (entity is DslDegradable) DegradableEntityLevel(entity) else throw "degrade".exception
-
-    private val String.exception
-        get() = IllegalStateException("${entity.id} is a ${entity.type.decapitalize()} so it cannot $this")
+    private fun cannot(what: String) =
+        IllegalStateException("${entity.id} is a ${entity.type.decapitalize()} so it cannot $what")
 }
+
+class GeneLevel internal constructor(gene: DslGene) : EntityLevel<DslGene>(gene)
+
+class ProteinLevel internal constructor(protein: DslProtein) : DegradingEntityLevel<DslProtein>(protein)
+
+class RegulatorLevel internal constructor(molecule: DslRegulating) : DegradingEntityLevel<DslRegulating>(molecule)
+
