@@ -2,61 +2,80 @@
 
 package dsl
 
+import model.utils.string
 import model.utils.type
 import java.lang.IllegalStateException
 
-class EntityLevelWrapper<out E: EntityLevel<*, *>> internal constructor(
+class EntityLevelWrapper<out E: EntityLevel<*>> internal constructor(
     private val entityLevel: E
 ) {
     infix fun that(block: E.() -> Unit) =
         entityLevel.run(block)
 }
 
-open class EntityLevel<out E : DslEntity, out S : EntityLevel<E, S>> internal constructor(
+abstract class EntityLevel<out E : DslEntity> internal constructor(
     protected val circuit: DslCircuit,
-    protected val entity: E
+    id: String,
+    ifAbsent: String.() -> E
 ) {
     @Suppress("UNCHECKED_CAST")
-    val has
-        get() = this as S
+    internal val entity = circuit.getOrPutEntity(id, ifAbsent) as E
 
-    infix fun an(dummy: initial_concentration) = entity.initialConcentration
+    open val has
+        get() = Has()
+
+    open inner class Has() {
+        infix fun an(dummy: initial_concentration) = entity.initialConcentration
+    }
+
 }
 
-open class DegradingEntityLevel<out E : DslDegradable, out S : DegradingEntityLevel<E, S>> internal constructor(
+abstract class DegradingEntityLevel<out E : DslDegradable> internal constructor(
     circuit: DslCircuit,
-    entity: E
-) : EntityLevel<E, DegradingEntityLevel<E, S>>(circuit, entity) {
-    infix fun a(dummy: degradation_rate) = DslRate().apply { entity.degradationRate = this }
-}
+    id: String,
+    ifAbsent: String.() -> E
+) : EntityLevel<E>(circuit, id, ifAbsent) {
+    override val has: Has
+        get() = Has()
 
-class GeneLevel internal constructor(circuit: DslCircuit, gene: DslGene) :
-    EntityLevel<DslGene, GeneLevel>(circuit, gene) {
-    val codes_for
-        get() = CodesFor(entity)
-
-    class CodesFor internal constructor(gene: DslGene) {
-        operator fun invoke(block: TranscriptionLevel.() -> Unit) = Unit
+    inner class Has() : EntityLevel<E>.Has() {
+        infix fun a(dummy: degradation_rate) = DslRate().apply { entity.degradationRate = this }
     }
 }
 
-class ProteinLevel internal constructor(circuit: DslCircuit, protein: DslProtein) :
-    DegradingEntityLevel<DslProtein, ProteinLevel>(circuit, protein)
+class GeneLevel internal constructor(circuit: DslCircuit, id: String) :
+    EntityLevel<DslGene>(circuit, id, { DslGene(id) }) {
+    val codes_for
+        get() = CodesFor()
 
-class RegulatorLevel internal constructor(circuit: DslCircuit, molecule: DslRegulating) :
-    DegradingEntityLevel<DslRegulating, RegulatorLevel>(circuit, molecule)
+    inner class CodesFor internal constructor() {
+        operator fun invoke(block: TranscriptionLevel.() -> Unit) =
+            TranscriptionLevel(circuit, entity).block()
+    }
+}
 
-class GenericEntityLevel internal constructor(circuit: DslCircuit, entity: DslEntity) :
-    EntityLevel<DslEntity, GenericEntityLevel>(circuit, entity) {
-    infix fun a(dummy: degradation_rate) =
+class ProteinLevel internal constructor(circuit: DslCircuit, id: String) :
+    DegradingEntityLevel<DslProtein>(circuit, id, { DslProtein(id) })
+
+class RegulatorLevel internal constructor(circuit: DslCircuit, id: String) :
+    DegradingEntityLevel<DslRegulating>(circuit, id, { DslMolecule(id) })
+
+class GenericEntityLevel internal constructor(circuit: DslCircuit, id: String) :
+    EntityLevel<DslEntity>(circuit, id, {
+        throw IllegalArgumentException("Entity ${id.string} has not been set before.")
+    }) {
+    override val has: Has
+        get() = Has()
+
+    inner class Has() : EntityLevel<*>.Has() {
+        infix fun a(dummy: degradation_rate) =
             if (entity is DslDegradable)
                 DslRate().apply { entity.degradationRate = this }
             else
                 throw IllegalStateException("\"${entity.id}\" is a ${entity.type.decapitalize()} so it cannot degrade.")
+    }
 }
 
 operator fun String.invoke(block: GenericEntityLevel.() -> Unit) =
-    TopLevel.getEntity(this).let {
-        EntityLevelWrapper(GenericEntityLevel(TopLevel.circuit, it)).that(block)
-    }
+    EntityLevelWrapper(GenericEntityLevel(TopLevel.circuit, this)).that(block)
 

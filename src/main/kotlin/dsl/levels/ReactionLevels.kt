@@ -2,40 +2,60 @@
 
 package dsl
 
-open class ReactionLevel<out R : DslReaction> internal constructor(
-    protected val circuit: DslCircuit,
-    protected val reaction: R
-)
+import java.lang.IllegalStateException
 
-class TranscriptionLevel internal constructor(circuit: DslCircuit, transcription: DslTranscription) :
-    ReactionLevel<DslTranscription>(circuit, transcription) {
+abstract class ReactionLevel<R : DslReaction> internal constructor() {
+    protected abstract val circuit: DslCircuit
+    protected abstract val reaction: R
+}
+
+class TranscriptionLevel internal constructor(
+    override val circuit: DslCircuit,
+    private val coder: DslGene
+) : ReactionLevel<DslTranscription>() {
+    private lateinit var transcription: DslTranscription
+
+    override val reaction
+        get() = if (this::transcription.isInitialized) transcription
+                else throw IllegalStateException("The target protein has not been set yet.")
+
     val the
         get() = The()
 
     val with
         get() = With()
 
-    val being
-        get() = Being()
+    val regulatedBy
+        get() = RegulatedBy()
 
     inner class The internal constructor() {
         infix fun protein(id: String) =
-            circuit.getOrPutEntity(id) { DslProtein(this) }.let { protein ->
-                EntityLevelWrapper(ProteinLevel(circuit, protein))
-        }
+            ProteinLevel(circuit, id).run {
+                transcription = DslTranscription(coder, entity).apply { circuit.putReaction(this) }
+                EntityLevelWrapper(this)
+            }
     }
 
     inner class With internal constructor() {
         infix fun a(dummy: basal_rate) = reaction.basalRate
     }
 
-    inner class Being internal constructor() {
-        infix fun regulatedBy(block: RegulationLevel.() -> Unit) = Unit
+    inner class RegulatedBy internal constructor() {
+        operator fun invoke(block: RegulationLevel.() -> Unit) =
+            RegulationLevel(circuit, transcription).block()
     }
 }
 
-class RegulationLevel internal constructor(circuit: DslCircuit, regulation: DslRegulation) :
-    ReactionLevel<DslRegulation>(circuit, regulation) {
+class RegulationLevel internal constructor(
+    override val circuit: DslCircuit,
+    private val transcription: DslTranscription
+) : ReactionLevel<DslRegulation>() {
+    private lateinit var regulation: DslRegulation
+
+    override val reaction
+        get() = if (this::regulation.isInitialized) regulation
+                else throw IllegalStateException("The regulator has not been set yet.")
+
     val the
         get() = The()
 
@@ -44,13 +64,15 @@ class RegulationLevel internal constructor(circuit: DslCircuit, regulation: DslR
 
     inner class The internal constructor() {
         infix fun protein(id: String) =
-            circuit.getOrPutEntity(id) { DslProtein(this) }.let { protein ->
-                EntityLevelWrapper(ProteinLevel(circuit, protein))
-            }
+            ProteinLevel(circuit, id).wrapper
 
         infix fun molecule(id: String) =
-            circuit.getOrPutEntity(id) { DslMolecule(this) }.let { molecule ->
-                EntityLevelWrapper(RegulatorLevel(circuit, molecule))
+            RegulatorLevel(circuit, id).wrapper
+
+        private val<E : EntityLevel<DslRegulating>> E.wrapper
+            get() = run {
+                regulation = DslRegulation(transcription, entity).apply { circuit.putReaction(this) }
+                EntityLevelWrapper(this)
             }
     }
 

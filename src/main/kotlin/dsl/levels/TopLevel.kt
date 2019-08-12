@@ -10,9 +10,6 @@ class TopLevel internal constructor() {
 
         internal val circuit
             get() = companionCircuit ?: throw IllegalStateException("No circuit is running.")
-
-        internal fun getEntity(id: String) =
-            circuit.getOrThrow(id)
     }
 
     infix fun circuit(name: String) =
@@ -54,9 +51,7 @@ class ContainingLevel internal constructor(
         get() = this
 
     infix fun gene(id: String) =
-        circuit.getOrPutEntity(id) { DslGene(this) }.let { gene ->
-            EntityLevelWrapper(GeneLevel(circuit, gene))
-        }
+        EntityLevelWrapper(GeneLevel(circuit, id))
 }
 
 class CircuitExportFirst internal constructor(private val circuit: DslCircuit) {

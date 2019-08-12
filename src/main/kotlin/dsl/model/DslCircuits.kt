@@ -14,17 +14,15 @@ abstract class DslCircuit internal constructor() {
 
     internal abstract val default: ImmutableDefaultValues
 
-    internal inline fun<reified E : DslEntity> getOrPutEntity(id: String, ifAbsent: String.() -> E) =
-        entities.getOrPut(id) { id.ifAbsent() }.apply {
-            if (this !is E) {
-                throw IllegalArgumentException("$this already exist but it is not of type ${E::class}")
-            }
-        } as E
+//    internal inline fun<reified E : DslEntity> getOrPutCastedEntity(id: String, noinline ifAbsent: String.() -> E) =
+//        getOrPutEntity(id, ifAbsent).apply {
+//            if (this !is E) {
+//                throw IllegalArgumentException("$this already exist but it is not of type ${E::class}")
+//            }
+//        } as E
 
-    internal fun getOrThrow(id: String) =
-        entities.getOrElse(id) {
-            throw IllegalArgumentException("Entity ${id.string} has not been set before.")
-        }
+    internal fun getOrPutEntity(id: String, ifAbsent: String.() -> DslEntity) =
+        entities.getOrPut(id) { id.ifAbsent() }
 
     internal fun putReaction(reaction: DslReaction) {
         reactions.add(reaction)
