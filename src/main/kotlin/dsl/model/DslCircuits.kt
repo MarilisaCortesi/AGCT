@@ -3,6 +3,8 @@
 package dsl
 
 import model.circuit.BasicGeneticCircuit
+import model.entities.DegradingEntity
+import model.reactions.BasicDegradation
 import model.utils.string
 
 abstract class DslCircuit internal constructor() {
@@ -10,27 +12,30 @@ abstract class DslCircuit internal constructor() {
 
     protected val reactions = mutableSetOf<DslReaction>()
 
-    internal abstract val default: DefaultValues
+    internal abstract val default: ImmutableDefaultValues
 
     internal inline fun<reified E : DslEntity> getOrPutEntity(id: String, ifAbsent: String.() -> E) =
         entities.getOrPut(id) { id.ifAbsent() }.apply {
-            if (this !is E) throw IllegalArgumentException("$this already exist but it is not of type ${E::class}")
+            if (this !is E) {
+                throw IllegalArgumentException("$this already exist but it is not of type ${E::class}")
+            }
         } as E
 
     internal fun getOrThrow(id: String) =
-        getOrPutEntity<DslEntity>(id) {
-            throw java.lang.IllegalArgumentException("Entity ${id.string} has not been set before.")
+        entities.getOrElse(id) {
+            throw IllegalArgumentException("Entity ${id.string} has not been set before.")
         }
 
-    internal inline fun<reified R : DslReaction> putReaction(reaction: R) =
+    internal fun putReaction(reaction: DslReaction) {
         reactions.add(reaction)
+    }
 
     internal abstract fun exportTo(types: Collection<ExportObject>)
 }
 
 class BasicDslCircuit internal constructor(
     private val name: String,
-    override val default: DefaultValues
+    override val default: ImmutableDefaultValues
 ) : DslCircuit() {
     override fun exportTo(types: Collection<ExportObject>) =
         BasicGeneticCircuit(name).also { circuit ->
@@ -49,10 +54,7 @@ class BasicDslCircuit internal constructor(
             .filterIsInstance<DslDegradable>()
             .mapNotNull { it.degradationRate?.to(it) }
             .map { (rate, entity) ->
-                DslDegradation(default).also {
-                    it.entity = entity
-                    it.degradationRate = rate
-                }.biochemicalReaction
+                BasicDegradation(entity.biochemicalEntity as DegradingEntity, rate.value)
             }
             .toSet()
             .toTypedArray()

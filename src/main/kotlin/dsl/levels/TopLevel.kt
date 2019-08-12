@@ -8,8 +8,11 @@ class TopLevel internal constructor() {
     companion object {
         private var companionCircuit: DslCircuit? = null
 
+        internal val circuit
+            get() = companionCircuit ?: throw IllegalStateException("No circuit is running.")
+
         internal fun getEntity(id: String) =
-            companionCircuit?.getOrThrow(id) ?: throw IllegalStateException("No circuit is running.")
+            circuit.getOrThrow(id)
     }
 
     infix fun circuit(name: String) =
@@ -17,12 +20,12 @@ class TopLevel internal constructor() {
 
     class CircuitWrapper internal constructor(private val name: String) {
         private val defaultRoutines = mutableListOf<MutableDefaultValues.() -> Unit>()
-        private val circuitRoutines = mutableListOf<CircuitLevel.() -> Unit>()
+        private val circuitRoutines = mutableListOf<ContainingLevel.() -> Unit>()
 
         infix fun with(block: MutableDefaultValues.() -> Unit) =
             defaultRoutines.add(block).let { this }
 
-        infix fun containing(block: CircuitLevel.() -> Unit) =
+        infix fun containing(block: ContainingLevel.() -> Unit) =
             circuitRoutines.add(block).let { this }
 
         infix fun then(dummy: export) =
@@ -33,7 +36,7 @@ class TopLevel internal constructor() {
                 BasicDslCircuit(name, immutable)
             }.let { circuit ->
                 companionCircuit = circuit
-                CircuitLevel(circuit).run {
+                ContainingLevel(circuit).run {
                     for (routine in circuitRoutines) {
                         routine()
                     }
@@ -42,6 +45,18 @@ class TopLevel internal constructor() {
                 CircuitExportFirst(circuit)
             }
     }
+}
+
+class ContainingLevel internal constructor(
+    private val circuit: DslCircuit
+) {
+    val the
+        get() = this
+
+    infix fun gene(id: String) =
+        circuit.getOrPutEntity(id) { DslGene(this) }.let { gene ->
+            EntityLevelWrapper(GeneLevel(circuit, gene))
+        }
 }
 
 class CircuitExportFirst internal constructor(private val circuit: DslCircuit) {

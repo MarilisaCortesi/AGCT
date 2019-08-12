@@ -1,4 +1,4 @@
-@file:Suppress("PackageDirectoryMismatch", "UNUSED_PARAMETER")
+@file:Suppress("PackageDirectoryMismatch", "UNUSED_PARAMETER", "PropertyName")
 
 package dsl
 
@@ -13,7 +13,7 @@ data class ValuesContainer internal constructor(
     val unbindingRate: DslRate = DslRate()
 )
 
-open class DefaultValues internal constructor(protected val container: ValuesContainer) {
+abstract class DefaultValues internal constructor() {
     internal val initialConcentration
         get() = container.initialConcentration.get
 
@@ -32,23 +32,31 @@ open class DefaultValues internal constructor(protected val container: ValuesCon
     internal val unbindingRate
         get() = container.unbindingRate.get
 
-    protected open val <T : DslVariable> T.get
+    protected abstract val container: ValuesContainer
+
+    protected abstract val <T : DslVariable> T.get : T
+}
+
+class ImmutableDefaultValues internal constructor(override val container: ValuesContainer) : DefaultValues() {
+    override val <T : DslVariable> T.get: T
         get() = javaClass.kotlin.create(value)
 }
 
-class MutableDefaultValues internal constructor() : DefaultValues(ValuesContainer()) {
+class MutableDefaultValues internal constructor() : DefaultValues() {
     val a = this
 
     internal val immutable
-        get() = DefaultValues(container)
+        get() = ImmutableDefaultValues(container)
 
     override val <T : DslVariable> T.get
         get() = this
 
-    infix fun default(dummy: initialConcentration) = container.initialConcentration
-    infix fun default(dummy: degradationRate) = container.degradationRate
-    infix fun default(dummy: basalRate) = container.basalRate
-    infix fun default(dummy: regulatedRate) = container.regulatedRate
-    infix fun default(dummy: bindingRate) = container.bindingRate
-    infix fun default(dummy: unbindingRate) = container.unbindingRate
+    override val container: ValuesContainer = ValuesContainer()
+
+    infix fun default(dummy: initial_concentration) = container.initialConcentration
+    infix fun default(dummy: degradation_rate) = container.degradationRate
+    infix fun default(dummy: basal_rate) = container.basalRate
+    infix fun default(dummy: regulated_rate) = container.regulatedRate
+    infix fun default(dummy: binding_rate) = container.bindingRate
+    infix fun default(dummy: unbinding_rate) = container.unbindingRate
 }

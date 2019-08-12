@@ -9,35 +9,35 @@ import model.entities.EntityParameters
 import model.entities.Gene
 import model.entities.Protein
 
-abstract class DslEntity internal constructor(default: DefaultValues) {
+abstract class DslEntity internal constructor() {
     internal abstract val biochemicalEntity: BiochemicalEntity
 
     internal abstract val id: String
 
-    internal val initialConcentration = default.initialConcentration
+    internal val initialConcentration = TopLevel.circuit.default.initialConcentration
 }
 
-abstract class DslDegradable internal constructor(default: DefaultValues) : DslEntity(default) {
+abstract class DslDegradable internal constructor() : DslEntity() {
     internal abstract var degradationRate: DslRate?
 }
 
-abstract class DslRegulating internal constructor(default: DefaultValues) : DslDegradable(default) {
+abstract class DslRegulating internal constructor() : DslDegradable() {
     abstract override val biochemicalEntity: RegulatingEntity
 }
 
-class DslGene(default: DefaultValues, override val id: String) : DslEntity(default) {
+class DslGene(override val id: String) : DslEntity() {
     override val biochemicalEntity: Gene
         get() = BasicGene(parameters)
 }
 
-class DslProtein(default: DefaultValues, override val id: String) : DslRegulating(default) {
+class DslProtein(override val id: String) : DslRegulating() {
     override val biochemicalEntity: Protein
         get() = BasicProtein(parameters)
 
-    override var degradationRate: DslRate? = default.degradationRate
+    override var degradationRate: DslRate? = TopLevel.circuit.default.degradationRate
 }
 
-class DslMolecule(default: DefaultValues, override val id: String) : DslRegulating(default) {
+class DslMolecule(override val id: String) : DslRegulating() {
     override val biochemicalEntity: RegulatingEntity
         get() = if(degradationRate == null) {
             BasicRegulatingEntity(parameters)
