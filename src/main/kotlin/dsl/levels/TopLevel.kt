@@ -16,21 +16,23 @@ class TopLevel internal constructor() {
         CircuitWrapper(name)
 
     class CircuitWrapper internal constructor(private val name: String) {
-        private val defaultRoutines = mutableListOf<MutableDefaultValues.() -> Unit>()
+        private val defaultRoutines = mutableListOf<DefaultLevel.() -> Unit>()
         private val circuitRoutines = mutableListOf<ContainingLevel.() -> Unit>()
 
-        infix fun with(block: MutableDefaultValues.() -> Unit) =
+        infix fun with(block: DefaultLevel.() -> Unit) =
             defaultRoutines.add(block).let { this }
 
         infix fun containing(block: ContainingLevel.() -> Unit) =
             circuitRoutines.add(block).let { this }
 
         infix fun then(dummy: export) =
-            MutableDefaultValues().run {
-                for (routine in defaultRoutines) {
-                    routine()
+            MutableDefaultValues().let { defaults ->
+                DefaultLevel(defaults).run {
+                    for (routine in defaultRoutines) {
+                        routine()
+                    }
                 }
-                BasicDslCircuit(name, immutable)
+                BasicDslCircuit(name, defaults.immutable)
             }.let { circuit ->
                 companionCircuit = circuit
                 ContainingLevel(circuit).run {
@@ -39,33 +41,45 @@ class TopLevel internal constructor() {
                     }
                 }
                 companionCircuit = null
-                CircuitExportFirst(circuit)
+                CircuitExport(circuit)
             }
     }
 }
 
-class ContainingLevel internal constructor(
-    private val circuit: DslCircuit
-) {
+class ContainingLevel internal constructor(private val circuit: DslCircuit) {
     val the
         get() = this
 
     infix fun gene(id: String) =
-        EntityLevelWrapper(GeneLevel(circuit, id))
+        EntityLevelWrapper(GeneLevel(id))
 }
 
-class CircuitExportFirst internal constructor(private val circuit: DslCircuit) {
+class DefaultLevel internal constructor(private val defaults: MutableDefaultValues) {
+    val a
+        get() = A()
+
+    inner class A internal constructor() {
+        infix fun default(dummy: initial_concentration) = defaults.initialConcentration
+        infix fun default(dummy: degradation_rate) = defaults.degradationRate
+        infix fun default(dummy: basal_rate) = defaults.basalRate
+        infix fun default(dummy: regulated_rate) = defaults.regulatedRate
+        infix fun default(dummy: binding_rate) = defaults.bindingRate
+        infix fun default(dummy: unbinding_rate) = defaults.unbindingRate
+    }
+}
+
+class CircuitExport internal constructor(private val circuit: DslCircuit) {
     infix fun to(type: ExportObject) =
         to(setOf(type))
 
     infix fun to(types: Collection<ExportObject>) =
-        CircuitExportSecond(circuit).and(types)
-}
+        And().and(types)
 
-class CircuitExportSecond internal constructor(private val circuit: DslCircuit) {
-    infix fun and(type: ExportObject) =
-        and(setOf(type))
+    inner class And internal constructor() {
+        infix fun and(type: ExportObject) =
+            and(setOf(type))
 
-    internal fun and(types: Collection<ExportObject>) =
-        apply { circuit.exportTo(types) }
+        internal fun and(types: Collection<ExportObject>) =
+            apply { circuit.exportTo(types) }
+    }
 }

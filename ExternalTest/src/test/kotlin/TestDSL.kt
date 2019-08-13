@@ -6,10 +6,7 @@ fun main() {
             has an initial_concentration of 20
 
             codes_for {
-                the protein "pro" that {
-                    has an initial_concentration of 50
-                    has a degradation_rate of 2
-                }
+                the protein "pro"
 
                 with a basal_rate of 5
 

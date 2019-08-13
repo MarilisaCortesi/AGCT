@@ -1,18 +1,15 @@
-@file:Suppress("PackageDirectoryMismatch", "PropertyName")
+@file:Suppress("PackageDirectoryMismatch", "PropertyName", "UNUSED_PARAMETER")
 
 package dsl
 
-import java.lang.IllegalStateException
+import dsl.TopLevel.Companion.circuit
 
 abstract class ReactionLevel<R : DslReaction> internal constructor() {
-    protected abstract val circuit: DslCircuit
     protected abstract val reaction: R
 }
 
-class TranscriptionLevel internal constructor(
-    override val circuit: DslCircuit,
-    private val coder: DslGene
-) : ReactionLevel<DslTranscription>() {
+class TranscriptionLevel internal constructor(private val coder: DslGene) :
+    ReactionLevel<DslTranscription>() {
     private lateinit var transcription: DslTranscription
 
     override val reaction
@@ -30,7 +27,7 @@ class TranscriptionLevel internal constructor(
 
     inner class The internal constructor() {
         infix fun protein(id: String) =
-            ProteinLevel(circuit, id).run {
+            ProteinLevel(id).run {
                 transcription = DslTranscription(coder, entity).apply { circuit.putReaction(this) }
                 EntityLevelWrapper(this)
             }
@@ -42,12 +39,11 @@ class TranscriptionLevel internal constructor(
 
     inner class RegulatedBy internal constructor() {
         operator fun invoke(block: RegulationLevel.() -> Unit) =
-            RegulationLevel(circuit, transcription).block()
+            RegulationLevel(transcription).block()
     }
 }
 
 class RegulationLevel internal constructor(
-    override val circuit: DslCircuit,
     private val transcription: DslTranscription
 ) : ReactionLevel<DslRegulation>() {
     private lateinit var regulation: DslRegulation
@@ -64,10 +60,10 @@ class RegulationLevel internal constructor(
 
     inner class The internal constructor() {
         infix fun protein(id: String) =
-            ProteinLevel(circuit, id).wrapper
+            ProteinLevel(id).wrapper
 
         infix fun molecule(id: String) =
-            RegulatorLevel(circuit, id).wrapper
+            RegulatorLevel(id).wrapper
 
         private val<E : EntityLevel<DslRegulating>> E.wrapper
             get() = run {
