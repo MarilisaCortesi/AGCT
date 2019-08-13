@@ -1,4 +1,4 @@
-Create circuit "My Circuit" containing {
+Fill circuit "My Circuit" with {
 	the gene "gA" having {
 		an initial concentration of 20
 	} that codes For {
@@ -38,7 +38,7 @@ Create circuit "My Circuit" containing {
     } that codes For {
     	...
     }
-} using as default {
-    the initial concentration into logspace(0, 4, 5)
-    the degradation rate into range(1, 9, 2)
+} having {
+    default initial concentration into logspace(0, 4, 5)
+    default degradation rate into range(1, 9, 2)
 } then export to Alchemist

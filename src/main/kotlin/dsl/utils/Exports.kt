@@ -12,11 +12,11 @@ abstract class ExportObject internal constructor() {
     internal fun export(circuit: GeneticCircuit) = circuit.exportTo(type)
 }
 
-object entities_list: ExportObject() {
+object entities: ExportObject() {
     override val type = ExportTypes.Entities
 }
 
-object reactions_list: ExportObject() {
+object reactions: ExportObject() {
     override val type = ExportTypes.Reactions
 }
 
