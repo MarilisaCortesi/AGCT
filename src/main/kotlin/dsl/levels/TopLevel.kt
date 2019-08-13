@@ -16,10 +16,10 @@ class TopLevel internal constructor() {
         CircuitWrapper(name)
 
     class CircuitWrapper internal constructor(private val name: String) {
-        private val defaultRoutines = mutableListOf<DefaultLevel.() -> Unit>()
+        private val defaultRoutines = mutableListOf<DefaultsLevel.() -> Unit>()
         private val circuitRoutines = mutableListOf<ContainingLevel.() -> Unit>()
 
-        infix fun with(block: DefaultLevel.() -> Unit) =
+        infix fun with(block: DefaultsLevel.() -> Unit) =
             defaultRoutines.add(block).let { this }
 
         infix fun containing(block: ContainingLevel.() -> Unit) =
@@ -27,7 +27,7 @@ class TopLevel internal constructor() {
 
         infix fun then(dummy: export) =
             MutableDefaultValues().let { defaults ->
-                DefaultLevel(defaults).run {
+                DefaultsLevel(defaults).run {
                     for (routine in defaultRoutines) {
                         routine()
                     }
@@ -54,7 +54,7 @@ class ContainingLevel internal constructor(private val circuit: DslCircuit) {
         EntityLevelWrapper(GeneLevel(id))
 }
 
-class DefaultLevel internal constructor(private val defaults: MutableDefaultValues) {
+class DefaultsLevel internal constructor(private val defaults: MutableDefaultValues) {
     val a
         get() = A()
 
