@@ -19,6 +19,8 @@ internal abstract class AbstractReaction(
             append(reagents.reaction)
             append(" --> ")
             append(products.reaction)
+            append(", rate = ")
+            append(rate.values)
         }
 
     override fun hashCode() =
