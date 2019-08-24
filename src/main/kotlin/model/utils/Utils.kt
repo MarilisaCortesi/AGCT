@@ -1,6 +1,8 @@
 package model.utils
 
+import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 /**
  * Exception thrown when an unsupported class is passed.
@@ -31,7 +33,7 @@ internal val Any?.type
 /**
  * Creates an instance from a [class][this] using the given [parameters].
  */
-internal fun<T : Any> KClass<T>.create(vararg parameters: Any) : T {
+internal fun<T : Any> KClass<T>.create(vararg parameters: Any?) : T {
     for (constructor in constructors) {
         try {
             return constructor.call(*parameters)
@@ -50,6 +52,27 @@ internal fun<T : Any> T.checkEquals(other: Any?, check: (T) -> Boolean) =
         this === other -> true
         javaClass != other?.javaClass -> false
         else -> (other as T).let(check)
+    }
+
+/**
+ * Custom delegate to perform late initialization on a var just once.
+ */
+internal fun <T : Any> lateVal(propertyName: String? = null, temporaryValue: T? = null) =
+    object : ReadWriteProperty<Any?, T> {
+        private var value: T? = null
+
+        override fun getValue(thisRef: Any?, property: KProperty<*>): T {
+            return value ?:
+                   temporaryValue ?:
+                   throw IllegalStateException("The ${propertyName ?: property.name} has not been set yet.")
+        }
+
+        override fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
+            if (this.value == null)
+                this.value = value
+            else
+                throw IllegalStateException("The ${propertyName ?: property.name} has been already set.")
+        }
     }
 
 /**

@@ -24,7 +24,7 @@ internal fun GeneticCircuit.agctExport() = start(" {", "}") {
                 line("with a basal.rate ${basalRate.string}")
                 regulations.blocks({ "regulated by" }) {
                     line("the regulator ${regulator.id.string}")
-                    line("with a regulating.rate ${regulatedRate.string}")
+                    line("with a regulating.rate ${regulatingRate.string}")
                     line("with a binding.rate ${bindingRate.string}")
                     line("with an unbinding.rate ${unbindingRate.string}")
                 }

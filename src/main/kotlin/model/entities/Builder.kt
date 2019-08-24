@@ -1,6 +1,7 @@
 package model.entities
 
 import model.utils.create
+import model.utils.lateVal
 import model.variables.Concentration
 import kotlin.properties.Delegates
 import kotlin.reflect.KClass
@@ -24,7 +25,7 @@ internal inline fun<reified T : BiochemicalEntity> entity(id: String, block: Ent
  * A class containing default parameters for a biochemical biochemicalEntity.
  */
 internal class EntityParameters {
-    lateinit var id: String
+    var id: String by lateVal()
     var initialConcentration: Concentration = Concentration()
     var aliases: MutableList<String> = mutableListOf()
 }

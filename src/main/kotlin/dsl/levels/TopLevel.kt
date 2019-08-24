@@ -62,7 +62,7 @@ class DefaultsLevel internal constructor(private val defaults: MutableDefaultVal
         infix fun default(dummy: initial.Concentration) = defaults.initialConcentration
         infix fun default(dummy: degradation.Rate) = defaults.degradationRate
         infix fun default(dummy: basal.Rate) = defaults.basalRate
-        infix fun default(dummy: regulating.Rate) = defaults.regulatedRate
+        infix fun default(dummy: regulating.Rate) = defaults.regulatingRate
         infix fun default(dummy: binding.Rate) = defaults.bindingRate
         infix fun default(dummy: unbinding.Rate) = defaults.unbindingRate
     }

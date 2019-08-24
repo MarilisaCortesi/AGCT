@@ -5,12 +5,12 @@ package dsl
 import model.utils.create
 
 data class ValuesContainer internal constructor(
-    val initialConcentration: DslConcentration = DslConcentration(),
-    val degradationRate: DslRate = DslRate(),
-    val basalRate: DslRate = DslRate(),
-    val regulatedRate: DslRate = DslRate(),
-    val bindingRate: DslRate = DslRate(),
-    val unbindingRate: DslRate = DslRate()
+    val initialConcentration: DslConcentration = DslConcentration("initial concentration"),
+    val degradationRate: DslRate = DslRate("degradation rate"),
+    val basalRate: DslRate = DslRate("basal rate"),
+    val regulatingRate: DslRate = DslRate("regulating rate"),
+    val bindingRate: DslRate = DslRate("binding rate"),
+    val unbindingRate: DslRate = DslRate("unbinding rate")
 )
 
 abstract class DefaultValues internal constructor() {
@@ -23,8 +23,8 @@ abstract class DefaultValues internal constructor() {
     internal val basalRate
         get() = container.basalRate.get
 
-    internal val regulatedRate
-        get() = container.regulatedRate.get
+    internal val regulatingRate
+        get() = container.regulatingRate.get
 
     internal val bindingRate
         get() = container.bindingRate.get
@@ -39,7 +39,7 @@ abstract class DefaultValues internal constructor() {
 
 class ImmutableDefaultValues internal constructor(override val container: ValuesContainer) : DefaultValues() {
     override val <T : DslVariable> T.get: T
-        get() = javaClass.kotlin.create(value)
+        get() = javaClass.kotlin.create(variableName, value)
 }
 
 class MutableDefaultValues internal constructor() : DefaultValues() {

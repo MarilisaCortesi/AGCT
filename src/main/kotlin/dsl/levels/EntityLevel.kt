@@ -39,7 +39,7 @@ abstract class DegradingEntityLevel<out E : DslDegradable> internal constructor(
 
     inner class Has internal constructor() : EntityLevel<E>.Has() {
         infix fun a(dummy: degradation.Rate) =
-            entity.degradationRate ?: DslRate().also { entity.degradationRate = it }
+            entity.degradationRate ?: DslRate("degradation rate").also { entity.degradationRate = it }
     }
 }
 
@@ -71,7 +71,7 @@ class GenericEntityLevel internal constructor(id: String) : EntityLevel<DslEntit
     inner class Has internal constructor() : EntityLevel<*>.Has() {
         infix fun a(dummy: degradation.Rate) =
             if (entity is DslDegradable)
-                entity.degradationRate ?: DslRate().also { entity.degradationRate = it }
+                entity.degradationRate ?: DslRate("degradation rate").also { entity.degradationRate = it }
             else
                 throw IllegalStateException("\"${entity.id}\" is a ${entity.type.decapitalize()} so it cannot degrade.")
     }

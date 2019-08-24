@@ -44,7 +44,7 @@ internal class TestReactions : StringSpec({
         DIRECT_REGULATION.run {
             reaction shouldBe DIRECT
             regulator shouldBe REGULATIVE
-            regulatedRate shouldBe Rate()
+            regulatingRate shouldBe Rate()
             unbindingRate shouldBe Rate()
             bindingRate shouldBe Rate()
             reactions shouldContainExactlyInAnyOrder DIRECT_REGULATION_REACTIONS
@@ -54,7 +54,7 @@ internal class TestReactions : StringSpec({
         TRANSCRIPTION_REGULATION.run {
             reaction shouldBe TRANSCRIPTION
             regulator shouldBe REGULATIVE
-            regulatedRate shouldBe Rate()
+            regulatingRate shouldBe Rate()
             unbindingRate shouldBe Rate()
             bindingRate shouldBe Rate()
             reactions shouldContainExactlyInAnyOrder TRANSCRIPTION_REGULATION_REACTIONS
@@ -64,7 +64,7 @@ internal class TestReactions : StringSpec({
         TRANSLATION_REGULATION.run {
             reaction shouldBe TRANSLATION
             regulator shouldBe REGULATIVE
-            regulatedRate shouldBe Rate()
+            regulatingRate shouldBe Rate()
             unbindingRate shouldBe Rate()
             bindingRate shouldBe Rate()
             reactions shouldContainExactlyInAnyOrder TRANSLATION_REGULATION_REACTIONS

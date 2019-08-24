@@ -3,12 +3,20 @@
 package dsl
 
 import model.utils.create
+import model.utils.lateVal
 import model.variables.Concentration
 import model.variables.Rate
 import model.variables.Variable
 
 @Suppress("UNCHECKED_CAST")
-abstract class DslVariable internal constructor(private var privateValue: Variable<Number>) {
+abstract class DslVariable internal constructor(
+    internal val variableName: String?,
+    default: Variable<Number>
+) {
+    // being protected, it would expose internal class Variable<Number>
+    // to avoid this, the value must remain private and be passed through the function getCastedValue
+    private var privateValue: Variable<Number> by lateVal(variableName, default)
+
     protected fun<T : Variable<Number>> getCastedValue() =
         privateValue as T
 
@@ -22,12 +30,18 @@ abstract class DslVariable internal constructor(private var privateValue: Variab
     }
 }
 
-class DslConcentration internal constructor(default: Concentration = Concentration()) : DslVariable(default) {
+class DslConcentration internal constructor(
+    variableName: String? = null,
+    default: Concentration = Concentration()
+) : DslVariable(variableName, default) {
     override val value: Concentration
         get() = getCastedValue()
 }
 
-class DslRate internal constructor(default: Rate = Rate()) : DslVariable(default) {
+class DslRate internal constructor(
+    variableName: String? = null,
+    default: Rate = Rate()
+) : DslVariable(variableName, default) {
     override val value: Rate
         get() = getCastedValue()
 }

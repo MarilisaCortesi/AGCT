@@ -57,7 +57,7 @@ internal interface Translation : CodingReaction<MRna, Protein>
 internal interface Regulation : BiochemicalReaction {
     val reaction: CodingReaction<*, *>
     val regulator: RegulatingEntity
-    val regulatedRate: Rate
+    val regulatingRate: Rate
     val bindingRate: Rate
     val unbindingRate: Rate
 }

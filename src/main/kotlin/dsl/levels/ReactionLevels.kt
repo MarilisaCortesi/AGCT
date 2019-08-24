@@ -3,6 +3,7 @@
 package dsl
 
 import dsl.TopLevel.Companion.circuit
+import model.utils.lateVal
 
 abstract class ReactionLevel<R : DslReaction> internal constructor() {
     protected abstract val reaction: R
@@ -10,11 +11,10 @@ abstract class ReactionLevel<R : DslReaction> internal constructor() {
 
 class TranscriptionLevel internal constructor(private val coder: DslGene) :
     ReactionLevel<DslTranscription>() {
-    private lateinit var transcription: DslTranscription
+    private var transcription: DslTranscription by lateVal("target protein")
 
     override val reaction
-        get() = if (this::transcription.isInitialized) transcription
-                else throw IllegalStateException("The target protein has not been set yet.")
+        get() = transcription
 
     val the
         get() = The()
@@ -50,11 +50,10 @@ class TranscriptionLevel internal constructor(private val coder: DslGene) :
 class RegulationLevel internal constructor(
     private val transcription: DslTranscription
 ) : ReactionLevel<DslRegulation>() {
-    private lateinit var regulation: DslRegulation
+    private var regulation: DslRegulation by lateVal("regulator")
 
     override val reaction
-        get() = if (this::regulation.isInitialized) regulation
-                else throw IllegalStateException("The regulator has not been set yet.")
+        get() = regulation
 
     val the
         get() = The()
@@ -77,7 +76,7 @@ class RegulationLevel internal constructor(
     }
 
     inner class With internal constructor() {
-        infix fun a(dummy: regulating.Rate) = reaction.regulatedRate
+        infix fun a(dummy: regulating.Rate) = reaction.regulatingRate
         infix fun a(dummy: binding.Rate) = reaction.bindingRate
         infix fun an(dummy: unbinding.Rate) = reaction.unbindingRate
     }

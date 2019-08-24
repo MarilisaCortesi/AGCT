@@ -28,7 +28,7 @@ class DslRegulation internal constructor(
     private val transcription: DslTranscription,
     private val regulator: DslRegulating
 ) : DslReaction() {
-    internal var regulatedRate: DslRate = TopLevel.circuit.default.regulatedRate
+    internal var regulatingRate: DslRate = TopLevel.circuit.default.regulatingRate
     internal var bindingRate: DslRate = TopLevel.circuit.default.bindingRate
     internal var unbindingRate: DslRate = TopLevel.circuit.default.unbindingRate
 
@@ -36,7 +36,7 @@ class DslRegulation internal constructor(
         get() = BasicRegulation(
             transcription.biochemicalReaction,
             regulator.biochemicalEntity,
-            regulatedRate.value,
+            regulatingRate.value,
             bindingRate.value,
             unbindingRate.value
         )

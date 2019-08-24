@@ -108,7 +108,7 @@ internal class BasicTranslation(
 internal class BasicRegulation(
     override val reaction: CodingReaction<*, *>,
     override val regulator: RegulatingEntity,
-    override val regulatedRate: Rate = Rate(),
+    override val regulatingRate: Rate = Rate(),
     override val bindingRate: Rate = Rate(),
     override val unbindingRate: Rate = Rate()
 ) : AbstractBiochemicalReaction(), Regulation {
@@ -134,13 +134,13 @@ internal class BasicRegulation(
     private val regulationInfo : Pair<BoundBiochemicalEntity<*, RegulatingEntity>, CodingReaction<*, *>> =
         when (reaction) {
             is DirectTranscription -> RegulatedGene(reaction.coder, regulator).let {
-                Pair(it, DirectTranscription(it, reaction.target, regulatedRate))
+                Pair(it, DirectTranscription(it, reaction.target, regulatingRate))
             }
             is BasicTranscription -> RegulatedGene(reaction.coder, regulator).let {
-                Pair(it, BasicTranscription(it, reaction.target, regulatedRate))
+                Pair(it, BasicTranscription(it, reaction.target, regulatingRate))
             }
             is BasicTranslation -> RegulatedMRna(reaction.coder, regulator).let {
-                Pair(it, BasicTranslation(it, reaction.target, regulatedRate))
+                Pair(it, BasicTranslation(it, reaction.target, regulatingRate))
             }
             else -> throw UnsupportedClassException(reaction.coder)
         }
