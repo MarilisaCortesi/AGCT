@@ -59,12 +59,12 @@ class DefaultsLevel internal constructor(private val defaults: MutableDefaultVal
         get() = A()
 
     inner class A internal constructor() {
-        infix fun default(dummy: initial_concentration) = defaults.initialConcentration
-        infix fun default(dummy: degradation_rate) = defaults.degradationRate
-        infix fun default(dummy: basal_rate) = defaults.basalRate
-        infix fun default(dummy: regulated_rate) = defaults.regulatedRate
-        infix fun default(dummy: binding_rate) = defaults.bindingRate
-        infix fun default(dummy: unbinding_rate) = defaults.unbindingRate
+        infix fun default(dummy: initial.Concentration) = defaults.initialConcentration
+        infix fun default(dummy: degradation.Rate) = defaults.degradationRate
+        infix fun default(dummy: basal.Rate) = defaults.basalRate
+        infix fun default(dummy: regulating.Rate) = defaults.regulatedRate
+        infix fun default(dummy: binding.Rate) = defaults.bindingRate
+        infix fun default(dummy: unbinding.Rate) = defaults.unbindingRate
     }
 }
 

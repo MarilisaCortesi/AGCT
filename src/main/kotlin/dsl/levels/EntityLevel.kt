@@ -25,7 +25,7 @@ abstract class EntityLevel<out E : DslEntity> internal constructor(
         get() = Has()
 
     open inner class Has internal constructor() {
-        infix fun an(dummy: initial_concentration) = entity.initialConcentration
+        infix fun an(concentration: initial.Concentration) = entity.initialConcentration
     }
 
 }
@@ -38,18 +38,23 @@ abstract class DegradingEntityLevel<out E : DslDegradable> internal constructor(
         get() = Has()
 
     inner class Has internal constructor() : EntityLevel<E>.Has() {
-        infix fun a(dummy: degradation_rate) = DslRate().apply { entity.degradationRate = this }
+        infix fun a(dummy: degradation.Rate) =
+            entity.degradationRate ?: DslRate().also { entity.degradationRate = it }
     }
 }
 
 class GeneLevel internal constructor(id: String) :
     EntityLevel<DslGene>(id, { DslGene(id) }) {
-    val codes_for
+    val codes
         get() = CodesFor()
 
     inner class CodesFor internal constructor() {
-        operator fun invoke(block: TranscriptionLevel.() -> Unit) =
-            TranscriptionLevel(entity).block()
+        infix fun For(block: TranscriptionLevel.() -> Unit) = And().and(block)
+
+        inner class And internal constructor() {
+            infix fun and(block: TranscriptionLevel.() -> Unit) =
+                TranscriptionLevel(entity).block().let { this }
+        }
     }
 }
 
@@ -64,9 +69,9 @@ class GenericEntityLevel internal constructor(id: String) : EntityLevel<DslEntit
         get() = Has()
 
     inner class Has internal constructor() : EntityLevel<*>.Has() {
-        infix fun a(dummy: degradation_rate) =
+        infix fun a(dummy: degradation.Rate) =
             if (entity is DslDegradable)
-                DslRate().apply { entity.degradationRate = this }
+                entity.degradationRate ?: DslRate().also { entity.degradationRate = it }
             else
                 throw IllegalStateException("\"${entity.id}\" is a ${entity.type.decapitalize()} so it cannot degrade.")
     }

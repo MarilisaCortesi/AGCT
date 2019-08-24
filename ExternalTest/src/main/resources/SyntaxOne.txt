@@ -1,0 +1,41 @@
+Create circuit "My Circuit" containing {
+    the gene "gA" that {
+        has an initial_concentration of 20
+
+        codes_for {
+            the protein "pA" that {
+                has an initial_concentration of 50
+                has a degradation_rate of 2
+            }
+
+            with a basal_rate of 5
+
+            regulated_by {
+                the molecule "rA" that {
+                    has an initial_concentration of 200
+                    has a degradation_rate of 5
+                }
+
+                with a regulated_rate of 10
+                with a binding_rate of 5
+                with an unbinding_rate of 5
+            }
+
+            regulated_by {
+                the molecule "rB" that ...
+                with ...
+            }
+        }
+
+        codes_for {
+            the protein "pB" that ...
+            with ...
+            regulated_by ...
+        }
+    }
+
+    the gene "gB" that ...
+} with {
+    a default initial_concentration into logspace(0, 4, 5)
+    a default degradation_rate into range(1, 9, 2)
+} then export to Alchemist

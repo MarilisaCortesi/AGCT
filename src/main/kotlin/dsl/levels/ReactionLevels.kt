@@ -22,7 +22,7 @@ class TranscriptionLevel internal constructor(private val coder: DslGene) :
     val with
         get() = With()
 
-    val regulatedBy
+    val regulated
         get() = RegulatedBy()
 
     inner class The internal constructor() {
@@ -34,12 +34,16 @@ class TranscriptionLevel internal constructor(private val coder: DslGene) :
     }
 
     inner class With internal constructor() {
-        infix fun a(dummy: basal_rate) = reaction.basalRate
+        infix fun a(dummy: basal.Rate) = reaction.basalRate
     }
 
     inner class RegulatedBy internal constructor() {
-        operator fun invoke(block: RegulationLevel.() -> Unit) =
-            RegulationLevel(transcription).block()
+        infix fun by(block: RegulationLevel.() -> Unit) = And().and(block)
+
+        inner class And internal constructor() {
+            infix fun and(block: RegulationLevel.() -> Unit) =
+                RegulationLevel(transcription).block().let { this }
+        }
     }
 }
 
@@ -73,10 +77,8 @@ class RegulationLevel internal constructor(
     }
 
     inner class With internal constructor() {
-        infix fun a(dummy: regulated_rate) = reaction.regulatedRate
-
-        infix fun a(dummy: binding_rate) = reaction.bindingRate
-
-        infix fun an(dummy: unbinding_rate) = reaction.unbindingRate
+        infix fun a(dummy: regulating.Rate) = reaction.regulatedRate
+        infix fun a(dummy: binding.Rate) = reaction.bindingRate
+        infix fun an(dummy: unbinding.Rate) = reaction.unbindingRate
     }
 }

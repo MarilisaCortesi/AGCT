@@ -2,11 +2,34 @@
 
 package dsl
 
-object initial_concentration
-object degradation_rate
-object basal_rate
-object regulated_rate
-object binding_rate
-object unbinding_rate
+object initial {
+    val concentration = Concentration()
+    class Concentration internal constructor()
+}
+
+object degradation {
+    val rate = Rate()
+    class Rate internal constructor()
+}
+
+object basal {
+    val rate = Rate()
+    class Rate internal constructor()
+}
+
+object regulating {
+    val rate = Rate()
+    class Rate internal constructor()
+}
+
+object binding {
+    val rate = Rate()
+    class Rate internal constructor()
+}
+
+object unbinding {
+    val rate = Rate()
+    class Rate internal constructor()
+}
 
 object export

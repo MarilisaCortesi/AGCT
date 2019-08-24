@@ -19,22 +19,22 @@ import model.variables.Variable
 internal fun GeneticCircuit.agctExport() = start(" {", "}") {
     block("Create circuit ${name.string} containing") {
         genes.blocks({ "the ${this.string} that" }) {
-            transcriptions.blocks({ "codes for" }) {
+            transcriptions.blocks({ "codes For" }) {
                 line("the protein ${target.id.string}")
-                line("with a basalRate ${basalRate.string}")
+                line("with a basal.rate ${basalRate.string}")
                 regulations.blocks({ "regulated by" }) {
                     line("the regulator ${regulator.id.string}")
-                    line("with a regulatedRate ${regulatedRate.string}")
-                    line("with a bindingRate ${bindingRate.string}")
-                    line("with an unbindingRate ${unbindingRate.string}")
+                    line("with a regulating.rate ${regulatedRate.string}")
+                    line("with a binding.rate ${bindingRate.string}")
+                    line("with an unbinding.rate ${unbindingRate.string}")
                 }
             }
         }
 
-        dslEntities.blocks({ "the $string" }) {
-            line("has an initialConcentration ${initialConcentration.string}")
+        dslEntities.blocks({ "\"$id \"" }) {
+            line("has an initial.concentration ${initialConcentration.string}")
             if (this is DegradingEntity) {
-                line("has a degradationRate ${degradation.degradationRate.string}")
+                line("has a degradation.rate ${degradation.degradationRate.string}")
             }
         }
     }
