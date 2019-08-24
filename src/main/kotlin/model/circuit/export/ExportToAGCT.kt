@@ -31,7 +31,7 @@ internal fun GeneticCircuit.agctExport() = start(" {", "}") {
             }
         }
 
-        dslEntities.blocks({ "\"$id \"" }) {
+        dslEntities.blocks({ "\"$id\"" }) {
             line("has an initial.concentration ${initialConcentration.string}")
             if (this is DegradingEntity) {
                 line("has a degradation.rate ${degradation.degradationRate.string}")
