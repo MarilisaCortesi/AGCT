@@ -5,10 +5,7 @@ fun main() {
         the gene "g/TetR" that {
             codes For {
                 the protein "TetR"
-                regulated by { the protein "LacI" } and {
-                    the protein "λcI"
-                    with a regulating.rate of 20
-                }
+                regulated by { the protein "LacI" } and { the protein "λcI" }
             }
         }
 
