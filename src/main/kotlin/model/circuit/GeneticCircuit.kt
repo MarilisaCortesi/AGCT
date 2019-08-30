@@ -1,6 +1,6 @@
 package model.circuit
 
-import model.circuit.export.ExportTypes
+import export.ExportType
 import model.entities.*
 import model.reactions.BiochemicalReaction
 
@@ -41,5 +41,5 @@ internal interface GeneticCircuit {
     /**
      * Exports the geneticCircuit.
      */
-    fun exportTo(vararg types: ExportTypes)
+    fun exportTo(vararg types: ExportType)
 }

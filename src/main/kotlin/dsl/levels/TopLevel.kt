@@ -70,16 +70,17 @@ class DefaultsLevel internal constructor(private val defaults: MutableDefaultVal
 
 class CircuitExport internal constructor(private val circuit: DslCircuit) {
     infix fun to(type: ExportObject) =
-        to(setOf(type))
+        And().and(type)
 
-    infix fun to(types: Collection<ExportObject>) =
-        And().and(types)
+    infix fun to(dummy: each) = Each()
 
     inner class And internal constructor() {
         infix fun and(type: ExportObject) =
-            and(setOf(type))
+            apply { circuit.exportTo(setOf(type)) }
+    }
 
-        internal fun and(types: Collection<ExportObject>) =
-            apply { circuit.exportTo(types) }
+    inner class Each internal constructor() {
+        infix fun one(types: Collection<ExportObject>) =
+            circuit.exportTo(types)
     }
 }

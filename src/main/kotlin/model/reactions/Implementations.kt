@@ -30,10 +30,11 @@ internal abstract class AbstractReaction(
         checkEquals(other) { reagents == it.reagents && products == it.products }
 
     private val Map<BiochemicalEntity, Int>.reaction
-        get() = if (size == 0) {
-            "[]"
-        } else {
-            entries.joinToString(" + ") { if (it.value != 1) "${it.value} " else "" + it.key.id }
+        get() = entries.joinToString(" + ", "[", "]") {
+            if (it.value != 1)
+                "${it.value}${it.key.id}"
+            else
+                it.key.id
         }
 }
 

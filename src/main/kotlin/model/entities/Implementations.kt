@@ -21,7 +21,7 @@ internal abstract class AbstractEntity(parameters: EntityParameters) : Biochemic
 internal abstract class AbstractBoundEntity<out F : BiochemicalEntity, out S : BiochemicalEntity>(
     override val first: F,
     override val second: S
-) : AbstractEntity(EntityParameters().apply { id = "[${first.id}-${second.id}]" }), BoundBiochemicalEntity<F, S>
+) : AbstractEntity(EntityParameters().apply { id = "${first.id}-${second.id}" }), BoundBiochemicalEntity<F, S>
 
 internal class BasicDegradingEntity(parameters: EntityParameters) :
     AbstractEntity(parameters), DegradingEntity

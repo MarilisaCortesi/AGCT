@@ -1,6 +1,6 @@
 package model.circuit
 
-import model.circuit.export.ExportTypes
+import export.ExportType
 import model.entities.BiochemicalEntity
 import model.reactions.BiochemicalReaction
 
@@ -40,7 +40,7 @@ internal abstract class AbstractGeneticCircuit(override val name: String) : Gene
         }
     }
 
-    override fun exportTo(vararg types: ExportTypes) {
+    override fun exportTo(vararg types: ExportType) {
         for (check in exportRules.values) {
             check(circuit)
         }

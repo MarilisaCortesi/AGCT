@@ -14,15 +14,18 @@ internal interface Variable<out T> {
 internal abstract class PositiveVariable<out T : Number>(values: Sequence<T>) : Variable<T> {
     init {
         for (value in values) {
-            if (value.toDouble() <= 0)
-                throw IllegalArgumentException("Variable must have positive values only.")
+            require(value.toDouble() > 0) { "Variable must have positive values only." }
         }
     }
 
     override val values = values.map { it }.toSet()
 
-    override fun toString() =
-        "$type(${values.joinToString { ", " }})"
+    override fun toString() = values.run {
+        if (size == 1)
+            single().toString()
+        else
+            joinToString(",", "(", ")")
+    }
 
     override fun hashCode() =
         values.hashCode()

@@ -6,7 +6,7 @@ import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
 import model.circuit.BasicGeneticCircuit
-import model.circuit.export.ExportTypes
+import export.ExportTypes
 import model.entities.*
 import model.reactions.BasicDegradation
 import model.reactions.BasicTranscription
