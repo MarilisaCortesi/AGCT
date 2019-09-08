@@ -7,9 +7,7 @@ interface Generator {
 }
 
 fun GeneticCircuit.exportTo(vararg generators: Generator) {
-    for (check in exportRules.values) {
-        check(circuitMap)
-    }
+    checkOnExport()
 
     for (generator in generators) {
         generator.from(this)

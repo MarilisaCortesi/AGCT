@@ -80,7 +80,7 @@ internal class TestGeneticCircuit : StringSpec({
             reactions shouldHaveSingleElement DIRECT
 
             shouldThrow<IllegalStateException> {
-                exportTo()
+                checkOnExport()
             }.message shouldBe "Degradation reaction not set for $PROTEIN"
         }
     }
