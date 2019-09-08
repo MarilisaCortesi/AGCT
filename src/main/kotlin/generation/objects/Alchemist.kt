@@ -1,12 +1,12 @@
-package export.types
+package generation.objects
 
-import export.ExportType
-import export.utils.Level.Companion.start
+import generation.Generator
+import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
 import model.entities.BiochemicalEntity
 import model.entities.BoundBiochemicalEntity
 
-internal class Alchemist : ExportType {
+object Alchemist : Generator {
     override fun from(circuit: GeneticCircuit) = with(circuit) {
         start(null, null, "  ", ": ") {
             "incarnation"("biochemistry")

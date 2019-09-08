@@ -1,7 +1,7 @@
-package export.types
+package generation.objects
 
-import export.ExportType
-import export.utils.Level.Companion.start
+import generation.Generator
+import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
 import model.entities.BiochemicalEntity
 import model.entities.BoundBiochemicalEntity
@@ -17,7 +17,7 @@ import model.utils.Nullable
 import model.utils.UnsupportedClassException
 import model.utils.string
 
-internal class AGCT : ExportType {
+object AGCT : Generator {
     override fun from(circuit: GeneticCircuit) = with(circuit) {
         context.set(this)
         start(" {", "}") {

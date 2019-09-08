@@ -3,6 +3,7 @@
 package dsl
 
 import model.circuit.BasicGeneticCircuit
+import model.circuit.GeneticCircuit
 import model.entities.DegradingEntity
 import model.reactions.BasicDegradation
 import model.utils.string
@@ -12,6 +13,8 @@ abstract class DslCircuit internal constructor() {
 
     protected val reactions = mutableSetOf<DslReaction>()
 
+    internal abstract val geneticCircuit: GeneticCircuit
+
     internal abstract val default: ImmutableDefaultValues
 
     internal fun getOrPutEntity(id: String, ifAbsent: String.() -> DslEntity) =
@@ -20,19 +23,17 @@ abstract class DslCircuit internal constructor() {
     internal fun putReaction(reaction: DslReaction) {
         reactions.add(reaction)
     }
-
-    internal abstract fun exportTo(types: Collection<ExportObject>)
 }
 
 class BasicDslCircuit internal constructor(
     private val name: String,
     override val default: ImmutableDefaultValues
 ) : DslCircuit() {
-    override fun exportTo(types: Collection<ExportObject>) =
-        BasicGeneticCircuit(name).also { circuit ->
-            circuit.addEntities(*entitiesArray)
-            circuit.addReactions(*degradationsArray, *reactionsArray)
-        }.exportTo(*types.map { it.type }.toTypedArray())
+    override val geneticCircuit: GeneticCircuit
+        get() =  BasicGeneticCircuit(name).apply {
+            addEntities(*entitiesArray)
+            addReactions(*degradationsArray, *reactionsArray)
+        }
 
     private val entitiesArray
         get() = entities.values

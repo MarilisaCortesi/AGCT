@@ -2,6 +2,10 @@
 
 package dsl
 
+import generation.Generator
+import generation.exportTo
+import model.circuit.GeneticCircuit
+
 val Create = TopLevel()
 
 class TopLevel internal constructor() {
@@ -20,20 +24,22 @@ class TopLevel internal constructor() {
         private val circuitRoutines = mutableListOf<ContainingLevel.() -> Unit>()
 
         infix fun with(block: DefaultsLevel.() -> Unit) =
-            defaultRoutines.add(block).let { this }
+            apply { defaultRoutines.add(block) }
 
         infix fun containing(block: ContainingLevel.() -> Unit) =
-            circuitRoutines.add(block).let { this }
+            apply { circuitRoutines.add(block) }
 
         infix fun then(dummy: export) =
-            MutableDefaultValues().let { defaults ->
+            CircuitExport(geneticCircuit)
+
+        private val geneticCircuit
+            get() = MutableDefaultValues().also { defaults ->
                 DefaultsLevel(defaults).run {
                     for (routine in defaultRoutines) {
                         routine()
                     }
                 }
-                BasicDslCircuit(name, defaults.immutable)
-            }.let { circuit ->
+            }.geneticCircuit(name) { circuit ->
                 companionCircuit = circuit
                 ContainingLevel(circuit).run {
                     for (routine in circuitRoutines) {
@@ -41,8 +47,10 @@ class TopLevel internal constructor() {
                     }
                 }
                 companionCircuit = null
-                CircuitExport(circuit)
             }
+
+        private fun MutableDefaultValues.geneticCircuit(name: String, block: (DslCircuit) -> Unit = { }) =
+            BasicDslCircuit(name, immutable).also(block).geneticCircuit
     }
 }
 
@@ -68,19 +76,19 @@ class DefaultsLevel internal constructor(private val defaults: MutableDefaultVal
     }
 }
 
-class CircuitExport internal constructor(private val circuit: DslCircuit) {
-    infix fun to(type: ExportObject) =
-        And().and(type)
+class CircuitExport internal constructor(private val circuit: GeneticCircuit) {
+    infix fun to(generator: Generator) =
+        And().and(generator)
 
     infix fun to(dummy: each) = Each()
 
     inner class And internal constructor() {
-        infix fun and(type: ExportObject) =
-            apply { circuit.exportTo(setOf(type)) }
+        infix fun and(generator: Generator) =
+            apply { circuit.exportTo(generator) }
     }
 
     inner class Each internal constructor() {
-        infix fun one(types: Collection<ExportObject>) =
-            circuit.exportTo(types)
+        infix fun one(generators: Collection<Generator>) =
+            circuit.exportTo(*generators.toTypedArray())
     }
 }

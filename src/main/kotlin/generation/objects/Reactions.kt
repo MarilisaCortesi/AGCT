@@ -1,10 +1,12 @@
-package export.types
+@file:Suppress("ClassName")
 
-import export.ExportType
-import export.utils.toFile
+package generation.objects
+
+import generation.Generator
+import generation.utils.toFile
 import model.circuit.GeneticCircuit
 
-internal class Reactions : ExportType {
+object reactions : Generator {
     override fun from(circuit: GeneticCircuit) = with(circuit) {
         circuit.reactions
             .map { it.reactions }

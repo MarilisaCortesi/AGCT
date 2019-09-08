@@ -1,7 +1,8 @@
 import dsl.*
+import generation.objects.*
 
 fun main() {
-    Create circuit "Repressilator" containing {
+    val a = Create circuit "Repressilator" containing {
         the gene "g/TetR" that {
             codes For {
                 the protein "TetR"
@@ -22,5 +23,5 @@ fun main() {
                 regulated by { the protein "TetR" }
             }
         }
-    } then export to each one into(entities, reactions, AGCT, Alchemist)
+    } then export to each one into (entities, reactions, AGCT, Alchemist)
 }

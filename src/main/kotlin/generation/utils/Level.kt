@@ -1,8 +1,8 @@
-package export.utils
+package generation.utils
 
 import model.utils.toConsole
 
-internal class Level private constructor(
+open class Level private constructor(
     private val prefix: String?,
     private val postfix: String?,
     private val indentation: String,
@@ -39,6 +39,8 @@ internal class Level private constructor(
         post: String? = postfix,
         block: Level.(T) -> Unit
     ) {
+        if (size == 0) return
+
         line?.invoke(elementAt(0))?.invoke(pre, post) { block(elementAt(0)) }
         drop(1).forEach {
             if (spacings < 0) {
@@ -81,7 +83,7 @@ internal class Level private constructor(
         line(line + prefix)
         with(lines) {
             addAll(start(pre, post, ind, sep, block).lines.map { it.first to it.second + 1 })
-            if (elementAt(lastIndex).first == "") {
+            if (size > 0 && elementAt(lastIndex).first == "") {
                 removeAt(lastIndex)
             }
         }
@@ -97,10 +99,10 @@ internal class Level private constructor(
     fun toConsole() =
         get().toConsole()
 
-    private val Int.tabs
+    protected val Int.tabs
         get() = indentation.repeat(this)
 
-    private operator fun String?.plus(other: String?) =
+    protected operator fun String?.plus(other: String?) =
         when {
             this == null -> other
             other == null -> this
