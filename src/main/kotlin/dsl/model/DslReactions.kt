@@ -3,11 +3,11 @@
 package dsl
 
 import model.reactions.*
-import model.reactions.BiochemicalReaction
+import model.reactions.GeneticReaction
 import model.reactions.DirectTranscription
 
 abstract class DslReaction internal constructor() {
-    internal abstract val biochemicalReaction: BiochemicalReaction
+    internal abstract val geneticReaction: GeneticReaction
 }
 
 class DslTranscription internal constructor(
@@ -16,10 +16,10 @@ class DslTranscription internal constructor(
 ) : DslReaction() {
     internal var basalRate: DslRate = TopLevel.circuit.default.basalRate
 
-    override val biochemicalReaction: DirectTranscription
+    override val geneticReaction: DirectTranscription
         get() = DirectTranscription(
-            coder.biochemicalEntity,
-            target.biochemicalEntity,
+            coder.geneticEntity,
+            target.geneticEntity,
             basalRate.value
         )
 }
@@ -32,10 +32,10 @@ class DslRegulation internal constructor(
     internal var bindingRate: DslRate = TopLevel.circuit.default.bindingRate
     internal var unbindingRate: DslRate = TopLevel.circuit.default.unbindingRate
 
-    override val biochemicalReaction: Regulation
+    override val geneticReaction: Regulation
         get() = BasicRegulation(
-            transcription.biochemicalReaction,
-            regulator.biochemicalEntity,
+            transcription.geneticReaction,
+            regulator.geneticEntity,
             regulatingRate.value,
             bindingRate.value,
             unbindingRate.value

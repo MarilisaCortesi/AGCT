@@ -7,8 +7,8 @@ import model.utils.UnsupportedClassException
 import model.variables.Rate
 
 internal abstract class AbstractReaction(
-    override val reagents: Map<BiochemicalEntity, Int>,
-    override val products: Map<BiochemicalEntity, Int>,
+    override val reagents: Map<GeneticEntity, Int>,
+    override val products: Map<GeneticEntity, Int>,
     override val rate: Rate,
     override val name: String
 ) : Reaction {
@@ -29,7 +29,7 @@ internal abstract class AbstractReaction(
     override fun equals(other: Any?) =
         checkEquals(other) { reagents == it.reagents && products == it.products }
 
-    private val Map<BiochemicalEntity, Int>.reaction
+    private val Map<GeneticEntity, Int>.reaction
         get() = entries.joinToString(" + ", "[", "]") {
             if (it.value != 1)
                 "${it.value}${it.key.id}"
@@ -38,10 +38,10 @@ internal abstract class AbstractReaction(
         }
 }
 
-internal abstract class AbstractBiochemicalReaction : BiochemicalReaction {
+internal abstract class AbstractGeneticReaction : GeneticReaction {
     override fun toString() =
         buildString {
-            append(this@AbstractBiochemicalReaction.type.toUpperCase())
+            append(this@AbstractGeneticReaction.type.toUpperCase())
             append(":\n- ")
             append(reactions.joinToString("\n- "))
         }
@@ -54,7 +54,7 @@ internal abstract class AbstractBiochemicalReaction : BiochemicalReaction {
 }
 
 internal abstract class AbstractCodingReaction<out C: TranscribingEntity, out T: TranscribableEntity> :
-    AbstractBiochemicalReaction(), CodingReaction<C, T> {
+    AbstractGeneticReaction(), CodingReaction<C, T> {
     override val reactions
         get() = setOf(
             BasicReaction(
@@ -67,16 +67,16 @@ internal abstract class AbstractCodingReaction<out C: TranscribingEntity, out T:
 }
 
 internal class BasicReaction(
-    reagents: Map<BiochemicalEntity, Int> = emptyMap(),
-    products: Map<BiochemicalEntity, Int> = emptyMap(),
+    reagents: Map<GeneticEntity, Int> = emptyMap(),
+    products: Map<GeneticEntity, Int> = emptyMap(),
     rate: Rate = Rate(),
-    name: String = "biochemicalReaction"
+    name: String = "reaction"
 ) : AbstractReaction(reagents, products, rate, name)
 
 internal class BasicDegradation(
     override val molecule: DegradingEntity,
     override val degradationRate: Rate = Rate()
-) : AbstractBiochemicalReaction(), Degradation {
+) : AbstractGeneticReaction(), Degradation {
     override val reactions
         get() = setOf(
             BasicReaction(
@@ -112,7 +112,7 @@ internal class BasicRegulation(
     override val regulatingRate: Rate = Rate(),
     override val bindingRate: Rate = Rate(),
     override val unbindingRate: Rate = Rate()
-) : AbstractBiochemicalReaction(), Regulation {
+) : AbstractGeneticReaction(), Regulation {
     override val reactions
         get() = regulationInfo.let { (boundEntity, regulatedReaction) ->
             setOf(
@@ -132,7 +132,7 @@ internal class BasicRegulation(
             )
         }
 
-    private val regulationInfo : Pair<BoundBiochemicalEntity<*, RegulatingEntity>, CodingReaction<*, *>> =
+    private val regulationInfo : Pair<BoundEntity<*, RegulatingEntity>, CodingReaction<*, *>> =
         when (reaction) {
             is DirectTranscription -> RegulatedGene(reaction.coder, regulator).let {
                 Pair(it, DirectTranscription(it, reaction.target, regulatingRate))

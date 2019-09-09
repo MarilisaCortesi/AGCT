@@ -4,7 +4,6 @@ import io.kotlintest.Matcher
 import io.kotlintest.Result
 import io.kotlintest.fail
 import io.kotlintest.matchers.collections.shouldHaveSize
-import model.circuit.BasicGeneticCircuit
 import model.entities.*
 import model.reactions.*
 import kotlin.math.abs
@@ -12,7 +11,7 @@ import kotlin.math.abs
 internal val ENTITY = entity<BasicEntity>("ent")
 internal val DEGRADING = entity<BasicDegradingEntity>("det")
 internal val REGULATIVE = entity<BasicRegulatingEntity>("reg")
-internal val DEGRADING_REGULATIVE = entity<DegradingRegulatingMolecule>("det reg")
+internal val DEGRADING_REGULATIVE = entity<DegradingRegulatingEntity>("det reg")
 internal val GENE = entity<BasicGene>("gen")
 internal val MRNA = entity<BasicMRna>("rna")
 internal val PROTEIN = entity<BasicProtein>("pro")

@@ -4,7 +4,7 @@ import model.utils.checkEquals
 import model.utils.type
 import model.utils.string
 
-internal abstract class AbstractEntity(parameters: EntityParameters) : BiochemicalEntity {
+internal abstract class AbstractEntity(parameters: EntityParameters) : GeneticEntity {
     override val id = parameters.id
     override val initialConcentration = parameters.initialConcentration
     override val aliases = parameters.aliases.toList()
@@ -18,10 +18,10 @@ internal abstract class AbstractEntity(parameters: EntityParameters) : Biochemic
         checkEquals(other) { id == it.id }
 }
 
-internal abstract class AbstractBoundEntity<out F : BiochemicalEntity, out S : BiochemicalEntity>(
+internal abstract class AbstractBoundEntity<out F : GeneticEntity, out S : GeneticEntity>(
     override val first: F,
     override val second: S
-) : AbstractEntity(EntityParameters().apply { id = "${first.id}-${second.id}" }), BoundBiochemicalEntity<F, S>
+) : AbstractEntity(EntityParameters().apply { id = "${first.id}-${second.id}" }), BoundEntity<F, S>
 
 internal class BasicDegradingEntity(parameters: EntityParameters) :
     AbstractEntity(parameters), DegradingEntity
@@ -29,7 +29,7 @@ internal class BasicDegradingEntity(parameters: EntityParameters) :
 internal class BasicRegulatingEntity(parameters: EntityParameters) :
     AbstractEntity(parameters), RegulatingEntity
 
-internal class DegradingRegulatingMolecule(parameters: EntityParameters) :
+internal class DegradingRegulatingEntity(parameters: EntityParameters) :
     AbstractEntity(parameters), DegradingEntity, RegulatingEntity
 
 internal class BasicEntity(parameters: EntityParameters) :

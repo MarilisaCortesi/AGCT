@@ -3,8 +3,8 @@ package generation.objects
 import generation.Generator
 import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
-import model.entities.BiochemicalEntity
-import model.entities.BoundBiochemicalEntity
+import model.entities.GeneticEntity
+import model.entities.BoundEntity
 
 object Alchemist : Generator {
     override fun from(circuit: GeneticCircuit) = with(circuit) {
@@ -42,12 +42,12 @@ object Alchemist : Generator {
 }
 
 private val GeneticCircuit.dslEntities
-    get() = entities.filter { it !is BoundBiochemicalEntity<*, *> }
+    get() = entities.filter { it !is BoundEntity<*, *> }
 
 private val GeneticCircuit.dslReactions
     get() = reactions.flatMap { it.reactions }
 
-private val Map<BiochemicalEntity, Int>.string
+private val Map<GeneticEntity, Int>.string
     get() = entries.joinToString(" + ", "[", "]") {
         if (it.value != 1)
             "${it.value}${it.key.id}"

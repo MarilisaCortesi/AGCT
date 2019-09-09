@@ -4,13 +4,13 @@ package dsl
 
 import model.entities.*
 import model.entities.BasicGene
-import model.entities.BiochemicalEntity
+import model.entities.GeneticEntity
 import model.entities.EntityParameters
 import model.entities.Gene
 import model.entities.Protein
 
 abstract class DslEntity internal constructor() {
-    internal abstract val biochemicalEntity: BiochemicalEntity
+    internal abstract val geneticEntity: GeneticEntity
 
     internal abstract val id: String
 
@@ -22,27 +22,27 @@ abstract class DslDegradable internal constructor() : DslEntity() {
 }
 
 abstract class DslRegulating internal constructor() : DslDegradable() {
-    abstract override val biochemicalEntity: RegulatingEntity
+    abstract override val geneticEntity: RegulatingEntity
 }
 
 class DslGene(override val id: String) : DslEntity() {
-    override val biochemicalEntity: Gene
+    override val geneticEntity: Gene
         get() = BasicGene(parameters)
 }
 
 class DslProtein(override val id: String) : DslRegulating() {
-    override val biochemicalEntity: Protein
+    override val geneticEntity: Protein
         get() = BasicProtein(parameters)
 
     override var degradationRate: DslRate? = TopLevel.circuit.default.degradationRate
 }
 
 class DslMolecule(override val id: String) : DslRegulating() {
-    override val biochemicalEntity: RegulatingEntity
+    override val geneticEntity: RegulatingEntity
         get() = if(degradationRate == null) {
             BasicRegulatingEntity(parameters)
         } else {
-            DegradingRegulatingMolecule(parameters)
+            DegradingRegulatingEntity(parameters)
         }
 
     override var degradationRate: DslRate? = null

@@ -1,20 +1,20 @@
 package model.circuit
 
-import model.entities.BiochemicalEntity
-import model.reactions.BiochemicalReaction
+import model.entities.GeneticEntity
+import model.reactions.GeneticReaction
 
 internal class CircuitRules {
     /**
      * Contain the list of rules to be checked when adding a new reaction to the circuit.
      * A circuit must throw an [IllegalArgumentException] if one of them is not followed.
      */
-    val addingRules = mutableMapOf<String, (MutableSet<BiochemicalReaction>, BiochemicalEntity, BiochemicalReaction) -> Unit>()
+    val addingRules = mutableMapOf<String, (MutableSet<GeneticReaction>, GeneticEntity, GeneticReaction) -> Unit>()
 
     /**
      * Contain the list of rules to be followed when exporting the circuit.
      * A circuit must throw an [IllegalStateException] if one of them are not followed.
      */
-    val exportRules = mutableMapOf<String, (Map<BiochemicalEntity, Set<BiochemicalReaction>>) -> Unit>()
+    val exportRules = mutableMapOf<String, (Map<GeneticEntity, Set<GeneticReaction>>) -> Unit>()
 }
 
 abstract class GeneticCircuit internal constructor(private val rules: CircuitRules) {
@@ -22,12 +22,12 @@ abstract class GeneticCircuit internal constructor(private val rules: CircuitRul
 
     abstract val name: String
 
-    private val circuitMap = mutableMapOf<BiochemicalEntity, MutableSet<BiochemicalReaction>>()
+    private val circuitMap = mutableMapOf<GeneticEntity, MutableSet<GeneticReaction>>()
 
-    internal val reactions: Set<BiochemicalReaction>
+    internal val reactions: Set<GeneticReaction>
         get() = circuitMap.values.flatten().toSet()
 
-    internal val entities: Set<BiochemicalEntity>
+    internal val entities: Set<GeneticEntity>
         get() = circuitMap.keys.toSet()
 
     internal fun checkOnExport() {
@@ -39,19 +39,19 @@ abstract class GeneticCircuit internal constructor(private val rules: CircuitRul
     /**
      * Returns the reactions involving the given [entity].
      */
-    internal fun reactionsOf(entity: BiochemicalEntity) =
+    internal fun reactionsOf(entity: GeneticEntity) =
         circuitMap[entity]?.toSet() ?: emptySet()
 
     /**
      * Adds an [entity] into the geneticCircuit.
      */
-    internal fun addEntity(entity: BiochemicalEntity) =
+    internal fun addEntity(entity: GeneticEntity) =
         addEntities(entity)
 
     /**
      * Adds a series of [entities] into the geneticCircuit.
      */
-    internal fun addEntities(vararg entities: BiochemicalEntity) {
+    internal fun addEntities(vararg entities: GeneticEntity) {
         for (entity in entities) {
             circuitMap.getOrPut(entity) { mutableSetOf() }
         }
@@ -60,13 +60,13 @@ abstract class GeneticCircuit internal constructor(private val rules: CircuitRul
     /**
      * Adds a [reaction] into the geneticCircuit.
      */
-    internal fun addReaction(reaction: BiochemicalReaction) =
+    internal fun addReaction(reaction: GeneticReaction) =
         addReactions(reaction)
 
     /**
      * Adds a series of [reactions] into the geneticCircuit.
      */
-    internal fun addReactions(vararg reactions: BiochemicalReaction) {
+    internal fun addReactions(vararg reactions: GeneticReaction) {
         for (reaction in reactions) {
             for (entity in reaction.entities) {
                 circuitMap.getOrPut(entity) { mutableSetOf() }.also { set ->
@@ -78,6 +78,6 @@ abstract class GeneticCircuit internal constructor(private val rules: CircuitRul
         }
     }
 
-    private val BiochemicalReaction.entities
+    private val GeneticReaction.entities
         get() = reactions.flatMap { it.reagents.keys.toMutableSet().apply { addAll(it.products.keys) } }.toSet()
 }

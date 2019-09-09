@@ -20,14 +20,14 @@ internal class TestEntities : StringSpec({
     }
 
     "test equality" {
-        entity<BiochemicalEntity>("ent") shouldEqual ENTITY
-        entity<BiochemicalEntity>("ent") { initialConcentration = Concentration(2) } shouldEqual ENTITY
-        entity<BiochemicalEntity>("oth") shouldNotEqual ENTITY
-        entity<BiochemicalEntity>("pro") shouldNotEqual ENTITY
+        entity<GeneticEntity>("ent") shouldEqual ENTITY
+        entity<GeneticEntity>("ent") { initialConcentration = Concentration(2) } shouldEqual ENTITY
+        entity<GeneticEntity>("oth") shouldNotEqual ENTITY
+        entity<GeneticEntity>("pro") shouldNotEqual ENTITY
     }
 })
 
-private infix fun BiochemicalEntity.testBasics(id: String) {
+private infix fun GeneticEntity.testBasics(id: String) {
     this.id shouldBe id
     initialConcentration shouldBe Concentration()
     aliases shouldHave 0.elements

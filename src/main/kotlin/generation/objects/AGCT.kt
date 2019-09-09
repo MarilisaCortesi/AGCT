@@ -3,8 +3,8 @@ package generation.objects
 import generation.Generator
 import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
-import model.entities.BiochemicalEntity
-import model.entities.BoundBiochemicalEntity
+import model.entities.GeneticEntity
+import model.entities.BoundEntity
 import model.entities.DegradingEntity
 import model.entities.Gene
 import model.entities.Protein
@@ -57,9 +57,9 @@ private val GeneticCircuit.genes
     get() = entities.filterIsInstance<Gene>().filter { it !is RegulatedGene }
 
 private val GeneticCircuit.dslEntities
-    get() = entities.filter { it !is BoundBiochemicalEntity<*, *> }
+    get() = entities.filter { it !is BoundEntity<*, *> }
 
-private val BiochemicalEntity.entity
+private val GeneticEntity.entity
     get() = when (this) {
         is Gene -> "gene"
         is Protein -> "protein"

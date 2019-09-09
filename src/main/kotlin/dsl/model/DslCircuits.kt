@@ -6,7 +6,6 @@ import model.circuit.BasicGeneticCircuit
 import model.circuit.GeneticCircuit
 import model.entities.DegradingEntity
 import model.reactions.BasicDegradation
-import model.utils.string
 
 abstract class DslCircuit internal constructor() {
     protected val entities = mutableMapOf<String, DslEntity>()
@@ -37,7 +36,7 @@ class BasicDslCircuit internal constructor(
 
     private val entitiesArray
         get() = entities.values
-            .map { it.biochemicalEntity }
+            .map { it.geneticEntity }
             .toSet()
             .toTypedArray()
 
@@ -46,14 +45,14 @@ class BasicDslCircuit internal constructor(
             .filterIsInstance<DslDegradable>()
             .mapNotNull { it.degradationRate?.to(it) }
             .map { (rate, entity) ->
-                BasicDegradation(entity.biochemicalEntity as DegradingEntity, rate.value)
+                BasicDegradation(entity.geneticEntity as DegradingEntity, rate.value)
             }
             .toSet()
             .toTypedArray()
 
     private val reactionsArray
         get() = reactions
-            .map { it.biochemicalReaction }
+            .map { it.geneticReaction }
             .toSet()
             .toTypedArray()
 }

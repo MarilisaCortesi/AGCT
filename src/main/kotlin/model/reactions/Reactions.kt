@@ -4,27 +4,27 @@ import model.entities.*
 import model.variables.Rate
 
 /**
- * A biochemicalReaction that occurs with a given [rate].
- * The [reagents] and the [products] of the biochemicalReaction contain their coefficients.
+ * A reaction that occurs with a given [rate].
+ * The [reagents] and the [products] of the reaction contain their coefficients.
  */
 internal interface Reaction {
-    val reagents: Map<BiochemicalEntity, Int>
-    val products: Map<BiochemicalEntity, Int>
+    val reagents: Map<GeneticEntity, Int>
+    val products: Map<GeneticEntity, Int>
     val rate: Rate
     val name: String
 }
 
 /**
- * A biochemical biochemicalReaction that can be made of multiple [single reactions][reactions].
+ * A genetic reaction that can be made of multiple [single reactions][reactions].
  */
-internal interface BiochemicalReaction {
+internal interface GeneticReaction {
     val reactions: Set<Reaction>
 }
 
 /**
  * The degradation of a [molecule].
  */
-internal interface Degradation : BiochemicalReaction {
+internal interface Degradation : GeneticReaction {
     val molecule: DegradingEntity
     val degradationRate: Rate
 }
@@ -32,7 +32,7 @@ internal interface Degradation : BiochemicalReaction {
 /**
  * The coding of a [target] from a [coder].
  */
-internal interface CodingReaction<out C : TranscribingEntity, out T : TranscribableEntity> : BiochemicalReaction {
+internal interface CodingReaction<out C : TranscribingEntity, out T : TranscribableEntity> : GeneticReaction {
     val coder: C
     val target: T
     val basalRate: Rate
@@ -54,7 +54,7 @@ internal interface Translation : CodingReaction<MRna, Protein>
 * The [binding rate][bindingRate] is the rate at which the regulator links itself to the entity.
 * The [unbinding rate][unbindingRate] is the rate at which the bound entity separates in the two original entities.
 */
-internal interface Regulation : BiochemicalReaction {
+internal interface Regulation : GeneticReaction {
     val reaction: CodingReaction<*, *>
     val regulator: RegulatingEntity
     val regulatingRate: Rate

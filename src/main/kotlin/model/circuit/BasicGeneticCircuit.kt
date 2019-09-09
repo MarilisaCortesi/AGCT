@@ -1,13 +1,10 @@
 package model.circuit
 
 import model.entities.*
-import model.reactions.*
-import model.reactions.BiochemicalReaction
 import model.reactions.CodingReaction
 import model.reactions.Degradation
 import model.reactions.Transcription
 import model.reactions.Translation
-import model.utils.toConsole
 import java.lang.IllegalStateException
 
 /**
