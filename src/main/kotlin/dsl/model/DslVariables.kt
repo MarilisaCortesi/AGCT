@@ -8,7 +8,6 @@ import model.variables.*
 import model.variables.BasicConcentration
 import model.variables.BasicRate
 
-@Suppress("UNCHECKED_CAST")
 abstract class DslVariable internal constructor(
     internal val variableName: String?,
     default: Variable<Number>
