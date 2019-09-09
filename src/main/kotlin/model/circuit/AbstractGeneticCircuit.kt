@@ -3,8 +3,8 @@ package model.circuit
 import model.entities.GeneticEntity
 import model.reactions.GeneticReaction
 
-internal abstract class AbstractGeneticCircuit constructor(override val rules: CircuitRules) : GeneticCircuit {
-    constructor(setRules: CircuitRules.() -> Unit) : this(BasicCircuitRules().apply(setRules))
+internal abstract class AbstractGeneticCircuit constructor(override val rules: CircuitRules) : MutableGeneticCircuit {
+    constructor(setRules: MutableCircuitRules.() -> Unit) : this(BasicCircuitRules().apply(setRules))
 
     private val circuitMap = mutableMapOf<GeneticEntity, MutableSet<GeneticReaction>>()
 
