@@ -17,7 +17,7 @@ class TranscriptionLevel internal constructor(private val coder: DslGene) :
         get() = transcription
 
     val the
-        get() = The()
+        get() = this
 
     val with
         get() = With()
@@ -25,13 +25,11 @@ class TranscriptionLevel internal constructor(private val coder: DslGene) :
     val regulated
         get() = RegulatedBy()
 
-    inner class The internal constructor() {
-        infix fun protein(id: String) =
-            ProteinLevel(id).run {
-                transcription = DslTranscription(coder, entity).apply { circuit.putReaction(this) }
-                EntityLevelWrapper(this)
-            }
-    }
+    infix fun protein(id: String) =
+        ProteinLevel(id).run {
+            transcription = DslTranscription(coder, entity).apply { circuit.putReaction(this) }
+            EntityLevelWrapper(this)
+        }
 
     inner class With internal constructor() {
         infix fun a(dummy: basal.Rate) = reaction.basalRate
@@ -56,24 +54,22 @@ class RegulationLevel internal constructor(
         get() = regulation
 
     val the
-        get() = The()
+        get() = this
 
     val with
         get() = With()
 
-    inner class The internal constructor() {
-        infix fun protein(id: String) =
-            ProteinLevel(id).wrapper
+    infix fun protein(id: String) =
+        ProteinLevel(id).wrapper
 
-        infix fun molecule(id: String) =
-            RegulatorLevel(id).wrapper
+    infix fun molecule(id: String) =
+        RegulatorLevel(id).wrapper
 
-        private val<E : EntityLevel<DslRegulating>> E.wrapper
-            get() = run {
-                regulation = DslRegulation(transcription, entity).apply { circuit.putReaction(this) }
-                EntityLevelWrapper(this)
-            }
-    }
+    private val<E : EntityLevel<DslRegulating>> E.wrapper
+        get() = run {
+            regulation = DslRegulation(transcription, entity).apply { circuit.putReaction(this) }
+            EntityLevelWrapper(this)
+        }
 
     inner class With internal constructor() {
         infix fun a(dummy: regulating.Rate) = reaction.regulatingRate
