@@ -2,7 +2,7 @@ import dsl.*
 import generation.objects.*
 
 fun main() {
-    val a = Create circuit "Repressilator" containing {
+    Create circuit "Repressilator" containing {
         the gene "g/TetR" that {
             codes For {
                 the protein "TetR"

@@ -20,40 +20,40 @@ import java.lang.IllegalStateException
  * For any of them that is broken, an exception will be thrown.
  */
 internal class BasicGeneticCircuit(override val name: String) : GeneticCircuit({
-    exportRules["one degradation reaction at least"] = { circuit ->
+    "one degradation reaction at least" { circuit ->
         circuit.filterKeys { it is DegradingEntity }
-            .filterValues { it.filterIsInstance<Degradation>().isEmpty() }
-            .keys
-            .firstOrNull()
-            ?.let { entity ->
-                throw IllegalStateException("Degradation reaction not set for $entity")
-            }
+        .filterValues { it.filterIsInstance<Degradation>().isEmpty() }
+        .keys
+        .singleOrNull()
+        ?.let { entity ->
+            throw IllegalStateException("Degradation reaction not set for $entity")
+        }
     }
 
     // includes "one degradation reaction at most" as a degradation reaction is made of the entity only
-    addingRules["no duplicate reactions"] = { set, entity, reaction ->
+    "no duplicate reactions" { set, entity, reaction ->
         require(!set.contains(reaction)) { "$reaction already set for $entity." }
     }
 
-    addingRules["one protein transcription/translation at most"] = { set, entity, reaction ->
+    "one protein transcription/translation at most" { set, entity, reaction ->
         if (entity is Protein && reaction is CodingReaction<*, *>) {
-            set.filterIsInstance<CodingReaction<*, *>>().firstOrNull()?.run {
+            set.filterIsInstance<CodingReaction<*, *>>().singleOrNull()?.run {
                 throw IllegalArgumentException("$entity is already transcribed/translated by $coder")
             }
         }
     }
 
-    addingRules["one mRNA transcription at most"] = { set, entity, reaction ->
+    "one mRNA transcription at most" { set, entity, reaction ->
         if (entity is MRna && reaction is Transcription<*>) {
-            set.filterIsInstance<Transcription<*>>().firstOrNull()?.run {
+            set.filterIsInstance<Transcription<*>>().singleOrNull()?.run {
                 throw IllegalArgumentException("$entity is already transcribed by $coder")
             }
         }
     }
 
-    addingRules["one mRNA translation at most"] = { set, entity, reaction ->
+    "one mRNA translation at most" { set, entity, reaction ->
         if (entity is MRna && reaction is Translation) {
-            set.filterIsInstance<Translation>().firstOrNull()?.run {
+            set.filterIsInstance<Translation>().singleOrNull()?.run {
                 throw IllegalArgumentException("$entity already translates $target")
             }
         }

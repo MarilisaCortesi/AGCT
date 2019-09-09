@@ -4,14 +4,22 @@ import model.entities.GeneticEntity
 import model.reactions.GeneticReaction
 
 internal class CircuitRules {
+    operator fun String.invoke(addingRule: (MutableSet<GeneticReaction>, GeneticEntity, GeneticReaction) -> Unit) {
+        addingRules[this] = addingRule
+    }
+
+    operator fun String.invoke(exportRule: (Map<GeneticEntity, Set<GeneticReaction>>) -> Unit) {
+        exportRules[this] = exportRule
+    }
+
     /**
-     * Contain the list of rules to be checked when adding a new reaction to the circuit.
+     * Contains the list of rules to be checked when adding a new reaction to the circuit.
      * A circuit must throw an [IllegalArgumentException] if one of them is not followed.
      */
     val addingRules = mutableMapOf<String, (MutableSet<GeneticReaction>, GeneticEntity, GeneticReaction) -> Unit>()
 
     /**
-     * Contain the list of rules to be followed when exporting the circuit.
+     * Contains the list of rules to be followed when exporting the circuit.
      * A circuit must throw an [IllegalStateException] if one of them are not followed.
      */
     val exportRules = mutableMapOf<String, (Map<GeneticEntity, Set<GeneticReaction>>) -> Unit>()
