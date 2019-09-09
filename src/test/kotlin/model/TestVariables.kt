@@ -46,10 +46,10 @@ internal class TestVariables : StringSpec({
     "test exception" {
         shouldThrow<IllegalArgumentException> {
             BasicRate(-1)
-        }.message shouldBe "Variable must have positive values only."
+        }.message shouldBe "Variable must have non-negative values only."
 
         shouldThrow<IllegalArgumentException> {
-            BasicConcentration(3, 2, 1, 0)
-        }.message shouldBe "Variable must have positive values only."
+            BasicConcentration(3, 2, 1, 0, -1)
+        }.message shouldBe "Variable must have non-negative values only."
     }
 })

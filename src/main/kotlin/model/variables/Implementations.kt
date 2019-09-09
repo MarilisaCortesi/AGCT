@@ -3,10 +3,10 @@ package model.variables
 import model.utils.checkEquals
 
 @Suppress("UNCHECKED_CAST")
-internal abstract class PositiveVariable<out T : Number>(values: Sequence<T>) : Variable<T> {
+internal abstract class UnsignedVariable<out T : Number>(values: Sequence<T>) : Variable<T> {
     init {
         for (value in values) {
-            require(value.toDouble() > 0) { "Variable must have positive values only." }
+            require(value.toDouble() >= 0) { "Variable must have non-negative values only." }
         }
     }
 
@@ -27,13 +27,13 @@ internal abstract class PositiveVariable<out T : Number>(values: Sequence<T>) : 
 }
 
 internal class BasicRate(values: Sequence<Number>) :
-    PositiveVariable<Double>(values.map { it.toDouble() }), Rate {
+    UnsignedVariable<Double>(values.map { it.toDouble() }), Rate {
     constructor(values: Collection<Number>) : this(values.asSequence())
     constructor(vararg values: Number = arrayOf(DEFAULT_RATE_VALUE)) : this(values.asSequence())
 }
 
 internal class BasicConcentration(values: Sequence<Number>) :
-    PositiveVariable<Double>(values.map { it.toDouble() }), Concentration {
+    UnsignedVariable<Double>(values.map { it.toDouble() }), Concentration {
     constructor(values: Collection<Number>) : this(values.asSequence())
     constructor(vararg values: Number = arrayOf(DEFAULT_CONCENTRATION_VALUE)) : this(values.asSequence())
 }
