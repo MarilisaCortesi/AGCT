@@ -13,12 +13,7 @@ abstract class DslVariable internal constructor(
     internal val variableName: String?,
     default: Variable<Number>
 ) {
-    // being protected, it would expose internal class Variable<Number>
-    // to avoid this, the value must remain private and be passed through the function getCastedValue
-    private var privateValue: Variable<Number> by lateVal(variableName, default)
-
-    protected fun<T : Variable<Number>> getCastedValue() =
-        privateValue as T
+    protected var privateValue: Variable<Number> by lateVal(variableName, default)
 
     internal abstract val value: Variable<Number>
 
@@ -35,7 +30,7 @@ class DslConcentration internal constructor(
     default: Concentration = BasicConcentration()
 ) : DslVariable(variableName, default) {
     override val value: Concentration
-        get() = getCastedValue()
+        get() = privateValue as Concentration
 }
 
 class DslRate internal constructor(
@@ -43,5 +38,5 @@ class DslRate internal constructor(
     default: Rate = BasicRate()
 ) : DslVariable(variableName, default) {
     override val value: Rate
-        get() = getCastedValue()
+        get() = privateValue as Rate
 }
