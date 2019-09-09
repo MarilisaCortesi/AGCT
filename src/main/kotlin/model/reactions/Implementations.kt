@@ -4,6 +4,7 @@ import model.utils.checkEquals
 import model.utils.type
 import model.entities.*
 import model.utils.UnsupportedClassException
+import model.variables.BasicRate
 import model.variables.Rate
 
 internal abstract class AbstractReaction(
@@ -69,13 +70,13 @@ internal abstract class AbstractCodingReaction<out C: TranscribingEntity, out T:
 internal class BasicReaction(
     reagents: Map<GeneticEntity, Int> = emptyMap(),
     products: Map<GeneticEntity, Int> = emptyMap(),
-    rate: Rate = Rate(),
+    rate: Rate = BasicRate(),
     name: String = "reaction"
 ) : AbstractReaction(reagents, products, rate, name)
 
 internal class BasicDegradation(
     override val molecule: DegradingEntity,
-    override val degradationRate: Rate = Rate()
+    override val degradationRate: Rate = BasicRate()
 ) : AbstractGeneticReaction(), Degradation {
     override val reactions
         get() = setOf(
@@ -91,27 +92,27 @@ internal class BasicDegradation(
 internal class DirectTranscription(
     override val coder: Gene,
     override val target: Protein,
-    override val basalRate: Rate = Rate()
+    override val basalRate: Rate = BasicRate()
 ) : AbstractCodingReaction<Gene, Protein>(), Transcription<Protein>
 
 internal class BasicTranscription(
     override val coder: Gene,
     override val target: MRna,
-    override val basalRate: Rate = Rate()
+    override val basalRate: Rate = BasicRate()
 ) : AbstractCodingReaction<Gene, MRna>(), Transcription<MRna>
 
 internal class BasicTranslation(
     override val coder: MRna,
     override val target: Protein,
-    override val basalRate: Rate = Rate()
+    override val basalRate: Rate = BasicRate()
 ) : AbstractCodingReaction<MRna, Protein>(), Translation
 
 internal class BasicRegulation(
     override val reaction: CodingReaction<*, *>,
     override val regulator: RegulatingEntity,
-    override val regulatingRate: Rate = Rate(),
-    override val bindingRate: Rate = Rate(),
-    override val unbindingRate: Rate = Rate()
+    override val regulatingRate: Rate = BasicRate(),
+    override val bindingRate: Rate = BasicRate(),
+    override val unbindingRate: Rate = BasicRate()
 ) : AbstractGeneticReaction(), Regulation {
     override val reactions
         get() = regulationInfo.let { (boundEntity, regulatedReaction) ->

@@ -4,9 +4,9 @@ package dsl
 
 import model.utils.create
 import model.utils.lateVal
-import model.variables.Concentration
-import model.variables.Rate
-import model.variables.Variable
+import model.variables.*
+import model.variables.BasicConcentration
+import model.variables.BasicRate
 
 @Suppress("UNCHECKED_CAST")
 abstract class DslVariable internal constructor(
@@ -32,7 +32,7 @@ abstract class DslVariable internal constructor(
 
 class DslConcentration internal constructor(
     variableName: String? = null,
-    default: Concentration = Concentration()
+    default: Concentration = BasicConcentration()
 ) : DslVariable(variableName, default) {
     override val value: Concentration
         get() = getCastedValue()
@@ -40,7 +40,7 @@ class DslConcentration internal constructor(
 
 class DslRate internal constructor(
     variableName: String? = null,
-    default: Rate = Rate()
+    default: Rate = BasicRate()
 ) : DslVariable(variableName, default) {
     override val value: Rate
         get() = getCastedValue()

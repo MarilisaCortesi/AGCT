@@ -7,7 +7,7 @@ import model.variables.Rate
  * A reaction that occurs with a given [rate].
  * The [reagents] and the [products] of the reaction contain their coefficients.
  */
-internal interface Reaction {
+interface Reaction {
     val reagents: Map<GeneticEntity, Int>
     val products: Map<GeneticEntity, Int>
     val rate: Rate
@@ -17,14 +17,14 @@ internal interface Reaction {
 /**
  * A genetic reaction that can be made of multiple [single reactions][reactions].
  */
-internal interface GeneticReaction {
+interface GeneticReaction {
     val reactions: Set<Reaction>
 }
 
 /**
  * The degradation of a [molecule].
  */
-internal interface Degradation : GeneticReaction {
+interface Degradation : GeneticReaction {
     val molecule: DegradingEntity
     val degradationRate: Rate
 }
@@ -32,7 +32,7 @@ internal interface Degradation : GeneticReaction {
 /**
  * The coding of a [target] from a [coder].
  */
-internal interface CodingReaction<out C : TranscribingEntity, out T : TranscribableEntity> : GeneticReaction {
+interface CodingReaction<out C : TranscribingEntity, out T : TranscribableEntity> : GeneticReaction {
     val coder: C
     val target: T
     val basalRate: Rate
@@ -41,12 +41,12 @@ internal interface CodingReaction<out C : TranscribingEntity, out T : Transcriba
 /**
  * The transcription of a [gene][coder] into an [molecule][target] that can either be a [Protein] or [mRNA][MRna].
  */
-internal interface Transcription<out T : TranscribableEntity> : CodingReaction<Gene, T>
+interface Transcription<out T : TranscribableEntity> : CodingReaction<Gene, T>
 
 /**
  * The translation of a [protein][target] from a molecule of [mRNA][coder].
  */
-internal interface Translation : CodingReaction<MRna, Protein>
+interface Translation : CodingReaction<MRna, Protein>
 
 /**
 * The regulation of a [coding reaction][reaction] from a [regulator].
@@ -54,7 +54,7 @@ internal interface Translation : CodingReaction<MRna, Protein>
 * The [binding rate][bindingRate] is the rate at which the regulator links itself to the entity.
 * The [unbinding rate][unbindingRate] is the rate at which the bound entity separates in the two original entities.
 */
-internal interface Regulation : GeneticReaction {
+interface Regulation : GeneticReaction {
     val reaction: CodingReaction<*, *>
     val regulator: RegulatingEntity
     val regulatingRate: Rate

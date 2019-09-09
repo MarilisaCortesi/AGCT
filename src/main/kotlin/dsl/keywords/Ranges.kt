@@ -8,7 +8,7 @@ import kotlin.math.pow
 private fun sequence(from: Number, step: Number, num: Int) =
     generateSequence(0) { it + 1 }.map { it * step.toDouble() + from.toDouble() }.take(num)
 
-internal interface NumericSequence
+interface NumericSequence
 
 object values : NumericSequence {
     /**

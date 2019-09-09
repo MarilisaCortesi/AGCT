@@ -6,13 +6,14 @@ import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import model.entities.*
 import model.reactions.*
+import model.variables.BasicRate
 import model.variables.Rate
 
 internal class TestReactions : StringSpec({
     "test basics" {
         DEGRADATION.run {
             molecule shouldBe PROTEIN
-            degradationRate shouldBe Rate()
+            degradationRate shouldBe BasicRate()
             reactions shouldContainExactlyInAnyOrder DEGRADATION_REACTIONS
             reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
         }
@@ -20,7 +21,7 @@ internal class TestReactions : StringSpec({
         DIRECT.run {
             coder shouldBe GENE
             target shouldBe PROTEIN
-            basalRate shouldBe Rate()
+            basalRate shouldBe BasicRate()
             reactions shouldContainExactlyInAnyOrder DIRECT_REACTIONS
             reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
         }
@@ -28,7 +29,7 @@ internal class TestReactions : StringSpec({
         TRANSCRIPTION.run {
             coder shouldBe GENE
             target shouldBe MRNA
-            basalRate shouldBe Rate()
+            basalRate shouldBe BasicRate()
             reactions shouldContainExactlyInAnyOrder TRANSCRIPTION_REACTIONS
             reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
         }
@@ -36,7 +37,7 @@ internal class TestReactions : StringSpec({
         TRANSLATION.run {
             coder shouldBe MRNA
             target shouldBe PROTEIN
-            basalRate shouldBe Rate()
+            basalRate shouldBe BasicRate()
             reactions shouldContainExactlyInAnyOrder TRANSLATION_REACTIONS
             reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
         }
@@ -44,9 +45,9 @@ internal class TestReactions : StringSpec({
         DIRECT_REGULATION.run {
             reaction shouldBe DIRECT
             regulator shouldBe REGULATIVE
-            regulatingRate shouldBe Rate()
-            unbindingRate shouldBe Rate()
-            bindingRate shouldBe Rate()
+            regulatingRate shouldBe BasicRate()
+            unbindingRate shouldBe BasicRate()
+            bindingRate shouldBe BasicRate()
             reactions shouldContainExactlyInAnyOrder DIRECT_REGULATION_REACTIONS
             reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
         }
@@ -54,9 +55,9 @@ internal class TestReactions : StringSpec({
         TRANSCRIPTION_REGULATION.run {
             reaction shouldBe TRANSCRIPTION
             regulator shouldBe REGULATIVE
-            regulatingRate shouldBe Rate()
-            unbindingRate shouldBe Rate()
-            bindingRate shouldBe Rate()
+            regulatingRate shouldBe BasicRate()
+            unbindingRate shouldBe BasicRate()
+            bindingRate shouldBe BasicRate()
             reactions shouldContainExactlyInAnyOrder TRANSCRIPTION_REGULATION_REACTIONS
             reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
         }
@@ -64,22 +65,22 @@ internal class TestReactions : StringSpec({
         TRANSLATION_REGULATION.run {
             reaction shouldBe TRANSLATION
             regulator shouldBe REGULATIVE
-            regulatingRate shouldBe Rate()
-            unbindingRate shouldBe Rate()
-            bindingRate shouldBe Rate()
+            regulatingRate shouldBe BasicRate()
+            unbindingRate shouldBe BasicRate()
+            bindingRate shouldBe BasicRate()
             reactions shouldContainExactlyInAnyOrder TRANSLATION_REGULATION_REACTIONS
             reactions.flatMap { it.reagents.values + it.products.values }.distinct() shouldHaveSingleElement 1
         }
     }
 
     "test equality" {
-        DEGRADATION shouldEqual BasicDegradation(PROTEIN, Rate(2))
-        DIRECT shouldEqual DirectTranscription(GENE, PROTEIN, Rate(2))
-        TRANSCRIPTION shouldEqual BasicTranscription(GENE, MRNA, Rate(2))
-        TRANSLATION shouldEqual BasicTranslation(MRNA, PROTEIN, Rate(2))
-        DIRECT_REGULATION shouldEqual BasicRegulation(DIRECT, REGULATIVE, Rate(2), Rate(2), Rate(2))
-        TRANSCRIPTION_REGULATION shouldEqual BasicRegulation(TRANSCRIPTION, REGULATIVE, Rate(2), Rate(2), Rate(2))
-        TRANSLATION_REGULATION shouldEqual BasicRegulation(TRANSLATION, REGULATIVE, Rate(2), Rate(2), Rate(2))
+        DEGRADATION shouldEqual BasicDegradation(PROTEIN, BasicRate(2))
+        DIRECT shouldEqual DirectTranscription(GENE, PROTEIN, BasicRate(2))
+        TRANSCRIPTION shouldEqual BasicTranscription(GENE, MRNA, BasicRate(2))
+        TRANSLATION shouldEqual BasicTranslation(MRNA, PROTEIN, BasicRate(2))
+        DIRECT_REGULATION shouldEqual BasicRegulation(DIRECT, REGULATIVE, BasicRate(2), BasicRate(2), BasicRate(2))
+        TRANSCRIPTION_REGULATION shouldEqual BasicRegulation(TRANSCRIPTION, REGULATIVE, BasicRate(2), BasicRate(2), BasicRate(2))
+        TRANSLATION_REGULATION shouldEqual BasicRegulation(TRANSLATION, REGULATIVE, BasicRate(2), BasicRate(2), BasicRate(2))
 
         val gene = entity<Gene>("g2")
         val mrna = entity<MRna>("m2")

@@ -4,7 +4,7 @@ package dsl
 
 import generation.Generator
 import generation.exportTo
-import model.circuit.GeneticCircuit
+import model.circuit.AbstractGeneticCircuit
 
 val Create = TopLevel()
 
@@ -76,7 +76,7 @@ class DefaultsLevel internal constructor(private val defaults: MutableDefaultVal
     }
 }
 
-class CircuitExport internal constructor(private val circuit: GeneticCircuit) {
+class CircuitExport internal constructor(private val circuit: AbstractGeneticCircuit) {
     infix fun to(generator: Generator) =
         And().and(generator)
 

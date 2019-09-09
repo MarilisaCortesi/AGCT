@@ -19,7 +19,7 @@ import java.lang.IllegalStateException
  *
  * For any of them that is broken, an exception will be thrown.
  */
-internal class BasicGeneticCircuit(override val name: String) : GeneticCircuit({
+internal class BasicGeneticCircuit(override val name: String) : AbstractGeneticCircuit({
     "one degradation reaction at least" { circuit ->
         circuit.filterKeys { it is DegradingEntity }
         .filterValues { it.filterIsInstance<Degradation>().isEmpty() }

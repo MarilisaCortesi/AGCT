@@ -2,6 +2,7 @@ package model.entities
 
 import model.utils.create
 import model.utils.lateVal
+import model.variables.BasicConcentration
 import model.variables.Concentration
 import kotlin.reflect.KClass
 
@@ -25,7 +26,7 @@ internal inline fun<reified T : GeneticEntity> entity(id: String, block: EntityP
  */
 internal class EntityParameters {
     var id: String by lateVal()
-    var initialConcentration: Concentration = Concentration()
+    var initialConcentration: Concentration = BasicConcentration()
     var aliases: MutableList<String> = mutableListOf()
 }
 
