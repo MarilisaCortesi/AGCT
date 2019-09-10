@@ -82,4 +82,4 @@ private val Transcription<*>.regulations
 
 private val Variable<*>.string
     get() = if (values.size == 1) "of ${values.single()}"
-            else "into ${values.joinToString(", ", "(", ")")}"
+            else "into values${values.joinToString(", ", "(", ")")}"
