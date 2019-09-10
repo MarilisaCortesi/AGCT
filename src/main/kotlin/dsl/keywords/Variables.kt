@@ -1,6 +1,6 @@
 @file:Suppress("ClassName", "PackageDirectoryMismatch")
 
-package dsl
+package agct
 
 object initial {
     val concentration = Concentration()

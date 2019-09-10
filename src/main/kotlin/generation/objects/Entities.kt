@@ -1,6 +1,6 @@
-@file:Suppress("ClassName")
+@file:Suppress("PackageDirectoryMismatch", "ClassName")
 
-package generation.objects
+package agct
 
 import generation.Generator
 import generation.utils.toFile

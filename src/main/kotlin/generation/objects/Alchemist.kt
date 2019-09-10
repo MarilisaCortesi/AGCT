@@ -1,4 +1,6 @@
-package generation.objects
+@file:Suppress("PackageDirectoryMismatch")
+
+package agct
 
 import generation.Generator
 import generation.utils.Level.Companion.start

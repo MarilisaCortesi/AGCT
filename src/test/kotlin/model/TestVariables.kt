@@ -15,7 +15,7 @@ internal class TestVariables : StringSpec({
         val defaultRate = BasicRate()
         defaultRate.values shouldHaveSingleElement DEFAULT_RATE_VALUE
         val singleRate = BasicRate(SINGLE_ELEMENT)
-        singleRate.values shouldHaveSingleElement SINGLE_ELEMENT.toDouble()
+        singleRate.values shouldHaveSingleElement SINGLE_ELEMENT
         val arrayRate = BasicRate(*MULTIPLE_ELEMENTS.toTypedArray())
         arrayRate.values shouldMatchWithTolerance MULTIPLE_ELEMENTS
         val sequenceRate = BasicRate(MULTIPLE_ELEMENTS.asSequence())

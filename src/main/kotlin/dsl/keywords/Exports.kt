@@ -1,6 +1,6 @@
 @file:Suppress("PackageDirectoryMismatch", "ClassName")
 
-package dsl
+package agct
 
 import generation.Generator
 

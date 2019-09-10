@@ -1,5 +1,4 @@
-import dsl.*
-import generation.objects.*
+import agct.*
 
 fun main() {
     Create circuit "Repressilator" containing {

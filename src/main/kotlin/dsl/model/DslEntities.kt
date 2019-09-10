@@ -1,6 +1,6 @@
 @file:Suppress("PackageDirectoryMismatch")
 
-package dsl
+package agct
 
 import model.entities.*
 import model.entities.BasicGene

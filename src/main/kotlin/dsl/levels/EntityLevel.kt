@@ -1,8 +1,7 @@
 @file:Suppress("PackageDirectoryMismatch", "ClassName", "UNUSED_PARAMETER", "PropertyName", "FunctionName")
 
-package dsl
+package agct
 
-import dsl.TopLevel.Companion.circuit
 import model.utils.string
 import model.utils.type
 import java.lang.IllegalStateException
@@ -19,7 +18,7 @@ abstract class EntityLevel<out E : DslEntity> internal constructor(
     ifAbsent: String.() -> E
 ) {
     @Suppress("UNCHECKED_CAST")
-    internal val entity = circuit.getOrPutEntity(id, ifAbsent) as E
+    internal val entity = TopLevel.circuit.getOrPutEntity(id, ifAbsent) as E
 
     open val has
         get() = Has()

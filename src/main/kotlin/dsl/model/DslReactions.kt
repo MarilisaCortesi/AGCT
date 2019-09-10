@@ -1,6 +1,6 @@
 @file:Suppress("PackageDirectoryMismatch")
 
-package dsl
+package agct
 
 import model.reactions.*
 import model.reactions.GeneticReaction

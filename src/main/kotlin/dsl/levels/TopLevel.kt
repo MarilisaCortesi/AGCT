@@ -1,6 +1,6 @@
 @file:Suppress("PackageDirectoryMismatch", "UNUSED_PARAMETER")
 
-package dsl
+package agct
 
 import generation.Generator
 import generation.exportTo

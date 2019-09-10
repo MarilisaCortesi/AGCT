@@ -1,4 +1,6 @@
-package generation.objects
+@file:Suppress("PackageDirectoryMismatch")
+
+package agct
 
 import generation.Generator
 import generation.utils.Level.Companion.start
@@ -21,7 +23,7 @@ object AGCT : Generator {
     override fun from(circuit: GeneticCircuit) = with(circuit) {
         context = this
         start(" {", "}") {
-            "import dsl.*"()
+            "import agct.*"()
             line()
             "fun main()" {
                 "Create circuit ${name.string} containing" {

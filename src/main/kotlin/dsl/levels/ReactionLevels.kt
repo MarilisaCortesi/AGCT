@@ -1,8 +1,7 @@
 @file:Suppress("PackageDirectoryMismatch", "PropertyName", "UNUSED_PARAMETER")
 
-package dsl
+package agct
 
-import dsl.TopLevel.Companion.circuit
 import model.utils.lateVal
 
 abstract class ReactionLevel<R : DslReaction> internal constructor() {
@@ -27,7 +26,7 @@ class TranscriptionLevel internal constructor(private val coder: DslGene) :
 
     infix fun protein(id: String) =
         ProteinLevel(id).run {
-            transcription = DslTranscription(coder, entity).apply { circuit.putReaction(this) }
+            transcription = DslTranscription(coder, entity).apply { TopLevel.circuit.putReaction(this) }
             EntityLevelWrapper(this)
         }
 
@@ -67,7 +66,7 @@ class RegulationLevel internal constructor(
 
     private val<E : EntityLevel<DslRegulating>> E.wrapper
         get() = run {
-            regulation = DslRegulation(transcription, entity).apply { circuit.putReaction(this) }
+            regulation = DslRegulation(transcription, entity).apply { TopLevel.circuit.putReaction(this) }
             EntityLevelWrapper(this)
         }
 

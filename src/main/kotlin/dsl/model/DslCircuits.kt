@@ -1,6 +1,6 @@
 @file:Suppress("PackageDirectoryMismatch", "RemoveExplicitTypeArguments", "UNUSED_PARAMETER")
 
-package dsl
+package agct
 
 import model.circuit.BasicGeneticCircuit
 import model.circuit.AbstractGeneticCircuit
