@@ -6,11 +6,14 @@ import model.utils.string
 import model.utils.type
 import java.lang.IllegalStateException
 
-class EntityLevelWrapper<out E: EntityLevel<*>> internal constructor(
-    private val entityLevel: E
-) {
+open class EntityLevelWrapper<out E: EntityLevel<*>> internal constructor(protected val entityLevel: E) {
     infix fun that(block: E.() -> Unit) =
         entityLevel.run(block)
+}
+
+class GeneLevelWrapper internal constructor(entityLevel: GeneLevel): EntityLevelWrapper<GeneLevel>(entityLevel) {
+    infix fun that(dummy: codes) =
+        entityLevel.codes
 }
 
 abstract class EntityLevel<out E : DslEntity> internal constructor(
