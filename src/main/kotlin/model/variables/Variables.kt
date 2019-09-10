@@ -15,14 +15,14 @@ interface Concentration : Variable<Int>
 /**
  * A variable that represents the rate of a reaction.
  */
-interface Rate : Variable<Double>
-
-/**
- * Default value of [Rate] variable.
- */
-const val DEFAULT_RATE_VALUE = 1.0
+interface Rate : Variable<Number>
 
 /**
  * Default value of [Concentration] variable.
  */
 internal const val DEFAULT_CONCENTRATION_VALUE = 100
+
+/**
+ * Default value of [Rate] variable.
+ */
+const val DEFAULT_RATE_VALUE = 1.0

@@ -34,11 +34,11 @@ abstract class DefaultValues internal constructor() {
 
     protected abstract val container: ValuesContainer
 
-    protected abstract val <T : DslVariable> T.get : T
+    protected abstract val <T : DslVariable<*>> T.get : T
 }
 
 class ImmutableDefaultValues internal constructor(override val container: ValuesContainer) : DefaultValues() {
-    override val <T : DslVariable> T.get: T
+    override val <T : DslVariable<*>> T.get: T
         get() = javaClass.kotlin.create(variableName, value)
 }
 
@@ -46,7 +46,7 @@ class MutableDefaultValues internal constructor() : DefaultValues() {
     internal val immutable
         get() = ImmutableDefaultValues(container)
 
-    override val <T : DslVariable> T.get
+    override val <T : DslVariable<*>> T.get
         get() = this
 
     override val container: ValuesContainer = ValuesContainer()

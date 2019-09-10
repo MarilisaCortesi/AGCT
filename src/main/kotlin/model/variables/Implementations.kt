@@ -27,7 +27,7 @@ internal abstract class UnsignedVariable<out T : Number>(values: Sequence<T>) : 
 }
 
 internal class BasicRate(values: Sequence<Number>) :
-    UnsignedVariable<Double>(values.map { it.toDouble() }), Rate {
+    UnsignedVariable<Number>(values.map { it.toDouble() }), Rate {
     constructor(values: Collection<Number>) : this(values.asSequence())
     constructor(vararg values: Number = arrayOf(DEFAULT_RATE_VALUE)) : this(values.asSequence())
 }

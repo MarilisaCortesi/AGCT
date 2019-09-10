@@ -8,18 +8,18 @@ import model.variables.*
 import model.variables.BasicConcentration
 import model.variables.BasicRate
 
-abstract class DslVariable internal constructor(
+abstract class DslVariable<N : Number> internal constructor(
     internal val variableName: String?,
-    default: Variable<Number>
+    default: Variable<N>
 ) {
-    protected var privateValue: Variable<Number> by lateVal(variableName, default)
+    protected var privateValue: Variable<N> by lateVal(variableName, default)
 
-    internal abstract val value: Variable<Number>
+    internal abstract val value: Variable<N>
 
-    infix fun of(value: Number) =
+    infix fun of(value: N) =
         into(sequenceOf(value))
 
-    infix fun into(values: Sequence<Number>) {
+    infix fun into(values: Sequence<N>) {
         privateValue = privateValue::class.create(values)
     }
 }
@@ -27,7 +27,7 @@ abstract class DslVariable internal constructor(
 class DslConcentration internal constructor(
     variableName: String? = null,
     default: Concentration = BasicConcentration()
-) : DslVariable(variableName, default) {
+) : DslVariable<Int>(variableName, default) {
     override val value: Concentration
         get() = privateValue as Concentration
 }
@@ -35,7 +35,7 @@ class DslConcentration internal constructor(
 class DslRate internal constructor(
     variableName: String? = null,
     default: Rate = BasicRate()
-) : DslVariable(variableName, default) {
+) : DslVariable<Number>(variableName, default) {
     override val value: Rate
         get() = privateValue as Rate
 }
