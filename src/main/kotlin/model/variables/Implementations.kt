@@ -32,8 +32,8 @@ internal class BasicRate(values: Sequence<Number>) :
     constructor(vararg values: Number = arrayOf(DEFAULT_RATE_VALUE)) : this(values.asSequence())
 }
 
-internal class BasicConcentration(values: Sequence<Number>) :
-    UnsignedVariable<Double>(values.map { it.toDouble() }), Concentration {
-    constructor(values: Collection<Number>) : this(values.asSequence())
-    constructor(vararg values: Number = arrayOf(DEFAULT_CONCENTRATION_VALUE)) : this(values.asSequence())
+internal class BasicConcentration(values: Sequence<Int>) :
+    UnsignedVariable<Int>(values), Concentration {
+    constructor(values: Collection<Int>) : this(values.asSequence())
+    constructor(vararg values: Int = intArrayOf(DEFAULT_CONCENTRATION_VALUE)) : this(values.asSequence())
 }

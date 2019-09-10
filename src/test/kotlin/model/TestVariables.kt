@@ -7,15 +7,15 @@ import io.kotlintest.specs.StringSpec
 import model.variables.*
 import java.lang.IllegalArgumentException
 
-private const val SINGLE_ELEMENT = 20.0
-private val MULTIPLE_ELEMENTS = setOf(1.0, 2.0, 3.0, 4.0, 5.0)
+private const val SINGLE_ELEMENT = 20
+private val MULTIPLE_ELEMENTS = setOf(1, 2, 3, 4, 5)
 
 internal class TestVariables : StringSpec({
     "test rate" {
         val defaultRate = BasicRate()
         defaultRate.values shouldHaveSingleElement DEFAULT_RATE_VALUE
         val singleRate = BasicRate(SINGLE_ELEMENT)
-        singleRate.values shouldHaveSingleElement SINGLE_ELEMENT
+        singleRate.values shouldHaveSingleElement SINGLE_ELEMENT.toDouble()
         val arrayRate = BasicRate(*MULTIPLE_ELEMENTS.toTypedArray())
         arrayRate.values shouldMatchWithTolerance MULTIPLE_ELEMENTS
         val sequenceRate = BasicRate(MULTIPLE_ELEMENTS.asSequence())
@@ -29,7 +29,7 @@ internal class TestVariables : StringSpec({
         defaultConcentration.values shouldHaveSingleElement DEFAULT_CONCENTRATION_VALUE
         val singleConcentration = BasicConcentration(SINGLE_ELEMENT)
         singleConcentration.values shouldHaveSingleElement SINGLE_ELEMENT
-        val arrayConcentration = BasicConcentration(*MULTIPLE_ELEMENTS.toTypedArray())
+        val arrayConcentration = BasicConcentration(*MULTIPLE_ELEMENTS.toIntArray())
         arrayConcentration.values shouldMatchWithTolerance MULTIPLE_ELEMENTS
         val sequenceConcentration = BasicConcentration(MULTIPLE_ELEMENTS.asSequence())
         sequenceConcentration.values shouldMatchWithTolerance MULTIPLE_ELEMENTS

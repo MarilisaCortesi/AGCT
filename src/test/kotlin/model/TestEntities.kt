@@ -5,7 +5,6 @@ import io.kotlintest.shouldHave
 import io.kotlintest.specs.StringSpec
 import model.entities.*
 import model.variables.BasicConcentration
-import model.variables.Concentration
 
 internal class TestEntities : StringSpec({
     "test basics" {
@@ -16,8 +15,8 @@ internal class TestEntities : StringSpec({
         GENE testBasics "gen"
         MRNA testBasics "rna"
         PROTEIN testBasics "pro"
-        REGULATED_GENE testBasics "gen-reg"
-        REGULATED_MRNA testBasics "rna-reg"
+        REGULATED_GENE testBasics "gen_reg"
+        REGULATED_MRNA testBasics "rna_reg"
     }
 
     "test equality" {

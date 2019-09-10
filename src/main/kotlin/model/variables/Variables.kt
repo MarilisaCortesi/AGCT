@@ -10,7 +10,7 @@ interface Variable<out T> {
 /**
  * A variable that represents the concentration of an entity.
  */
-interface Concentration : Variable<Double>
+interface Concentration : Variable<Int>
 
 /**
  * A variable that represents the rate of a reaction.
@@ -25,4 +25,4 @@ const val DEFAULT_RATE_VALUE = 1.0
 /**
  * Default value of [Concentration] variable.
  */
-internal const val DEFAULT_CONCENTRATION_VALUE = 100.0
+internal const val DEFAULT_CONCENTRATION_VALUE = 100
