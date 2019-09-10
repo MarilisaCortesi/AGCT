@@ -18,6 +18,7 @@ import model.reactions.Transcription
 import model.utils.UnsupportedClassException
 import model.utils.forEachSelf
 import model.utils.string
+import model.utils.type
 import model.variables.Variable
 
 object AGCT : Generator {
