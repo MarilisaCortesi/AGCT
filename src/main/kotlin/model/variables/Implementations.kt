@@ -10,7 +10,7 @@ internal abstract class UnsignedVariable<out T : Number>(values: Sequence<T>) : 
         }
     }
 
-    override val values = values.map { it }.toSet()
+    override val values = values.toSet()
 
     override fun toString() = values.run {
         if (size == 1)
@@ -27,7 +27,7 @@ internal abstract class UnsignedVariable<out T : Number>(values: Sequence<T>) : 
 }
 
 internal class BasicRate(values: Sequence<Number>) :
-    UnsignedVariable<Number>(values.map { it.toDouble() }), Rate {
+    UnsignedVariable<Number>(values), Rate {
     constructor(values: Collection<Number>) : this(values.asSequence())
     constructor(vararg values: Number = arrayOf(DEFAULT_RATE_VALUE)) : this(values.asSequence())
 }
