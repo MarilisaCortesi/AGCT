@@ -16,7 +16,7 @@ internal abstract class UnsignedVariable<out T : Number>(values: Sequence<T>) : 
         if (size == 1)
             single().toString()
         else
-            joinToString(",", "(", ")")
+            joinToString(", ", "(", ")")
     }
 
     override fun hashCode() =

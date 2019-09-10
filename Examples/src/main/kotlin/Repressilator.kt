@@ -20,8 +20,11 @@ fun main() {
         the gene "g/λcI" that {
             codes For {
                 the protein "λcI"
-                regulated by { the protein "TetR" }
+                regulated by {
+                    the protein "TetR"
+                    with a regulating.rate into linspace(1, 2, 3)
+                }
             }
         }
-    } then export to each one into (entities, reactions, AGCT, Alchemist)
+    } then export to entities and reactions and AGCT and Alchemist
 }

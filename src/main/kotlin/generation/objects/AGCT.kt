@@ -15,7 +15,7 @@ import model.reactions.Regulation
 import model.reactions.Transcription
 import model.utils.UnsupportedClassException
 import model.utils.string
-import kotlin.properties.Delegates
+import model.variables.Variable
 
 object AGCT : Generator {
     override fun from(circuit: GeneticCircuit) = with(circuit) {
@@ -28,20 +28,20 @@ object AGCT : Generator {
                     genes.invoke({ "the ${it.entity} that" }, spacings = 1) { gene ->
                         gene.transcriptions.invoke("codes For", " and", -1) { transcription ->
                             "the ${transcription.target.entity}"()
-                            "with a basal.rate ${transcription.basalRate}"()
+                            "with a basal.rate ${transcription.basalRate.string}"()
                             transcription.regulations.invoke("regulated by", " and", -1) { regulation ->
                                 "the ${regulation.regulator.entity}"()
-                                "with a regulating.rate ${regulation.regulatingRate}"()
-                                "with a binding.rate ${regulation.bindingRate}"()
-                                "with an unbinding.rate ${regulation.unbindingRate}"()
+                                "with a regulating.rate ${regulation.regulatingRate.string}"()
+                                "with a binding.rate ${regulation.bindingRate.string}"()
+                                "with an unbinding.rate ${regulation.unbindingRate.string}"()
                             }
                         }
                     }
                     line()
                     dslEntities({ "\"${it.id}\"" }, spacings = 1) { entity ->
-                        "has an initial.concentration ${entity.initialConcentration}"()
+                        "has an initial.concentration ${entity.initialConcentration.string}"()
                         if (entity is DegradingEntity) {
-                            "has a degradation.rate ${entity.degradation.degradationRate}"()
+                            "has a degradation.rate ${entity.degradation.degradationRate.string}"()
                         }
                     }
                 }
@@ -75,3 +75,7 @@ private val Gene.transcriptions
 
 private val Transcription<*>.regulations
     get() = context!!.reactions.filterIsInstance<Regulation>().filter { it.reaction == this }
+
+private val Variable<*>.string
+    get() = if (values.size == 1) "of ${values.single()}"
+            else "into ${values.joinToString(", ", "(", ")")}"
