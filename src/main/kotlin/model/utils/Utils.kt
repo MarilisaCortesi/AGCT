@@ -76,6 +76,12 @@ internal fun <T : Any> lateVal(propertyName: String? = null, temporaryValue: T? 
     }
 
 /**
+ * For each with extension method.
+ */
+internal fun<T> Collection<T>.forEachSelf(action: T.() -> Unit) =
+    forEach(action)
+
+/**
  * Surrounds the string with two inverted commas to resemble a string.
  */
 internal val String.string

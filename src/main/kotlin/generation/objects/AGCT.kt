@@ -16,6 +16,7 @@ import model.reactions.Degradation
 import model.reactions.Regulation
 import model.reactions.Transcription
 import model.utils.UnsupportedClassException
+import model.utils.forEachSelf
 import model.utils.string
 import model.variables.Variable
 
@@ -27,11 +28,11 @@ object AGCT : Generator {
             line()
             "fun main()" {
                 "Create circuit ${name.string} containing" {
-                    genes.invoke({ "the ${it.entity} that" }, spacings = 1) { gene ->
-                        gene.transcriptions.invoke("codes For", " and", -1) { transcription ->
+                    genes.forEachSelf {
+                        transcriptions("the $entity that codes For", " and", -1) { transcription ->
                             "the ${transcription.target.entity}"()
                             "with a basal.rate ${transcription.basalRate.string}"()
-                            transcription.regulations.invoke("regulated by", " and", -1) { regulation ->
+                            transcription.regulations("regulated by", " and", -1) { regulation ->
                                 "the ${regulation.regulator.entity}"()
                                 "with a regulating.rate ${regulation.regulatingRate.string}"()
                                 "with a binding.rate ${regulation.bindingRate.string}"()

@@ -99,7 +99,7 @@ open class Level private constructor(
     fun toConsole() =
         get().toConsole()
 
-    protected val Int.tabs
+    private val Int.tabs
         get() = indentation.repeat(this)
 
     protected operator fun String?.plus(other: String?) =
