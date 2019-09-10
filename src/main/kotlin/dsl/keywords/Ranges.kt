@@ -29,7 +29,7 @@ object range : NumericSequence {
 
 object linspace : NumericSequence {
     /**
-     * An inclusive range of equally spaced [values].
+     * An inclusive range of evenly spaced [values].
      * Starting [from] and ending [to] the given values, for a total of [num] elements.
      */
 
@@ -39,7 +39,7 @@ object linspace : NumericSequence {
 
 object logspace : NumericSequence {
     /**
-     * An inclusive range of [values] spaced on a logarithmic scale.
+     * An inclusive range of [values] spaced evenly on a log scale.
      * Starting [from] and ending [to] the given values, for a total of [num] elements.
      */
     operator fun invoke(from: Number, to: Number, num: Int) =
@@ -48,7 +48,7 @@ object logspace : NumericSequence {
 
 object geomspace : NumericSequence {
     /**
-     * An inclusive range of [values] spaced on a geometrical scale.
+     * An inclusive range of [values] spaced evenly on a log scale (a geometric progression).
      * Starting [from] and ending [to] the given values, for a total of [num] elements.
      */
     operator fun invoke(from: Number, to: Number, num: Int) =
