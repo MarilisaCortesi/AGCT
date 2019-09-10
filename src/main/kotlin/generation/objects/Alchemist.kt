@@ -18,8 +18,8 @@ object Alchemist : Generator {
             line()
             "displacements:" {
                 "- in:" {
-                    "type"("Point()")
-                    "parameters"("[0,0]")
+                    "  type"("Point")
+                    "  parameters"("[0, 0]")
                 }
                 "" {
                     "contents:" {

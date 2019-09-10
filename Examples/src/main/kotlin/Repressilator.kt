@@ -3,28 +3,35 @@ import generation.objects.*
 
 fun main() {
     Create circuit "Repressilator" containing {
-        the gene "g/TetR" that {
+        the gene "gTetR" that {
+            has an initial.concentration of 1
             codes For {
                 the protein "TetR"
                 regulated by { the protein "LacI" }
             }
         }
 
-        the gene "g/LacI" that {
+        the gene "gLacI" that {
+            has an initial.concentration of 1
             codes For {
                 the protein "LacI"
                 regulated by { the protein "λcI" }
             }
         }
 
-        the gene "g/λcI" that {
+        the gene "gλcI" that {
+            has an initial.concentration of 1
             codes For {
                 the protein "λcI"
-                regulated by {
-                    the protein "TetR"
-                    with a regulating.rate into linspace(1, 2, 3)
-                }
+                regulated by { the protein "TetR" }
             }
         }
+    } with {
+        a default initial.concentration of 0
+        a default degradation.rate of 0.01
+        a default basal.rate of 0
+        a default regulating.rate of 10
+        a default binding.rate of 0.1
+        a default unbinding.rate of 0.01
     } then export to entities and reactions and AGCT and Alchemist
 }

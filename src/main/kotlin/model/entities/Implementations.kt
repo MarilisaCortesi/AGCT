@@ -21,7 +21,7 @@ internal abstract class AbstractEntity(parameters: EntityParameters) : GeneticEn
 internal abstract class AbstractBoundEntity<out F : GeneticEntity, out S : GeneticEntity>(
     override val first: F,
     override val second: S
-) : AbstractEntity(EntityParameters().apply { id = "${first.id}-${second.id}" }), BoundEntity<F, S>
+) : AbstractEntity(EntityParameters().apply { id = "${first.id}_${second.id}" }), BoundEntity<F, S>
 
 internal class BasicDegradingEntity(parameters: EntityParameters) :
     AbstractEntity(parameters), DegradingEntity
