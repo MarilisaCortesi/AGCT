@@ -13,13 +13,13 @@ import model.entities.RegulatingEntity
 import model.reactions.Degradation
 import model.reactions.Regulation
 import model.reactions.Transcription
-import model.utils.Nullable
 import model.utils.UnsupportedClassException
 import model.utils.string
+import kotlin.properties.Delegates
 
 object AGCT : Generator {
     override fun from(circuit: GeneticCircuit) = with(circuit) {
-        context.set(this)
+        context = this
         start(" {", "}") {
             "import dsl.*"()
             line()
@@ -47,11 +47,11 @@ object AGCT : Generator {
                 }
             }
         }.toFile("agct.kt", name)
-        context.set(null)
+        context = null
     }
 }
 
-private val context = Nullable<GeneticCircuit>()
+private var context: GeneticCircuit? = null
 
 private val GeneticCircuit.genes
     get() = entities.filterIsInstance<Gene>().filter { it !is RegulatedGene }
@@ -68,10 +68,10 @@ private val GeneticEntity.entity
     } + " ${id.string}"
 
 private val DegradingEntity.degradation
-    get() = context.get.reactionsOf(this).filterIsInstance<Degradation>().single()
+    get() = context!!.reactionsOf(this).filterIsInstance<Degradation>().single()
 
 private val Gene.transcriptions
-    get() = context.get.reactionsOf(this).filterIsInstance<Transcription<*>>()
+    get() = context!!.reactionsOf(this).filterIsInstance<Transcription<*>>()
 
 private val Transcription<*>.regulations
-    get() = context.get.reactions.filterIsInstance<Regulation>().filter { it.reaction == this }
+    get() = context!!.reactions.filterIsInstance<Regulation>().filter { it.reaction == this }

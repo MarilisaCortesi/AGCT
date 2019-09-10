@@ -76,18 +76,6 @@ internal fun <T : Any> lateVal(propertyName: String? = null, temporaryValue: T? 
     }
 
 /**
- * Custom delegate to have an optional value throwing [NullPointerException] when trying to access it if no value is set
- */
-internal class Nullable<T : Any> (private var innerValue: T? = null) {
-    val get: T
-        get() = innerValue ?: throw NullPointerException("$this has no value.")
-
-    fun set(value: T?) {
-        innerValue = value
-    }
-}
-
-/**
  * Surrounds the string with two inverted commas to resemble a string.
  */
 internal val String.string
