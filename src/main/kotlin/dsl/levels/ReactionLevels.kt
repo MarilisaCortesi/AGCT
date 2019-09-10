@@ -6,7 +6,7 @@ import dsl.TopLevel.Companion.circuit
 import model.utils.lateVal
 
 abstract class ReactionLevel<R : DslReaction> internal constructor() {
-    protected abstract val reaction: R
+    internal abstract val reaction: R
 }
 
 class TranscriptionLevel internal constructor(private val coder: DslGene) :
