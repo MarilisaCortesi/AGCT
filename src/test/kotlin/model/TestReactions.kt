@@ -74,13 +74,13 @@ internal class TestReactions : StringSpec({
     }
 
     "test equality" {
-        DEGRADATION shouldEqual BasicDegradation(PROTEIN, BasicRate(2))
-        DIRECT shouldEqual DirectTranscription(GENE, PROTEIN, BasicRate(2))
-        TRANSCRIPTION shouldEqual BasicTranscription(GENE, MRNA, BasicRate(2))
-        TRANSLATION shouldEqual BasicTranslation(MRNA, PROTEIN, BasicRate(2))
-        DIRECT_REGULATION shouldEqual BasicRegulation(DIRECT, REGULATIVE, BasicRate(2), BasicRate(2), BasicRate(2))
-        TRANSCRIPTION_REGULATION shouldEqual BasicRegulation(TRANSCRIPTION, REGULATIVE, BasicRate(2), BasicRate(2), BasicRate(2))
-        TRANSLATION_REGULATION shouldEqual BasicRegulation(TRANSLATION, REGULATIVE, BasicRate(2), BasicRate(2), BasicRate(2))
+        DEGRADATION shouldEqual BasicDegradation(PROTEIN, BasicRate(2.0))
+        DIRECT shouldEqual DirectTranscription(GENE, PROTEIN, BasicRate(2.0))
+        TRANSCRIPTION shouldEqual BasicTranscription(GENE, MRNA, BasicRate(2.0))
+        TRANSLATION shouldEqual BasicTranslation(MRNA, PROTEIN, BasicRate(2.0))
+        DIRECT_REGULATION shouldEqual BasicRegulation(DIRECT, REGULATIVE, BasicRate(2.0), BasicRate(2.0), BasicRate(2.0))
+        TRANSCRIPTION_REGULATION shouldEqual BasicRegulation(TRANSCRIPTION, REGULATIVE, BasicRate(2.0), BasicRate(2.0), BasicRate(2.0))
+        TRANSLATION_REGULATION shouldEqual BasicRegulation(TRANSLATION, REGULATIVE, BasicRate(2.0), BasicRate(2.0), BasicRate(2.0))
 
         val gene = entity<Gene>("g2")
         val mrna = entity<MRna>("m2")

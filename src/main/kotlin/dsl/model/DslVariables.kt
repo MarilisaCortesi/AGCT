@@ -46,6 +46,6 @@ class DslRate internal constructor(
     override val value: Rate
         get() = privateValue as Rate
 
-    override fun Sequence<Number>.set(): Variable<Number> =
-        BasicRate(this)
+    override fun Sequence<Number>.set(): Variable<Double> =
+        BasicRate(map{ it.toDouble() })
 }

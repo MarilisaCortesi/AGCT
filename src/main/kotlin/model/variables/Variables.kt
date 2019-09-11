@@ -15,7 +15,7 @@ interface Concentration : Variable<Int>
 /**
  * A variable that represents the rate of a reaction.
  */
-interface Rate : Variable<Number>
+interface Rate : Variable<Double>
 
 /**
  * Default value of [Concentration] variable.

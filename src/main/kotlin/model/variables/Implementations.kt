@@ -26,10 +26,10 @@ internal abstract class UnsignedVariable<out T : Number>(values: Sequence<T>) : 
         checkEquals(other) { values == it.values }
 }
 
-internal class BasicRate(values: Sequence<Number>) :
-    UnsignedVariable<Number>(values), Rate {
-    constructor(values: Collection<Number>) : this(values.asSequence())
-    constructor(vararg values: Number = arrayOf(DEFAULT_RATE_VALUE)) : this(values.asSequence())
+internal class BasicRate(values: Sequence<Double>) :
+    UnsignedVariable<Double>(values), Rate {
+    constructor(values: Collection<Double>) : this(values.asSequence())
+    constructor(vararg values: Double = doubleArrayOf(DEFAULT_RATE_VALUE)) : this(values.asSequence())
 }
 
 internal class BasicConcentration(values: Sequence<Int>) :
