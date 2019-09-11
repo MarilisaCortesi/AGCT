@@ -10,30 +10,38 @@ import model.entities.BoundEntity
 
 object Alchemist : Generator {
     override fun from(circuit: GeneticCircuit) = with(circuit) {
-        start(null, null, "  ", ": ") {
+        val variables = mutableListOf<Variable<*>>(*dslConcentrations.toTypedArray(), *dslRates.toTypedArray())
+        start(prefix = null, postfix = null, indentation = "  ", stringSeparator = ": ") { // Level
             "incarnation"("biochemistry")
             line()
-            "seeds:" {
+            "variables: " { // Level
+                variables({"${it.id}: &${it.id}"}) { // Level
+                    "type"("ArbitraryVariable")
+                    "parameters"("[${it.values.first()}, ${it.values.joinToString(separator = ", ")}]")
+                }
+            }
+            line()
+            "seeds:" { // Level
                 "scenario"(0)
                 "simulation"(1)
             }
             line()
-            "displacements:" {
-                "- in:" {
+            "displacements:" { // Level
+                "- in:" { // Level
                     "  type"("Point")
                     "  parameters"("[0, 0]")
                 }
-                "" {
-                    "contents:" {
-                        dslEntities.invoke({ "- molecule: ${it.id}" }) {
-                            "concentration"(it.initialConcentration)
+                "" { // Level
+                    "contents:" { // Level
+                        dslConcentrations(line = { "- molecule: ${it.info.molecule}" }) { // Level
+                            "concentration"("*${it.id}")
                         }
                     }
                     line()
-                    "programs:" {
-                        "- " {
-                            dslReactions.invoke({ "- time-distribution: ${it.rate}" }) {
-                                "program"("\"${it.reagents.string} --> ${it.products.string}\"")
+                    "programs:" { // Level
+                        "- " { // Level
+                            dslRates(line = { "- time-distribution: *${it.id}" }) { // Level
+                                "program"(it.info.program)
                             }
                         }
                     }
@@ -43,11 +51,21 @@ object Alchemist : Generator {
     }
 }
 
-private val GeneticCircuit.dslEntities
-    get() = entities.filter { it !is BoundEntity<*, *> }
+private data class Variable<I : Any>(val id: String, val values: Collection<*>, val info: I)
 
-private val GeneticCircuit.dslReactions
-    get() = reactions.flatMap { it.reactions }
+private val GeneticCircuit.dslConcentrations
+    get() = entities.filter { it !is BoundEntity<*, *> }.mapIndexed { index, entity ->
+        Variable("conc$index", entity.initialConcentration.values, object {
+            val molecule = entity.id
+        })
+    }
+
+private val GeneticCircuit.dslRates
+    get() = reactions.flatMap { it.reactions }.mapIndexed { index, reaction ->
+        Variable("rate$index", reaction.rate.values, object {
+            val program = "\"${reaction.reagents.string} --> ${reaction.products.string}\""
+        })
+    }
 
 private val Map<GeneticEntity, Int>.string
     get() = entries.joinToString(" + ", "[", "]") {
