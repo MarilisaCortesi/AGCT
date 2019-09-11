@@ -50,7 +50,7 @@ tasks {
 }
 
 val Task.simulation
-    get() = project.properties["sim"]?.toString() ?: throw IllegalArgumentException("Simulation not set.")
+    get() = project.properties["sim"]?.toString() ?: ""
 
 val Task.time
     get() = project.properties["time"]?.toString()?.toDoubleOrNull() ?: 100.0
