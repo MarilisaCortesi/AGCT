@@ -19,7 +19,9 @@ import model.utils.UnsupportedClassException
 import model.utils.string
 import model.variables.Variable
 
-object AGCT : AbstractGenerator({ file ->
+object AGCT : AGCTGenerator()
+
+open class AGCTGenerator : AbstractGenerator({ file ->
     context = this
 
     file["export/${name.toLowerCase()}/agct.kt"] =

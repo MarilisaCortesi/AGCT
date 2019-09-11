@@ -1,5 +1,4 @@
 import agct.*
-import generation.utils.Level.Companion.start
 import utils.ExportableAlchemist
 
 fun main() {
@@ -26,19 +25,15 @@ fun main() {
         a default binding.rate of 0.01
         a default unbinding.rate of 0.01
     } then export to ExportableAlchemist {
-        start(prefix = null, postfix = null, indentation = "  ", stringSeparator = ": ") {
-            "export:" {
-                line("- time")
-                "- molecule: TetR" {
-                    "aggregators"("[mean]")
-                }
-                "- molecule: LacI" {
-                    "aggregators"("[mean]")
-                }
-                "- molecule: AcI" {
-                    "aggregators"("[mean]")
-                }
-            }
-        }.toString()
+        buildString {
+            append("export:\n")
+            append("  - time\n")
+            append("  - molecule: TetR\n")
+            append("    aggregators: [mean]\n")
+            append("  - molecule: LacI\n")
+            append("    aggregators: [mean]\n")
+            append("  - molecule: AcI\n")
+            append("    aggregators: [mean]")
+        }
     }
 }
