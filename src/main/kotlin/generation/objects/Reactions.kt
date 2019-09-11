@@ -2,16 +2,11 @@
 
 package agct
 
-import generation.Generator
-import generation.utils.toFile
-import model.circuit.GeneticCircuit
+import generation.AbstractGenerator
 
-object reactions : Generator {
-    override fun from(circuit: GeneticCircuit) = with(circuit) {
-        circuit.reactions
-            .map { it.reactions }
-            .flatten()
-            .joinToString("\n", "${name.toUpperCase()}\n\n")
-            .toFile("reactions.txt", circuit.name)
-    }
-}
+object reactions : ReactionsGenerator()
+
+open class ReactionsGenerator : AbstractGenerator({ file ->
+    file["export/${name.toLowerCase()}/reactions.txt"] =
+        reactions.map { it.reactions }.flatten().joinToString("\n", "${name.toUpperCase()}\n\n")
+})

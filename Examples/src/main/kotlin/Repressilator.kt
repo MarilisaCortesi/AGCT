@@ -1,4 +1,6 @@
 import agct.*
+import generation.utils.Level.Companion.start
+import utils.ExportableAlchemist
 
 fun main() {
     Create circuit "Repressilator" containing {
@@ -23,5 +25,20 @@ fun main() {
         a default regulating.rate of 10
         a default binding.rate of 0.01
         a default unbinding.rate of 0.01
-    } then export to Alchemist
+    } then export to ExportableAlchemist {
+        start(prefix = null, postfix = null, indentation = "  ", stringSeparator = ": ") {
+            "export:" {
+                line("- time")
+                "- molecule: TetR" {
+                    "aggregators"("[mean]")
+                }
+                "- molecule: LacI" {
+                    "aggregators"("[mean]")
+                }
+                "- molecule: AcI" {
+                    "aggregators"("[mean]")
+                }
+            }
+        }.toString()
+    }
 }

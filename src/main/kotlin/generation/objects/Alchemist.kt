@@ -2,15 +2,18 @@
 
 package agct
 
-import generation.Generator
+import generation.AbstractGenerator
 import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
 import model.entities.GeneticEntity
 import model.entities.BoundEntity
 
-object Alchemist : Generator {
-    override fun from(circuit: GeneticCircuit) = with(circuit) {
-        val variables = mutableListOf<Variable<*>>(*dslConcentrations.toTypedArray(), *dslRates.toTypedArray())
+object Alchemist : AlchemistGenerator()
+
+open class AlchemistGenerator : AbstractGenerator({ file ->
+    val variables = mutableListOf<Variable<*>>(*dslConcentrations.toTypedArray(), *dslRates.toTypedArray())
+
+    file["export/${name.toLowerCase()}/alchemist.yml"] =
         start(prefix = null, postfix = null, indentation = "  ", stringSeparator = ": ") { // Level
             "incarnation"("biochemistry")
             line()
@@ -47,9 +50,8 @@ object Alchemist : Generator {
                     }
                 }
             }
-        }.toFile("alchemist.yml", name)
-    }
-}
+        }.toString()
+})
 
 private data class Variable<I : Any>(val id: String, val values: Collection<*>, val info: I)
 

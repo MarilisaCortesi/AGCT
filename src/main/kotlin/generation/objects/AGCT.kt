@@ -2,7 +2,7 @@
 
 package agct
 
-import generation.Generator
+import generation.AbstractGenerator
 import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
 import model.entities.GeneticEntity
@@ -19,9 +19,10 @@ import model.utils.UnsupportedClassException
 import model.utils.string
 import model.variables.Variable
 
-object AGCT : Generator {
-    override fun from(circuit: GeneticCircuit) = with(circuit) {
-        context = this
+object AGCT : AbstractGenerator({ file ->
+    context = this
+
+    file["export/${name.toLowerCase()}/agct.kt"] =
         start(prefix = " {", postfix = "}") { // Level
             "import agct.*"()
             line()
@@ -48,10 +49,10 @@ object AGCT : Generator {
                     }
                 }
             }
-        }.toFile("agct.kt", name)
-        context = null
-    }
-}
+        }.toString()
+
+    context = null
+})
 
 private var context: GeneticCircuit? = null
 

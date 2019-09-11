@@ -1,7 +1,5 @@
 package generation.utils
 
-import model.utils.toConsole
-
 open class Level private constructor(
     private val prefix: String?,
     private val postfix: String?,
@@ -9,7 +7,7 @@ open class Level private constructor(
     private val stringSeparator: String = ""
 ) {
     companion object {
-        internal fun start(
+        fun start(
             prefix: String? = "",
             postfix: String? = "",
             indentation: String = "\t",
@@ -90,14 +88,8 @@ open class Level private constructor(
         line(postfix)
     }
 
-    fun get() =
+    override fun toString() =
         lines.joinToString("\n") { "${it.second.tabs}${it.first}" }
-
-    fun toFile(filename: String, directory: String) =
-        get().toFile(filename, directory)
-
-    fun toConsole() =
-        get().toConsole()
 
     private val Int.tabs
         get() = indentation.repeat(this)

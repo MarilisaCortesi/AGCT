@@ -2,13 +2,11 @@
 
 package agct
 
-import generation.Generator
-import generation.utils.toFile
-import model.circuit.GeneticCircuit
+import generation.AbstractGenerator
 
-object entities : Generator {
-    override fun from(circuit: GeneticCircuit) = with(circuit) {
+object entities : EntitiesGenerator()
+
+open class EntitiesGenerator : AbstractGenerator( { file ->
+    file["export/${name.toLowerCase()}/entities.txt"] =
         entities.joinToString("\n", "${name.toUpperCase()}\n\n")
-            .toFile("entities.txt", circuit.name)
-    }
-}
+})

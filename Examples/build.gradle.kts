@@ -46,7 +46,7 @@ tasks {
         mustRunAfter("runCircuit")
     }
 
-    register<Task>("execCircuit") {
+    register<Task>("executeCircuit") {
         dependsOn("exportCircuit", "runCircuit", "plotCircuit")
     }
 }
