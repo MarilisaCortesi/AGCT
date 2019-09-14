@@ -1,8 +1,8 @@
 package model.entities
 
 import model.utils.checkEquals
-import model.utils.type
 import model.utils.string
+import model.utils.type
 
 internal abstract class AbstractEntity(parameters: EntityParameters) : GeneticEntity {
     override val id = parameters.id

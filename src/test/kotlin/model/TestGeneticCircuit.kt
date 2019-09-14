@@ -6,11 +6,11 @@ import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
 import model.circuit.BasicGeneticCircuit
-import model.entities.*
+import model.entities.BasicGene
+import model.entities.entity
 import model.reactions.BasicTranscription
 import model.reactions.BasicTranslation
 import model.reactions.DirectTranscription
-import java.lang.IllegalStateException
 
 internal class TestGeneticCircuit : StringSpec({
     "test direct circuit" {

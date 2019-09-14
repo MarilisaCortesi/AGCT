@@ -2,9 +2,10 @@
 
 package agct
 
-import model.reactions.*
-import model.reactions.GeneticReaction
+import model.reactions.BasicRegulation
 import model.reactions.DirectTranscription
+import model.reactions.GeneticReaction
+import model.reactions.Regulation
 
 abstract class DslReaction internal constructor() {
     internal abstract val geneticReaction: GeneticReaction

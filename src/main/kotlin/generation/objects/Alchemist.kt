@@ -6,8 +6,8 @@ import generation.AbstractGenerator
 import generation.defaultDirectory
 import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
-import model.entities.GeneticEntity
 import model.entities.BoundEntity
+import model.entities.GeneticEntity
 
 object Alchemist : AlchemistGenerator({ "$defaultDirectory/alchemist.yml" })
 

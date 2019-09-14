@@ -1,9 +1,9 @@
 package model.reactions
 
-import model.utils.checkEquals
-import model.utils.type
 import model.entities.*
 import model.utils.UnsupportedClassException
+import model.utils.checkEquals
+import model.utils.type
 import model.variables.BasicRate
 import model.variables.Rate
 

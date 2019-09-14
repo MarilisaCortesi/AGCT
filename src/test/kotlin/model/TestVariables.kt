@@ -4,8 +4,10 @@ import io.kotlintest.matchers.collections.shouldHaveSingleElement
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldThrow
 import io.kotlintest.specs.StringSpec
-import model.variables.*
-import java.lang.IllegalArgumentException
+import model.variables.BasicConcentration
+import model.variables.BasicRate
+import model.variables.DEFAULT_CONCENTRATION_VALUE
+import model.variables.DEFAULT_RATE_VALUE
 
 private const val SINGLE_INTEGER_ELEMENT : Int = 20
 private val MULTIPLE_INTEGER_ELEMENTS : Set<Int> = setOf(1, 2, 3, 4, 5)

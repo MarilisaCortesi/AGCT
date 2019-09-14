@@ -7,7 +7,6 @@ import io.kotlintest.specs.StringSpec
 import model.entities.*
 import model.reactions.*
 import model.variables.BasicRate
-import model.variables.Rate
 
 internal class TestReactions : StringSpec({
     "test basics" {

@@ -3,11 +3,6 @@
 package agct
 
 import model.entities.*
-import model.entities.BasicGene
-import model.entities.GeneticEntity
-import model.entities.EntityParameters
-import model.entities.Gene
-import model.entities.Protein
 
 abstract class DslEntity internal constructor() {
     internal abstract val geneticEntity: GeneticEntity

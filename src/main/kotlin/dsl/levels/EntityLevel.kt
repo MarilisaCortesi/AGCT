@@ -4,7 +4,6 @@ package agct
 
 import model.utils.string
 import model.utils.type
-import java.lang.IllegalStateException
 
 open class EntityLevelWrapper<out E: EntityLevel<*>> internal constructor(protected val entityLevel: E) {
     infix fun that(block: E.() -> Unit) =

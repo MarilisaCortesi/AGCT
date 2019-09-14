@@ -2,13 +2,8 @@
 
 package agct
 
-import model.utils.create
 import model.utils.lateVal
-import model.utils.toConsole
-import model.utils.type
 import model.variables.*
-import model.variables.BasicConcentration
-import model.variables.BasicRate
 
 abstract class DslVariable<N : Number> internal constructor(
     internal val variableName: String?,

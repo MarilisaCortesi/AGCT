@@ -1,11 +1,12 @@
 package model.circuit
 
-import model.entities.*
+import model.entities.DegradingEntity
+import model.entities.MRna
+import model.entities.Protein
 import model.reactions.CodingReaction
 import model.reactions.Degradation
 import model.reactions.Transcription
 import model.reactions.Translation
-import java.lang.IllegalStateException
 
 /**
  * A genetic circuit with basic limitations:

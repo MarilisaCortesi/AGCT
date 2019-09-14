@@ -3,7 +3,8 @@ package model
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldHave
 import io.kotlintest.specs.StringSpec
-import model.entities.*
+import model.entities.GeneticEntity
+import model.entities.entity
 import model.variables.BasicConcentration
 
 internal class TestEntities : StringSpec({

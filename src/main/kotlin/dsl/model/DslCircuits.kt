@@ -2,8 +2,8 @@
 
 package agct
 
-import model.circuit.BasicGeneticCircuit
 import model.circuit.AbstractGeneticCircuit
+import model.circuit.BasicGeneticCircuit
 import model.entities.DegradingEntity
 import model.reactions.BasicDegradation
 

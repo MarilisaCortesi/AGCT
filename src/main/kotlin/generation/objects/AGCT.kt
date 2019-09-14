@@ -6,13 +6,7 @@ import generation.AbstractGenerator
 import generation.defaultDirectory
 import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
-import model.entities.GeneticEntity
-import model.entities.BoundEntity
-import model.entities.DegradingEntity
-import model.entities.Gene
-import model.entities.Protein
-import model.entities.RegulatedGene
-import model.entities.RegulatingEntity
+import model.entities.*
 import model.reactions.Degradation
 import model.reactions.Regulation
 import model.reactions.Transcription
