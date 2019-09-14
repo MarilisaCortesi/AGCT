@@ -60,6 +60,9 @@ class ContainingLevel internal constructor(private val circuit: DslCircuit) {
 
     infix fun gene(id: String) =
         GeneLevelWrapper(GeneLevel(id))
+
+    operator fun String.invoke(block: GenericEntityLevel.() -> Unit) =
+        EntityLevelWrapper(GenericEntityLevel(this)).that(block)
 }
 
 class DefaultsLevel internal constructor(private val defaults: MutableDefaultValues) {

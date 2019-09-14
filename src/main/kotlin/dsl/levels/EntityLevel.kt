@@ -79,6 +79,3 @@ class GenericEntityLevel internal constructor(id: String) : EntityLevel<DslEntit
     }
 }
 
-operator fun String.invoke(block: GenericEntityLevel.() -> Unit) =
-    EntityLevelWrapper(GenericEntityLevel(this)).that(block)
-
