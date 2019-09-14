@@ -3,17 +3,18 @@
 package agct
 
 import generation.AbstractGenerator
+import generation.defaultDirectory
 import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
 import model.entities.GeneticEntity
 import model.entities.BoundEntity
 
-object Alchemist : AlchemistGenerator()
+object Alchemist : AlchemistGenerator({ defaultDirectory })
 
-open class AlchemistGenerator : AbstractGenerator({ file ->
+open class AlchemistGenerator(directoryPath: GeneticCircuit.() -> String) : AbstractGenerator({ file ->
     val variables = mutableListOf<Variable<*>>(*dslConcentrations.toTypedArray(), *dslRates.toTypedArray())
 
-    file["export/${name.toLowerCase()}/alchemist.yml"] =
+    file["${directoryPath()}/alchemist.yml"] =
         start(prefix = null, postfix = null, indentation = "  ", stringSeparator = ": ") { // Level
             "incarnation"("biochemistry")
             line()

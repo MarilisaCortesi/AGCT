@@ -3,6 +3,7 @@
 package agct
 
 import generation.AbstractGenerator
+import generation.defaultDirectory
 import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
 import model.entities.GeneticEntity
@@ -19,12 +20,12 @@ import model.utils.UnsupportedClassException
 import model.utils.string
 import model.variables.Variable
 
-object AGCT : AGCTGenerator()
+object AGCT : AGCTGenerator({ defaultDirectory })
 
-open class AGCTGenerator : AbstractGenerator({ file ->
+open class AGCTGenerator(directoryPath: GeneticCircuit.() -> String) : AbstractGenerator({ file ->
     context = this
 
-    file["export/${name.toLowerCase()}/agct.kt"] =
+    file["${directoryPath()}/agct.kt"] =
         start(prefix = " {", postfix = "}") { // Level
             "import agct.*"()
             line()

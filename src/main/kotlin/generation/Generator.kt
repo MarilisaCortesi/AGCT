@@ -3,6 +3,9 @@ package generation
 import model.circuit.GeneticCircuit
 import java.io.File
 
+val GeneticCircuit.defaultDirectory
+    get() = "export/${name.toLowerCase()}"
+
 interface Generator {
     fun from(circuit: GeneticCircuit)
 }

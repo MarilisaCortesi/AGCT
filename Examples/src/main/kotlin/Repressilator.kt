@@ -26,14 +26,13 @@ fun main() {
         a default unbinding.rate of 0.01
     } then export to ExportableAlchemist {
         buildString {
-            append("export:\n")
-            append("  - time\n")
-            append("  - molecule: TetR\n")
-            append("    aggregators: [mean]\n")
-            append("  - molecule: LacI\n")
-            append("    aggregators: [mean]\n")
-            append("  - molecule: AcI\n")
-            append("    aggregators: [mean]")
+            append("- time\n")
+            append("- molecule: TetR\n")
+            append("  aggregators: [mean]\n")
+            append("- molecule: LacI\n")
+            append("  aggregators: [mean]\n")
+            append("- molecule: AcI\n")
+            append("  aggregators: [mean]")
         }
     }
 }
