@@ -20,12 +20,12 @@ import model.utils.UnsupportedClassException
 import model.utils.string
 import model.variables.Variable
 
-object AGCT : AGCTGenerator({ defaultDirectory })
+object AGCT : AGCTGenerator({ "$defaultDirectory/agct.kt" })
 
-open class AGCTGenerator(directoryPath: GeneticCircuit.() -> String) : AbstractGenerator({ file ->
+open class AGCTGenerator(filename: GeneticCircuit.() -> String) : AbstractGenerator({ file ->
     context = this
 
-    file["${directoryPath()}/agct.kt"] =
+    file[filename()] =
         start(prefix = " {", postfix = "}") { // Level
             "import agct.*"()
             line()

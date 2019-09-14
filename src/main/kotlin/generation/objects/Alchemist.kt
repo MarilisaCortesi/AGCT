@@ -9,12 +9,12 @@ import model.circuit.GeneticCircuit
 import model.entities.GeneticEntity
 import model.entities.BoundEntity
 
-object Alchemist : AlchemistGenerator({ defaultDirectory })
+object Alchemist : AlchemistGenerator({ "$defaultDirectory/alchemist.yml" })
 
-open class AlchemistGenerator(directoryPath: GeneticCircuit.() -> String) : AbstractGenerator({ file ->
+open class AlchemistGenerator(filename: GeneticCircuit.() -> String) : AbstractGenerator({ file ->
     val variables = mutableListOf<Variable<*>>(*dslConcentrations.toTypedArray(), *dslRates.toTypedArray())
 
-    file["${directoryPath()}/alchemist.yml"] =
+    file[filename()] =
         start(prefix = null, postfix = null, indentation = "  ", stringSeparator = ": ") { // Level
             "incarnation"("biochemistry")
             line()
