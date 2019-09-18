@@ -10,6 +10,8 @@ private fun sequence(from: Number, step: Number, num: Int): Sequence<Number> =
 
 interface NumericSequence
 
+val infinite : Int = Double.POSITIVE_INFINITY.toInt()
+
 object values : NumericSequence {
     /**
      * A custom range of arbitrary [values].
