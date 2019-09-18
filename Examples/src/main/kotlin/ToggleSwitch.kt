@@ -1,6 +1,4 @@
 import agct.*
-import utils.ExportableAlchemist
-import utils.line
 
 fun main() {
     Create circuit "Genetic Toggle Switch" containing {

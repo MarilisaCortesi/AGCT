@@ -39,5 +39,5 @@ fun main() {
         line("  aggregators: [mean]")
         line("- molecule: B")
         line("  aggregators: [mean]")
-    } and AGCT
+    }
 }
