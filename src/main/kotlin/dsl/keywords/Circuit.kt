@@ -2,4 +2,6 @@
 
 package agct
 
-object codes
+object codes {
+    operator fun invoke(block: TranscriptionLevel.() -> Unit) = block
+}

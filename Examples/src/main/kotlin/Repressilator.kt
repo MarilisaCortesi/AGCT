@@ -4,17 +4,17 @@ import utils.line
 
 fun main() {
     Create circuit "Repressilator" containing {
-        the gene "gTetR" that codes For {
+        the gene "gTetR" that codes {
             the protein "TetR"
             regulated by { the protein "LacI" }
         }
 
-        the gene "gLacI" that codes For {
+        the gene "gLacI" that codes {
             the protein "LacI"
             regulated by { the protein "AcI" }
         }
 
-        the gene "gAcI" that codes For {
+        the gene "gAcI" that codes {
             the protein "AcI"
             regulated by { the protein "TetR" }
         }

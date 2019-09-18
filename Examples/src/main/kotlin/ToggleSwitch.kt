@@ -4,7 +4,7 @@ import utils.line
 
 fun main() {
     Create circuit "Genetic Toggle Switch" containing {
-        the gene "promoter1" that codes For {
+        the gene "promoter1" that codes {
             the protein "repressor2"
             regulated by {
                 the protein "repressor1"
@@ -13,7 +13,7 @@ fun main() {
             }
         }
 
-        the gene "promoter2" that codes For {
+        the gene "promoter2" that codes {
             the protein "repressor1"
             regulated by {
                 the protein "repressor2"
