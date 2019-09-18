@@ -10,7 +10,8 @@ data class ValuesContainer internal constructor(
     val basalRate: DslRate = DslRate("basal rate"),
     val regulatingRate: DslRate = DslRate("regulating rate"),
     val bindingRate: DslRate = DslRate("binding rate"),
-    val unbindingRate: DslRate = DslRate("unbinding rate")
+    val unbindingRate: DslRate = DslRate("unbinding rate"),
+    val reactionRate: DslRate = DslRate("reaction rate")
 )
 
 abstract class DefaultValues internal constructor() {
@@ -31,6 +32,9 @@ abstract class DefaultValues internal constructor() {
 
     internal val unbindingRate
         get() = container.unbindingRate.get
+
+    internal val reactionRate
+        get() = container.reactionRate.get
 
     protected abstract val container: ValuesContainer
 

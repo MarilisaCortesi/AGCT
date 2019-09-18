@@ -46,12 +46,12 @@ class DslChemicalReaction internal constructor(
     private val reagents: Map<DslEntity, Int>,
     private val products: Map<DslEntity, Int>
 ) : DslReaction() {
-    internal val rate = DslRate()
+    internal val reactionRate = DslRate()
 
     override val modelReaction
         get() = BasicChemicalReaction(
             reagents.mapKeys { (entity, _) -> entity.modelEntity },
             products.mapKeys { (entity, _) -> entity.modelEntity },
-            rate.value
+            reactionRate.value
         )
 }

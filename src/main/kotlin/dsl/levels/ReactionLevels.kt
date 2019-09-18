@@ -96,6 +96,6 @@ class CustomReactionsLevel internal constructor() {
             TopLevel.circuit.putReaction(reaction)
         }
 
-        infix fun having(dummy: rate) = reaction.rate
+        infix fun having(dummy: reaction.Rate) = reaction.reactionRate
     }
 }

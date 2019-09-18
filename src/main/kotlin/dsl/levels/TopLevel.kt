@@ -84,6 +84,7 @@ class DefaultsLevel internal constructor(private val defaults: MutableDefaultVal
         infix fun default(dummy: regulating.Rate) = defaults.regulatingRate
         infix fun default(dummy: binding.Rate) = defaults.bindingRate
         infix fun default(dummy: unbinding.Rate) = defaults.unbindingRate
+        infix fun default(dummy: reaction.Rate) = defaults.reactionRate
     }
 }
 

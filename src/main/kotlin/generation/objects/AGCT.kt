@@ -4,9 +4,11 @@ package agct
 
 import generation.AbstractGenerator
 import generation.defaultDirectory
+import generation.utils.Level
 import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
 import model.entities.*
+import model.reactions.ChemicalReaction
 import model.reactions.Degradation
 import model.reactions.Regulation
 import model.reactions.Transcription
@@ -26,7 +28,7 @@ open class AGCTGenerator(filename: GeneticCircuit.() -> String) : AbstractGenera
             "fun main()" { // Level
                 "Create circuit ${name.string} containing" { // Level
                     genes.forEach { gene ->
-                        gene.transcriptions(line = "the ${gene.string} that codes For", innerLine = " and", spacings = -1) { transcription ->
+                        gene.transcriptions(line = "the ${gene.string} that codes", innerLine = " and", spacings = -1) { transcription ->
                             "the ${transcription.target.string}"()
                             "with a basal.rate ${transcription.basalRate.string}"()
                             transcription.regulations(line = "regulated by", innerLine = " and", spacings = -1) { regulation ->
@@ -36,9 +38,13 @@ open class AGCTGenerator(filename: GeneticCircuit.() -> String) : AbstractGenera
                                 "with an unbinding.rate ${regulation.unbindingRate.string}"()
                             }
                         }
+                        line()
+                    }
+                    chemicalReactions { reaction ->
+                        reaction.line()
                     }
                     line()
-                    dslEntities(line = { "\"${it.id}\"" }, spacings = 1) { entity ->
+                    agctEntities(line = { "\"${it.id}\"" }, spacings = 1) { entity ->
                         "has an initial.concentration ${entity.initialConcentration.string}"()
                         if (entity is DegradingEntity) {
                             "has a degradation.rate ${entity.degradation.degradationRate.string}"()
@@ -56,7 +62,7 @@ private var context: GeneticCircuit? = null
 private val GeneticCircuit.genes
     get() = entities.filterIsInstance<Gene>().filter { it !is RegulatedGene }
 
-private val GeneticCircuit.dslEntities
+private val GeneticCircuit.agctEntities
     get() = entities.filter { it !is BoundEntity<*, *> }
 
 private val DegradingEntity.degradation
@@ -67,6 +73,25 @@ private val Gene.transcriptions
 
 private val Transcription<*>.regulations
     get() = context!!.reactions.filterIsInstance<Regulation>().filter { it.reaction == this }
+
+private fun Level.chemicalReactions(block: Level.(ChemicalReaction) -> Unit) =
+    context!!.reactions.filterIsInstance<ChemicalReaction>().let { reactions ->
+        if (reactions.isNotEmpty()) {
+            "chemical reactions" {
+                reactions.forEach { block(it) }
+            }
+        }
+    }
+
+private val ChemicalReaction.line
+    get() = reactions.single()
+        .toString()
+        .substringAfter(":")
+        .substringBefore(",")
+        .replace("[", "\"")
+        .replace("]", "\"")
+        .replace("-->", "to")
+        .trim() + " with rate ${rate.string}"
 
 private val Entity.string
     get() = when (this) {
