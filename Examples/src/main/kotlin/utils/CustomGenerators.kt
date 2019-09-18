@@ -5,9 +5,7 @@ import generation.defaultDirectory
 import model.circuit.GeneticCircuit
 
 class ExportableAlchemist(
-    directoryPath: GeneticCircuit.() -> String = {
-        "${System.getProperty("user.dir").replace("Examples", "")}/Examples/$defaultDirectory/alchemist.yml"
-    },
+    directoryPath: GeneticCircuit.() -> String = { "$defaultDirectory/alchemist.yml" },
     exportBlock: StringBuilder.(GeneticCircuit) -> Unit
 ) : AlchemistGenerator(directoryPath) {
     private val block: GeneticCircuit.() -> String = { StringBuilder().let { it.exportBlock(this) }.toString() }

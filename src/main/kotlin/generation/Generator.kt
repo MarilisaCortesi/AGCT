@@ -4,7 +4,11 @@ import model.circuit.GeneticCircuit
 import java.io.File
 
 val GeneticCircuit.defaultDirectory
-    get() = "export/${name.toLowerCase()}"
+    get() = buildString {
+        append(System.getProperty("user.dir").replace("Examples", ""))
+        append("/Examples/export/")
+        append(name.toLowerCase())
+    }
 
 interface Generator {
     fun from(circuit: GeneticCircuit)
