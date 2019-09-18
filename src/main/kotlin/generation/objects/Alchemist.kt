@@ -7,7 +7,7 @@ import generation.defaultDirectory
 import generation.utils.Level.Companion.start
 import model.circuit.GeneticCircuit
 import model.entities.BoundEntity
-import model.entities.GeneticEntity
+import model.entities.Entity
 
 object Alchemist : AlchemistGenerator({ "$defaultDirectory/alchemist.yml" })
 
@@ -70,7 +70,7 @@ private val GeneticCircuit.dslRates
         })
     }
 
-private val Map<GeneticEntity, Int>.string
+private val Map<Entity, Int>.string
     get() = entries.joinToString(" + ", "[", "]") {
         if (it.value != 1)
             "${it.value}${it.key.id}"

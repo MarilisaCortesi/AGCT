@@ -1,17 +1,17 @@
 package model.circuit
 
-import model.entities.GeneticEntity
-import model.reactions.GeneticReaction
+import model.entities.Entity
+import model.reactions.Reaction
 
 internal abstract class AbstractGeneticCircuit constructor(override val rules: CircuitRules) : MutableGeneticCircuit {
     constructor(setRules: MutableCircuitRules.() -> Unit) : this(BasicCircuitRules().apply(setRules))
 
-    private val circuitMap = mutableMapOf<GeneticEntity, MutableSet<GeneticReaction>>()
+    private val circuitMap = mutableMapOf<Entity, MutableSet<Reaction>>()
 
-    override val reactions: Set<GeneticReaction>
+    override val reactions: Set<Reaction>
         get() = circuitMap.values.flatten().toSet()
 
-    override val entities: Set<GeneticEntity>
+    override val entities: Set<Entity>
         get() = circuitMap.keys.toSet()
 
     override fun checkRules() {
@@ -20,22 +20,22 @@ internal abstract class AbstractGeneticCircuit constructor(override val rules: C
         }
     }
 
-    override fun reactionsOf(entity: GeneticEntity) =
+    override fun reactionsOf(entity: Entity) =
         circuitMap[entity]?.toSet() ?: emptySet()
 
-    override fun addEntity(entity: GeneticEntity) =
+    override fun addEntity(entity: Entity) =
         addEntities(entity)
 
-    override fun addEntities(vararg entities: GeneticEntity) {
+    override fun addEntities(vararg entities: Entity) {
         for (entity in entities) {
             circuitMap.getOrPut(entity) { mutableSetOf() }
         }
     }
 
-    override fun addReaction(reaction: GeneticReaction) =
+    override fun addReaction(reaction: Reaction) =
         addReactions(reaction)
 
-    override fun addReactions(vararg reactions: GeneticReaction) {
+    override fun addReactions(vararg reactions: Reaction) {
         for (reaction in reactions) {
             for (entity in reaction.entities) {
                 circuitMap.getOrPut(entity) { mutableSetOf() }.also { set ->
@@ -47,6 +47,6 @@ internal abstract class AbstractGeneticCircuit constructor(override val rules: C
         }
     }
 
-    private val GeneticReaction.entities
+    private val Reaction.entities
         get() = reactions.flatMap { it.reagents.keys.toMutableSet().apply { addAll(it.products.keys) } }.toSet()
 }

@@ -68,7 +68,7 @@ private val Gene.transcriptions
 private val Transcription<*>.regulations
     get() = context!!.reactions.filterIsInstance<Regulation>().filter { it.reaction == this }
 
-private val GeneticEntity.string
+private val Entity.string
     get() = when (this) {
         is Gene -> "gene"
         is Protein -> "protein"

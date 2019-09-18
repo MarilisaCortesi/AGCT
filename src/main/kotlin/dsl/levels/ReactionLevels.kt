@@ -76,3 +76,26 @@ class RegulationLevel internal constructor(
         infix fun an(dummy: unbinding.Rate) = reaction.unbindingRate
     }
 }
+
+class CustomReactionsLevel internal constructor() {
+    infix fun String.to(products: String) =
+        ChemicalReactionLevel(DslChemicalReaction(this.toEntityMap(), products.toEntityMap()))
+
+    private fun String.toEntityMap(): Map<DslEntity, Int>  =
+        split("+").map { string -> Pair(string, string.indexOfFirst { it.isLetter() }) }
+            .map { (string, firstChar) -> Pair(string.substring(firstChar), string.substring(0 until firstChar)) }
+            .map { (entity, coefficient) -> Pair(entity.trim(), coefficient.trim()) }
+            .toMap()
+            .mapKeys { (entity, _) -> TopLevel.circuit.getOrPutEntity(entity) { DslMolecule(this) } }
+            .mapValues { (_, coefficient) -> coefficient.toIntOrNull() ?: 1 }
+
+    inner class ChemicalReactionLevel internal constructor(
+        override val reaction: DslChemicalReaction
+    ) : ReactionLevel<DslChemicalReaction>() {
+        init {
+            TopLevel.circuit.putReaction(reaction)
+        }
+
+        infix fun having(dummy: rate) = reaction.rate
+    }
+}

@@ -36,7 +36,7 @@ class BasicDslCircuit internal constructor(
 
     private val entitiesArray
         get() = entities.values
-            .map { it.geneticEntity }
+            .map { it.modelEntity }
             .toSet()
             .toTypedArray()
 
@@ -45,14 +45,14 @@ class BasicDslCircuit internal constructor(
             .filterIsInstance<DslDegradable>()
             .mapNotNull { it.degradationRate?.to(it) }
             .map { (rate, entity) ->
-                BasicDegradation(entity.geneticEntity as DegradingEntity, rate.value)
+                BasicDegradation(entity.modelEntity as DegradingEntity, rate.value)
             }
             .toSet()
             .toTypedArray()
 
     private val reactionsArray
         get() = reactions
-            .map { it.geneticReaction }
+            .map { it.modelReaction }
             .toSet()
             .toTypedArray()
 }

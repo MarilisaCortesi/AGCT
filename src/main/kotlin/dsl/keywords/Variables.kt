@@ -2,6 +2,8 @@
 
 package agct
 
+object rate
+
 object initial {
     val concentration = Concentration()
     class Concentration internal constructor()

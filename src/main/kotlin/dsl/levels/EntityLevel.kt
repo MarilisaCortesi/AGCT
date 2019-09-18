@@ -61,7 +61,7 @@ class GeneLevel internal constructor(id: String) :
 
 class ProteinLevel internal constructor(id: String) : DegradingEntityLevel<DslProtein>(id, { DslProtein(id) })
 
-class RegulatorLevel internal constructor(id: String) : DegradingEntityLevel<DslRegulating>(id, { DslMolecule(id) })
+class RegulatorLevel internal constructor(id: String) : DegradingEntityLevel<DslRegulating>(id, { DslRegulator(id) })
 
 class GenericEntityLevel internal constructor(id: String) : EntityLevel<DslEntity>(id, {
         throw IllegalArgumentException("Entity ${id.string} has not been set before.")

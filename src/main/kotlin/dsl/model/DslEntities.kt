@@ -5,7 +5,7 @@ package agct
 import model.entities.*
 
 abstract class DslEntity internal constructor() {
-    internal abstract val geneticEntity: GeneticEntity
+    internal abstract val modelEntity: Entity
 
     internal abstract val id: String
 
@@ -17,23 +17,23 @@ abstract class DslDegradable internal constructor() : DslEntity() {
 }
 
 abstract class DslRegulating internal constructor() : DslDegradable() {
-    abstract override val geneticEntity: RegulatingEntity
+    abstract override val modelEntity: RegulatingEntity
 }
 
 class DslGene(override val id: String) : DslEntity() {
-    override val geneticEntity: Gene
+    override val modelEntity: Gene
         get() = BasicGene(parameters)
 }
 
 class DslProtein(override val id: String) : DslRegulating() {
-    override val geneticEntity: Protein
+    override val modelEntity: Protein
         get() = BasicProtein(parameters)
 
     override var degradationRate: DslRate? = TopLevel.circuit.default.degradationRate
 }
 
-class DslMolecule(override val id: String) : DslRegulating() {
-    override val geneticEntity: RegulatingEntity
+class DslRegulator(override val id: String) : DslRegulating() {
+    override val modelEntity: RegulatingEntity
         get() = if(degradationRate == null) {
             BasicRegulatingEntity(parameters)
         } else {
@@ -41,6 +41,11 @@ class DslMolecule(override val id: String) : DslRegulating() {
         }
 
     override var degradationRate: DslRate? = null
+}
+
+class DslMolecule(override val id: String) : DslEntity() {
+    override val modelEntity: Entity
+        get() = BasicMolecule(parameters)
 }
 
 private val DslEntity.parameters

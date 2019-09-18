@@ -3,7 +3,7 @@ package model
 import io.kotlintest.shouldBe
 import io.kotlintest.shouldHave
 import io.kotlintest.specs.StringSpec
-import model.entities.GeneticEntity
+import model.entities.Entity
 import model.entities.entity
 import model.variables.BasicConcentration
 
@@ -21,14 +21,14 @@ internal class TestEntities : StringSpec({
     }
 
     "test equality" {
-        entity<GeneticEntity>("ent") shouldEqual ENTITY
-        entity<GeneticEntity>("ent") { initialConcentration = BasicConcentration(2) } shouldEqual ENTITY
-        entity<GeneticEntity>("oth") shouldNotEqual ENTITY
-        entity<GeneticEntity>("pro") shouldNotEqual ENTITY
+        entity<Entity>("ent") shouldEqual ENTITY
+        entity<Entity>("ent") { initialConcentration = BasicConcentration(2) } shouldEqual ENTITY
+        entity<Entity>("oth") shouldNotEqual ENTITY
+        entity<Entity>("pro") shouldNotEqual ENTITY
     }
 })
 
-private infix fun GeneticEntity.testBasics(id: String) {
+private infix fun Entity.testBasics(id: String) {
     this.id shouldBe id
     initialConcentration shouldBe BasicConcentration()
     aliases shouldHave 0.elements

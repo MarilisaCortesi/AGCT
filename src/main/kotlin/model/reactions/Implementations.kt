@@ -7,12 +7,18 @@ import model.utils.type
 import model.variables.BasicRate
 import model.variables.Rate
 
-internal abstract class AbstractReaction(
-    override val reagents: Map<GeneticEntity, Int>,
-    override val products: Map<GeneticEntity, Int>,
-    override val rate: Rate,
-    override val name: String
-) : Reaction {
+internal class BasicSingleReaction(
+    override val reagents: Map<Entity, Int> = emptyMap(),
+    override val products: Map<Entity, Int> = emptyMap(),
+    override val rate: Rate = BasicRate(),
+    override val name: String = "reaction"
+) : SingleReaction {
+    init {
+        require(reagents.values.toMutableList().apply { addAll(products.values) }.all { it > 0 }) {
+            IllegalArgumentException("All coefficients must be positive.")
+        }
+    }
+
     override fun toString() =
         buildString {
             append(name)
@@ -30,7 +36,7 @@ internal abstract class AbstractReaction(
     override fun equals(other: Any?) =
         checkEquals(other) { reagents == it.reagents && products == it.products }
 
-    private val Map<GeneticEntity, Int>.reaction
+    private val Map<Entity, Int>.reaction
         get() = entries.joinToString(" + ", "[", "]") {
             if (it.value != 1)
                 "${it.value}${it.key.id}"
@@ -39,7 +45,7 @@ internal abstract class AbstractReaction(
         }
 }
 
-internal abstract class AbstractGeneticReaction : GeneticReaction {
+internal abstract class AbstractGeneticReaction : Reaction {
     override fun toString() =
         buildString {
             append(this@AbstractGeneticReaction.type.toUpperCase())
@@ -58,7 +64,7 @@ internal abstract class AbstractCodingReaction<out C: TranscribingEntity, out T:
     AbstractGeneticReaction(), CodingReaction<C, T> {
     override val reactions
         get() = setOf(
-            BasicReaction(
+            BasicSingleReaction(
                 reagents = mapOf(coder to 1),
                 products = mapOf(coder to 1, target to 1),
                 rate = basalRate,
@@ -67,20 +73,13 @@ internal abstract class AbstractCodingReaction<out C: TranscribingEntity, out T:
         )
 }
 
-internal class BasicReaction(
-    reagents: Map<GeneticEntity, Int> = emptyMap(),
-    products: Map<GeneticEntity, Int> = emptyMap(),
-    rate: Rate = BasicRate(),
-    name: String = "reaction"
-) : AbstractReaction(reagents, products, rate, name)
-
 internal class BasicDegradation(
     override val molecule: DegradingEntity,
     override val degradationRate: Rate = BasicRate()
 ) : AbstractGeneticReaction(), Degradation {
     override val reactions
         get() = setOf(
-            BasicReaction(
+            BasicSingleReaction(
                 reagents = mapOf(molecule to 1),
                 products = emptyMap(),
                 rate = degradationRate,
@@ -117,13 +116,13 @@ internal class BasicRegulation(
     override val reactions
         get() = regulationInfo.let { (boundEntity, regulatedReaction) ->
             setOf(
-                BasicReaction(
+                BasicSingleReaction(
                     reagents = mapOf(boundEntity.first to 1, regulator to 1),
                     products = mapOf(boundEntity to 1),
                     rate = bindingRate,
                     name = "${boundEntity.first.id} binding"
                 ),
-                BasicReaction(
+                BasicSingleReaction(
                     reagents = mapOf(boundEntity to 1),
                     products = mapOf(boundEntity.first to 1, regulator to 1),
                     rate = unbindingRate,
@@ -146,4 +145,20 @@ internal class BasicRegulation(
             }
             else -> throw UnsupportedClassException(reaction.coder)
         }
+}
+
+internal class BasicChemicalReaction(
+    override val reagents: Map<Entity, Int> = emptyMap(),
+    override val products: Map<Entity, Int> = emptyMap(),
+    override val rate: Rate = BasicRate()
+) : ChemicalReaction {
+    override val reactions: Set<SingleReaction>
+        get() = setOf(
+            BasicSingleReaction(
+                reagents = reagents,
+                products = products,
+                rate = rate,
+                name = "custom chemical reaction"
+            )
+        )
 }

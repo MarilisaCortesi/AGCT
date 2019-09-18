@@ -9,13 +9,13 @@ import kotlin.reflect.KClass
 /**
  * Creates an entity using its parameters and its [type][T].
  */
-internal inline fun<reified T : GeneticEntity> entity(block: EntityParameters.() -> Unit = {}) =
+internal inline fun<reified T : Entity> entity(block: EntityParameters.() -> Unit = {}) =
     EntityParameters().apply(block).run { T::class.createEntity(this) }
 
 /**
  * Creates an entity using its parameters and its [type][T].
  */
-internal inline fun<reified T : GeneticEntity> entity(id: String, block: EntityParameters.() -> Unit = {}) =
+internal inline fun<reified T : Entity> entity(id: String, block: EntityParameters.() -> Unit = {}) =
     entity<T> {
         this.id = id
         block()
@@ -35,7 +35,7 @@ internal class EntityParameters {
  * Given a [KClass] named 'Something', it returns the class named 'BasicSomething' if it exists.
  */
 @Suppress("UNCHECKED_CAST")
-private fun<T : GeneticEntity> KClass<T>.createEntity(parameters: EntityParameters) =
+private fun<T : Entity> KClass<T>.createEntity(parameters: EntityParameters) =
     try {
         create(parameters)
     } catch (e: Exception) {

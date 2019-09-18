@@ -58,11 +58,19 @@ class ContainingLevel internal constructor(private val circuit: DslCircuit) {
     val the
         get() = this
 
+    val chemical
+        get() = ChemicalReactions()
+
     infix fun gene(id: String) =
         GeneLevelWrapper(GeneLevel(id))
 
     operator fun String.invoke(block: GenericEntityLevel.() -> Unit) =
         EntityLevelWrapper(GenericEntityLevel(this)).that(block)
+
+    inner class ChemicalReactions internal constructor() {
+        infix fun reactions(block: CustomReactionsLevel.() -> Unit) =
+            CustomReactionsLevel().run(block)
+    }
 }
 
 class DefaultsLevel internal constructor(private val defaults: MutableDefaultValues) {

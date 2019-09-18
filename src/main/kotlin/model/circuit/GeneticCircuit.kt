@@ -1,7 +1,7 @@
 package model.circuit
 
-import model.entities.GeneticEntity
-import model.reactions.GeneticReaction
+import model.entities.Entity
+import model.reactions.Reaction
 
 interface GeneticCircuit {
     /**
@@ -12,12 +12,12 @@ interface GeneticCircuit {
     /**
      * The [reactions] of the circuit.
      */
-    val reactions: Set<GeneticReaction>
+    val reactions: Set<Reaction>
 
     /**
      * The [entities] of the circuit.
      */
-    val entities: Set<GeneticEntity>
+    val entities: Set<Entity>
 
     /**
      * The [rules] of the circuit.
@@ -32,7 +32,7 @@ interface GeneticCircuit {
     /**
      * Returns the reactions involving the given [entity].
      */
-    fun reactionsOf(entity: GeneticEntity) : Set<GeneticReaction>
+    fun reactionsOf(entity: Entity) : Set<Reaction>
 }
 
 /**
@@ -40,22 +40,22 @@ interface GeneticCircuit {
  */
 internal interface MutableGeneticCircuit : GeneticCircuit {
     /**
-     * Adds an [entity] into the geneticCircuit.
+     * Adds an [entity] into the circuit.
      */
-    fun addEntity(entity: GeneticEntity)
+    fun addEntity(entity: Entity)
 
     /**
-     * Adds a series of [entities] into the geneticCircuit.
+     * Adds a series of [entities] into the circuit.
      */
-    fun addEntities(vararg entities: GeneticEntity)
+    fun addEntities(vararg entities: Entity)
 
     /**
-     * Adds a [reaction] into the geneticCircuit.
+     * Adds a [reaction] into the circuit.
      */
-    fun addReaction(reaction: GeneticReaction)
+    fun addReaction(reaction: Reaction)
 
     /**
-     * Adds a series of [reactions] into the geneticCircuit.
+     * Adds a series of [reactions] into the circuit.
      */
-    fun addReactions(vararg reactions: GeneticReaction)
+    fun addReactions(vararg reactions: Reaction)
 }

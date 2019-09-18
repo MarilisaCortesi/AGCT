@@ -102,7 +102,7 @@ internal class TestReactions : StringSpec({
 })
 
 private val DEGRADATION_REACTIONS = setOf(
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(PROTEIN to 1),
         products = emptyMap(),
         name = "pro degradation"
@@ -110,7 +110,7 @@ private val DEGRADATION_REACTIONS = setOf(
 )
 
 private val DIRECT_REACTIONS = setOf(
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(GENE to 1),
         products = mapOf(GENE to 1, PROTEIN to 1),
         name = "pro transcription"
@@ -118,7 +118,7 @@ private val DIRECT_REACTIONS = setOf(
 )
 
 private val TRANSCRIPTION_REACTIONS = setOf(
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(GENE to 1),
         products = mapOf(GENE to 1, MRNA to 1),
         name = "rna transcription"
@@ -126,7 +126,7 @@ private val TRANSCRIPTION_REACTIONS = setOf(
 )
 
 private val TRANSLATION_REACTIONS = setOf(
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(MRNA to 1),
         products = mapOf(MRNA to 1, PROTEIN to 1),
         name = "pro translation"
@@ -134,17 +134,17 @@ private val TRANSLATION_REACTIONS = setOf(
 )
 
 private val DIRECT_REGULATION_REACTIONS = setOf(
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(GENE to 1, REGULATIVE to 1),
         products = mapOf(REGULATED_GENE to 1),
         name = "gen binding"
     ),
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(REGULATED_GENE to 1),
         products = mapOf(GENE to 1, REGULATIVE to 1),
         name = "gen unbinding"
     ),
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(REGULATED_GENE to 1),
         products = mapOf(REGULATED_GENE to 1, PROTEIN to 1),
         name = "pro transcription"
@@ -152,17 +152,17 @@ private val DIRECT_REGULATION_REACTIONS = setOf(
 )
 
 private val TRANSCRIPTION_REGULATION_REACTIONS = setOf(
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(GENE to 1, REGULATIVE to 1),
         products = mapOf(REGULATED_GENE to 1),
         name = "gen binding"
     ),
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(REGULATED_GENE to 1),
         products = mapOf(GENE to 1, REGULATIVE to 1),
         name = "gen unbinding"
     ),
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(REGULATED_GENE to 1),
         products = mapOf(REGULATED_GENE to 1, MRNA to 1),
         name = "rna transcription"
@@ -170,17 +170,17 @@ private val TRANSCRIPTION_REGULATION_REACTIONS = setOf(
 )
 
 private val TRANSLATION_REGULATION_REACTIONS = setOf(
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(MRNA to 1, REGULATIVE to 1),
         products = mapOf(REGULATED_MRNA to 1),
         name = "rna binding"
     ),
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(REGULATED_MRNA to 1),
         products = mapOf(MRNA to 1, REGULATIVE to 1),
         name = "rna unbinding"
     ),
-    BasicReaction(
+    BasicSingleReaction(
         reagents = mapOf(REGULATED_MRNA to 1),
         products = mapOf(REGULATED_MRNA to 1, PROTEIN to 1),
         name = "pro transcription"

@@ -4,7 +4,7 @@ import model.utils.checkEquals
 import model.utils.string
 import model.utils.type
 
-internal abstract class AbstractEntity(parameters: EntityParameters) : GeneticEntity {
+internal abstract class AbstractEntity(parameters: EntityParameters) : Entity {
     override val id = parameters.id
     override val initialConcentration = parameters.initialConcentration
     override val aliases = parameters.aliases.toList()
@@ -18,7 +18,7 @@ internal abstract class AbstractEntity(parameters: EntityParameters) : GeneticEn
         checkEquals(other) { id == it.id }
 }
 
-internal abstract class AbstractBoundEntity<out F : GeneticEntity, out S : GeneticEntity>(
+internal abstract class AbstractBoundEntity<out F : Entity, out S : Entity>(
     override val first: F,
     override val second: S
 ) : AbstractEntity(EntityParameters().apply { id = "${first.id}_${second.id}" }), BoundEntity<F, S>
@@ -43,6 +43,9 @@ internal class BasicMRna(parameters: EntityParameters) :
 
 internal class BasicProtein(parameters: EntityParameters) :
     AbstractEntity(parameters), Protein
+
+internal class BasicMolecule(parameters: EntityParameters) :
+    AbstractEntity(parameters), Molecule
 
 internal class RegulatedMRna(mRna: MRna, regulator: RegulatingEntity) :
     AbstractBoundEntity<MRna, RegulatingEntity>(mRna, regulator), MRna

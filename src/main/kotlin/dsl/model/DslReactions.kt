@@ -2,13 +2,12 @@
 
 package agct
 
+import model.reactions.*
 import model.reactions.BasicRegulation
 import model.reactions.DirectTranscription
-import model.reactions.GeneticReaction
-import model.reactions.Regulation
 
 abstract class DslReaction internal constructor() {
-    internal abstract val geneticReaction: GeneticReaction
+    internal abstract val modelReaction: Reaction
 }
 
 class DslTranscription internal constructor(
@@ -17,10 +16,10 @@ class DslTranscription internal constructor(
 ) : DslReaction() {
     internal var basalRate: DslRate = TopLevel.circuit.default.basalRate
 
-    override val geneticReaction: DirectTranscription
+    override val modelReaction: DirectTranscription
         get() = DirectTranscription(
-            coder.geneticEntity,
-            target.geneticEntity,
+            coder.modelEntity,
+            target.modelEntity,
             basalRate.value
         )
 }
@@ -33,12 +32,26 @@ class DslRegulation internal constructor(
     internal var bindingRate: DslRate = TopLevel.circuit.default.bindingRate
     internal var unbindingRate: DslRate = TopLevel.circuit.default.unbindingRate
 
-    override val geneticReaction: Regulation
+    override val modelReaction: Regulation
         get() = BasicRegulation(
-            transcription.geneticReaction,
-            regulator.geneticEntity,
+            transcription.modelReaction,
+            regulator.modelEntity,
             regulatingRate.value,
             bindingRate.value,
             unbindingRate.value
+        )
+}
+
+class DslChemicalReaction internal constructor(
+    private val reagents: Map<DslEntity, Int>,
+    private val products: Map<DslEntity, Int>
+) : DslReaction() {
+    internal val rate = DslRate()
+
+    override val modelReaction
+        get() = BasicChemicalReaction(
+            reagents.mapKeys { (entity, _) -> entity.modelEntity },
+            products.mapKeys { (entity, _) -> entity.modelEntity },
+            rate.value
         )
 }
