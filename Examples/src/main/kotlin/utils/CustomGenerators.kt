@@ -8,8 +8,10 @@ class ExportableAlchemist(
     directoryPath: GeneticCircuit.() -> String = {
         "${System.getProperty("user.dir").replace("Examples", "")}/Examples/$defaultDirectory/alchemist.yml"
     },
-    private val exportBlock: GeneticCircuit.() -> String
+    exportBlock: StringBuilder.(GeneticCircuit) -> Unit
 ) : AlchemistGenerator(directoryPath) {
+    private val block: GeneticCircuit.() -> String = { StringBuilder().let { it.exportBlock(this) }.toString() }
+
     override val files: GeneticCircuit.() -> Map<String, String> = {
         super.files(this).mapValues { (_, data) ->
             buildString {
@@ -17,8 +19,11 @@ class ExportableAlchemist(
                 append("\n\n")
                 append("export:")
                 append("\n  ")
-                append(exportBlock().replace("\n", "\n  "))
+                append(block().replace("\n", "\n  "))
             }
         }
     }
 }
+
+fun StringBuilder.line(line: String): StringBuilder =
+    append("$line\n")
