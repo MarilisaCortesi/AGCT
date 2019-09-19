@@ -12,7 +12,7 @@ open class EntityLevelWrapper<out E: EntityLevel<*>> internal constructor(protec
 
 class GeneLevelWrapper internal constructor(entityLevel: GeneLevel): EntityLevelWrapper<GeneLevel>(entityLevel) {
     infix fun that(block: TranscriptionLevel.() -> Unit) =
-        entityLevel.CodesFor().invoke(block)
+        entityLevel.Codes().invoke(block)
 }
 
 abstract class EntityLevel<out E : DslEntity> internal constructor(
@@ -47,9 +47,9 @@ abstract class DegradingEntityLevel<out E : DslDegradable> internal constructor(
 class GeneLevel internal constructor(id: String) :
     EntityLevel<DslGene>(id, { DslGene(id) }) {
     val codes
-        get() = CodesFor()
+        get() = Codes()
 
-    inner class CodesFor internal constructor() {
+    inner class Codes internal constructor() {
         operator fun invoke(block: TranscriptionLevel.() -> Unit) = And().and(block)
 
         inner class And internal constructor() {
