@@ -8,7 +8,7 @@ import model.circuit.GeneticCircuit
 
 object entities : EntitiesGenerator({ "$defaultDirectory/entities.txt" })
 
-open class EntitiesGenerator(filename: GeneticCircuit.() -> String) : AbstractGenerator( { file ->
+open class EntitiesGenerator(filename: GeneticCircuit.() -> String) : AbstractGenerator({ file ->
     file[filename()] =
         entities.joinToString("\n", "${name.toUpperCase()}\n\n")
 })

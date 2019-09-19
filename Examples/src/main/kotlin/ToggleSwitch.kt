@@ -39,5 +39,5 @@ fun main() {
         a default binding.rate of 1
         a default unbinding.rate of 1
         a default reaction.rate of 1
-    } then export to reactions
+    } then export to Alchemist
 }
