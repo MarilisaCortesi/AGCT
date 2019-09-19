@@ -83,6 +83,7 @@ class CustomReactionsLevel internal constructor() {
 
     private fun String.toEntityMap(): Map<DslEntity, Int>  =
         split("+").map { string -> Pair(string, string.indexOfFirst { it.isLetter() }) }
+            .filter { (_, firstChar) -> firstChar >= 0 }
             .map { (string, firstChar) -> Pair(string.substring(firstChar), string.substring(0 until firstChar)) }
             .map { (entity, coefficient) -> Pair(entity.trim(), coefficient.trim()) }
             .toMap()

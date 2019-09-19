@@ -4,41 +4,30 @@ import utils.line
 
 fun main() {
     Create circuit "Brusselator" containing {
-        the gene "A" that codes {
-            the protein "X"
-        }
-
-        the gene "B" that codes {
-            the protein "Y"
-            with a basal.rate of 0
-            regulated by {
-                the protein "X"
-                with a regulating.rate of infinite
-            }
-        }
+        the gene "A" that codes { the protein "X" }
 
         chemical reactions {
-            "2X + Y" to "3X" having reaction.rate of 1
+            "2X + Y" to "3X"
+            "B + X" to "B + Y"
         }
 
         "A" {
-            has an initial.concentration of 1
+            has an initial.concentration of 10
         }
 
         "B" {
-            has an initial.concentration of 3
+            has an initial.concentration of 200
         }
     } with {
         a default initial.concentration of 0
         a default degradation.rate of 1
         a default basal.rate of 1
-        a default binding.rate of 1
-        a default unbinding.rate of 1
+        a default reaction.rate of 1
     } then export to ExportableAlchemist {
         line("- time")
-        line("- molecule: A")
+        line("- molecule: X")
         line("  aggregators: [mean]")
-        line("- molecule: B")
+        line("- molecule: Y")
         line("  aggregators: [mean]")
     }
 }

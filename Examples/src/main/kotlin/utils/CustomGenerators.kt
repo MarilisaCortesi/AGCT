@@ -8,7 +8,7 @@ class ExportableAlchemist(
     directoryPath: GeneticCircuit.() -> String = { "$defaultDirectory/alchemist.yml" },
     exportBlock: StringBuilder.(GeneticCircuit) -> Unit
 ) : AlchemistGenerator(directoryPath) {
-    private val block: GeneticCircuit.() -> String = { StringBuilder().let { it.exportBlock(this) }.toString() }
+    private val block: GeneticCircuit.() -> String = { StringBuilder().also { it.exportBlock(this) }.toString() }
 
     override val files: GeneticCircuit.() -> Map<String, String> = {
         super.files(this).mapValues { (_, data) ->
