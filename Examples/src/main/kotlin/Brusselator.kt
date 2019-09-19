@@ -30,6 +30,7 @@ fun main() {
         }
     } with {
         a default initial.concentration of 0
+        a default degradation.rate of 1
         a default basal.rate of 1
         a default binding.rate of 1
         a default unbinding.rate of 1
