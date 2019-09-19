@@ -7,9 +7,6 @@ fun main() {
             regulated by {
                 the protein "repressor1"
                 with a regulating.rate of 0.1
-            } and {
-                the molecule "inducer1"
-                with a regulating.rate of 10
             }
         }
 
@@ -18,10 +15,14 @@ fun main() {
             regulated by {
                 the protein "repressor2"
                 with a regulating.rate of 0.1
-            } and {
-                the molecule "inducer2"
-                with a regulating.rate of 10
             }
+        }
+        
+        chemical reactions {
+            "repressor1 + inducer1" to "repressor1_inducer1"
+            "repressor1_inducer1" to "repressor1 + inducer1"
+            "repressor2 + inducer2" to "repressor2_inducer2"
+            "repressor2_inducer2" to "repressor2 + inducer2"
         }
 
         "promoter1" {
@@ -37,5 +38,6 @@ fun main() {
         a default basal.rate of 1
         a default binding.rate of 1
         a default unbinding.rate of 1
-    } then export to Alchemist
+        a default reaction.rate of 1
+    } then export to reactions
 }
