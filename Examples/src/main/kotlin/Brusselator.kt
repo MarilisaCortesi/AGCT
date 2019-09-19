@@ -18,7 +18,7 @@ fun main() {
         }
 
         chemical reactions {
-            "2X + Y" to "3X" having reaction.rate into values(1, 2, 4)
+            "2X + Y" to "3X" having reaction.rate of 1
         }
 
         "A" {
