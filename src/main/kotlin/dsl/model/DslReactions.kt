@@ -3,8 +3,6 @@
 package agct
 
 import model.reactions.*
-import model.reactions.BasicRegulation
-import model.reactions.DirectTranscription
 
 abstract class DslReaction internal constructor() {
     internal abstract val modelReaction: Reaction
