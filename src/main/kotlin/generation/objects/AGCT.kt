@@ -91,7 +91,7 @@ private val ChemicalReaction.line
         .replace("[", "\"")
         .replace("]", "\"")
         .replace("-->", "to")
-        .trim() + " with rate ${rate.string}"
+        .trim() + " having reaction.rate ${rate.string}"
 
 private val Entity.string
     get() = when (this) {
