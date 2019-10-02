@@ -11,8 +11,8 @@ open class EntityLevelWrapper<out E: EntityLevel<*>> internal constructor(protec
 }
 
 class GeneLevelWrapper internal constructor(entityLevel: GeneLevel): EntityLevelWrapper<GeneLevel>(entityLevel) {
-    infix fun that(block: TranscriptionLevel.() -> Unit) =
-        entityLevel.Codes().invoke(block)
+    infix fun that(codes: codes.Block) =
+        entityLevel.Codes().invoke(codes.block)
 }
 
 abstract class EntityLevel<out E : DslEntity> internal constructor(
