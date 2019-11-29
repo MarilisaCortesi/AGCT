@@ -2,8 +2,10 @@
 
 package agct
 
+import dsl.AgctDslComponent
 import model.utils.lateVal
 
+@AgctDslComponent
 abstract class ReactionLevel<R : DslReaction> internal constructor() {
     internal abstract val reaction: R
 }

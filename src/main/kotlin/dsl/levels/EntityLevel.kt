@@ -2,14 +2,17 @@
 
 package agct
 
+import dsl.AgctDslComponent
 import model.utils.string
 import model.utils.type
 
+@AgctDslComponent
 open class EntityLevelWrapper<out E: EntityLevel<*>> internal constructor(protected val entityLevel: E) {
     infix fun that(block: E.() -> Unit) =
         entityLevel.run(block)
 }
 
+@AgctDslComponent
 class GeneLevelWrapper internal constructor(entityLevel: GeneLevel): EntityLevelWrapper<GeneLevel>(entityLevel) {
     infix fun that(codes: codes.Block) =
         entityLevel.Codes().invoke(codes.block)

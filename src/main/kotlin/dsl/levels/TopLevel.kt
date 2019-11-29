@@ -2,11 +2,13 @@
 
 package agct
 
+import dsl.AgctDslComponent
 import generation.Generator
 import generation.exportTo
 import model.circuit.GeneticCircuit
 
 val Create = TopLevel()
+
 
 class TopLevel internal constructor() {
     companion object {
@@ -54,6 +56,7 @@ class TopLevel internal constructor() {
     }
 }
 
+@AgctDslComponent
 class ContainingLevel internal constructor(private val circuit: DslCircuit) {
     val the
         get() = this
