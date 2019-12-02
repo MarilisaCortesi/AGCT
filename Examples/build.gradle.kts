@@ -1,17 +1,8 @@
-plugins {
-    java
-    kotlin("jvm")
-}
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    compile(rootProject)
-    compile("org.jetbrains.kotlin:kotlin-scripting-jvm")
-    compile("org.slf4j:slf4j-nop:1.7.26")
-    compile(group = "it.unibo.alchemist", name = "alchemist", version = "9.0.0")
+    implementation(rootProject)
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm")
+    implementation("org.slf4j:slf4j-nop:1.7.26")
+    implementation("it.unibo.alchemist:alchemist:9.0.0")
 }
 
 tasks {

@@ -2,24 +2,26 @@ val kotlinVersion = "1.3.50"
 val kotlinTestVersion = "3.3.3"
 
 plugins {
-    java
     kotlin("jvm") version "1.3.50"
 }
 
-repositories {
-    mavenCentral()
-}
+allprojects {
 
-dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm")
-    testCompile("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
-}
+    apply(plugin = "kotlin")
 
-tasks {
-    withType<Test> {
-        useJUnitPlatform()
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+        implementation("org.jetbrains.kotlin:kotlin-scripting-jvm")
+        testCompile("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
+    }
+
+    tasks {
+        withType<Test> {
+            useJUnitPlatform()
+        }
     }
 }
-
-defaultTasks("test")
