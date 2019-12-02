@@ -1,6 +1,16 @@
-import agct.*
-import utils.ExportableAlchemist
-import utils.line
+package io.github.agct.examples
+
+import io.github.agct.dsl.keywords.basal
+import io.github.agct.dsl.keywords.binding
+import io.github.agct.dsl.keywords.codes
+import io.github.agct.dsl.keywords.degradation
+import io.github.agct.dsl.keywords.export
+import io.github.agct.dsl.keywords.initial
+import io.github.agct.dsl.keywords.regulating
+import io.github.agct.dsl.keywords.unbinding
+import io.github.agct.dsl.levels.Create
+import io.github.agct.examples.utils.ExportableAlchemist
+import io.github.agct.examples.utils.line
 
 fun main() {
     Create circuit "Repressilator" containing {

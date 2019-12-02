@@ -1,4 +1,16 @@
+package io.github.agct.examples
+
 import agct.*
+import io.github.agct.dsl.keywords.basal
+import io.github.agct.dsl.keywords.codes
+import io.github.agct.dsl.keywords.degradation
+import io.github.agct.dsl.keywords.export
+import io.github.agct.dsl.keywords.initial
+import io.github.agct.dsl.keywords.linspace
+import io.github.agct.dsl.keywords.logspace
+import io.github.agct.dsl.keywords.reaction
+import io.github.agct.dsl.keywords.regulating
+import io.github.agct.dsl.levels.Create
 
 fun main() {
     Create circuit "My Circuit" containing {

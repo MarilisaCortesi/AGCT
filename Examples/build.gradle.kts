@@ -1,6 +1,7 @@
 dependencies {
     implementation(rootProject)
     implementation("it.unibo.alchemist:alchemist:9.0.0")
+    testImplementation("io.github.classgraph:classgraph:4.8.58")
     runtimeOnly("org.slf4j:slf4j-nop:1.7.26")
 }
 

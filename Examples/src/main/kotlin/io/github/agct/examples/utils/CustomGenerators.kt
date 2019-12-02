@@ -1,8 +1,8 @@
-package utils
+package io.github.agct.examples.utils
 
 import agct.AlchemistGenerator
-import generation.defaultDirectory
-import model.circuit.GeneticCircuit
+import io.github.agct.generation.defaultDirectory
+import io.github.agct.model.circuit.GeneticCircuit
 
 class ExportableAlchemist(
     directoryPath: GeneticCircuit.() -> String = { "$defaultDirectory/alchemist.yml" },
