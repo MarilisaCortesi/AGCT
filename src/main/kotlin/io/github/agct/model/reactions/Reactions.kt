@@ -8,7 +8,6 @@ import io.github.agct.model.entities.Protein
 import io.github.agct.model.entities.RegulatingEntity
 import io.github.agct.model.entities.TranscribableEntity
 import io.github.agct.model.entities.TranscribingEntity
-import model.entities.*
 import io.github.agct.model.variables.Rate
 
 /**

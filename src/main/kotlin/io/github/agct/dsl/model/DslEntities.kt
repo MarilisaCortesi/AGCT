@@ -12,7 +12,6 @@ import io.github.agct.model.entities.EntityParameters
 import io.github.agct.model.entities.Gene
 import io.github.agct.model.entities.Protein
 import io.github.agct.model.entities.RegulatingEntity
-import model.entities.*
 import io.github.agct.model.variables.BasicRate
 
 abstract class DslEntity internal constructor() {

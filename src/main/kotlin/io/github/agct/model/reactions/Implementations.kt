@@ -11,7 +11,6 @@ import io.github.agct.model.entities.RegulatedMRna
 import io.github.agct.model.entities.RegulatingEntity
 import io.github.agct.model.entities.TranscribableEntity
 import io.github.agct.model.entities.TranscribingEntity
-import model.entities.*
 import io.github.agct.model.utils.UnsupportedClassException
 import io.github.agct.model.utils.checkEquals
 import io.github.agct.model.utils.type

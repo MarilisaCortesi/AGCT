@@ -7,7 +7,6 @@ import io.github.agct.model.reactions.BasicRegulation
 import io.github.agct.model.reactions.DirectTranscription
 import io.github.agct.model.reactions.Reaction
 import io.github.agct.model.reactions.Regulation
-import model.reactions.*
 
 abstract class DslReaction internal constructor() {
     internal abstract val modelReaction: Reaction

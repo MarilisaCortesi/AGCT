@@ -8,7 +8,6 @@ import io.github.agct.model.variables.BasicRate
 import io.github.agct.model.variables.Concentration
 import io.github.agct.model.variables.Rate
 import io.github.agct.model.variables.Variable
-import model.variables.*
 
 abstract class DslVariable<N : Number> internal constructor(
     internal val variableName: String?,
