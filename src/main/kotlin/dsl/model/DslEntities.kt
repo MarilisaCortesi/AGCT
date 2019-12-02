@@ -3,6 +3,7 @@
 package agct
 
 import model.entities.*
+import model.variables.BasicRate
 
 abstract class DslEntity internal constructor() {
     internal abstract val modelEntity: Entity
@@ -28,7 +29,6 @@ class DslGene(override val id: String) : DslEntity() {
 class DslProtein(override val id: String) : DslRegulating() {
     override val modelEntity: Protein
         get() = BasicProtein(parameters)
-
     override var degradationRate: DslRate? = TopLevel.circuit.default.degradationRate
 }
 
@@ -39,13 +39,13 @@ class DslRegulator(override val id: String) : DslRegulating() {
         } else {
             DegradingRegulatingEntity(parameters)
         }
-
     override var degradationRate: DslRate? = null
 }
 
-class DslMolecule(override val id: String) : DslEntity() {
+class DslMolecule(override val id: String) : DslDegradable() {
     override val modelEntity: Entity
         get() = BasicMolecule(parameters)
+    override var degradationRate: DslRate? = DslRate(default = BasicRate(0.0))
 }
 
 private val DslEntity.parameters
