@@ -11,7 +11,7 @@ internal class RunExamples : StringSpec({
         .map { it to it.getMethodInfo().find { it.isStatic && it.name == "main" } }
         .filterNot { it.second == null }
         .forEach { (clazz, main) ->
-            "Example in ${clazz.classpathElementFile.name} should not crash" {
+            "Example in ${clazz} should not crash" {
                 main!!.loadClassAndGetMethod().invoke(null)
             }
         }

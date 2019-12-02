@@ -1,7 +1,7 @@
 package io.github.agct.examples.utils
 
-import agct.AlchemistGenerator
 import io.github.agct.generation.defaultDirectory
+import io.github.agct.generation.target.AlchemistGenerator
 import io.github.agct.model.circuit.GeneticCircuit
 
 class ExportableAlchemist(

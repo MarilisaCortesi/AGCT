@@ -1,12 +1,6 @@
 package io.github.agct.examples
 
-import io.github.agct.dsl.keywords.basal
-import io.github.agct.dsl.keywords.codes
-import io.github.agct.dsl.keywords.degradation
-import io.github.agct.dsl.keywords.export
-import io.github.agct.dsl.keywords.initial
-import io.github.agct.dsl.keywords.reaction
-import io.github.agct.dsl.levels.Create
+import agct.*
 import io.github.agct.examples.utils.ExportableAlchemist
 import io.github.agct.examples.utils.line
 
