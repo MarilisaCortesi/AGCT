@@ -1,8 +1,7 @@
 dependencies {
     implementation(rootProject)
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm")
-    implementation("org.slf4j:slf4j-nop:1.7.26")
     implementation("it.unibo.alchemist:alchemist:9.0.0")
+    runtimeOnly("org.slf4j:slf4j-nop:1.7.26")
 }
 
 tasks {

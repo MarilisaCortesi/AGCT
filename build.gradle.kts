@@ -6,7 +6,6 @@ plugins {
 }
 
 allprojects {
-
     apply(plugin = "kotlin")
 
     repositories {
