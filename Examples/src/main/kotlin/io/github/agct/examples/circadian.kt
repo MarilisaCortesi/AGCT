@@ -1,5 +1,7 @@
+package io.github.agct.examples
+
 import agct.*
-import utils.ExportableAlchemist
+import io.github.agct.generation.target.Alchemist
 
 fun main() {
     Create circuit "Circadian_Rhythm" containing {
