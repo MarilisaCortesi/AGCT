@@ -51,7 +51,7 @@ fun main() {
                 with a regulating.rate of 5}
         }
         chemical reactions{
-            "CREB_I + Ca2+_cAMP" to "CREB"
+            "CREB_I + Ca2-ion_cAMP" to "CREB"
             "PER + CKLE" to "PER_p + CKLE"
             "PER + SCF_BTRCP" to "PER_u + SCF_BTRCP"
             "CRY + AMPK " to "CRY_p + AMPK"
