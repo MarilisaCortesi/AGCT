@@ -35,8 +35,8 @@ fun main() {
             protein ("DEC")
             regulated by {protein ("BMALL_CLOCK")}
         }
-        gene ("rev-erba") that codes {
-            protein ("REV-ERBA")
+        gene ("rev_erba") that codes {
+            protein ("REV_ERBA")
             regulated by {protein ("BMALL_CLOCK")}
         }
         gene ("ror") that codes {
@@ -47,26 +47,26 @@ fun main() {
             protein ("BMALL_CLOCK")
             regulated by {protein ("ROR")}
             regulated by {
-                protein ("REV-ERBA")
+                protein ("REV_ERBA")
                 with a regulating.rate of 5}
         }
         chemical reactions{
-            "CREB_I + Ca2-ion_cAMP" to "CREB"
+            "CREB_I + Ca2ion_cAMP" to "CREB"
             "PER + CKLE" to "PER_p + CKLE"
             "PER + SCF_BTRCP" to "PER_u + SCF_BTRCP"
             "CRY + AMPK " to "CRY_p + AMPK"
             "CRY + FBXL3" to "CRY_u + FBXL3"
-            "PER + CRY + CKLE" to "PER-CRY-CKLE"
-            "PER_p + CRY + CKLE" to "PER-CRY-CKLE"
-            "PER_u + CRY + CKLE" to "PER-CRY-CKLE"
-            "PER + CRY_p + CKLE" to "PER-CRY-CKLE"
-            "PER_p + CRY_p + CKLE" to "PER-CRY-CKLE"
-            "PER_u + CRY_p + CKLE" to "PER-CRY-CKLE"
-            "PER + CRY_u + CKLE" to "PER-CRY-CKLE"
-            "PER_p + CRY_u + CKLE" to "PER-CRY-CKLE"
-            "PER_u + CRY_u + CKLE" to "PER-CRY-CKLE"
-            "BMALL_CLOCK + DEC" to "BMALL_CLOCK-DEC"
-            "BMALL_CLOCK + PER-CRY-CKLE" to "BMALL_CLOCK-PER-CRY-CKLE"
+            "PER + CRY + CKLE" to "PER_CRY_CKLE"
+            "PER_p + CRY + CKLE" to "PER_CRY_CKLE"
+            "PER_u + CRY + CKLE" to "PER_CRY_CKLE"
+            "PER + CRY_p + CKLE" to "PER_CRY_CKLE"
+            "PER_p + CRY_p + CKLE" to "PER_CRY_CKLE"
+            "PER_u + CRY_p + CKLE" to "PER_CRY_CKLE"
+            "PER + CRY_u + CKLE" to "PER_CRY_CKLE"
+            "PER_p + CRY_u + CKLE" to "PER_CRY_CKLE"
+            "PER_u + CRY_u + CKLE" to "PER_CRY_CKLE"
+            "BMALL_CLOCK + DEC" to "BMALL_CLOCK_DEC"
+            "BMALL_CLOCK + PER_CRY_CKLE" to "BMALL_CLOCK_PER_CRY_CKLE"
         }
         "PER_p" {
             has a degradation.rate of 0.5
